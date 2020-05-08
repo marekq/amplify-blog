@@ -1,10 +1,9 @@
 version: 0.2
 backend:
   phases:
-    preBuild:
-      commands:
-				- yum update -y
-				- yum install gcc openssl-devel bzip2-devel libffi-devel tar wget gzip make -y
+    build:
+				- yum -y update
+				- yum -y install gcc openssl-devel bzip2-devel libffi-devel tar wget gzip make
 				- cd /tmp
 				- wget https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tgz
 				- tar zxvf Python-3.8.2.tgz
@@ -13,9 +12,7 @@ backend:
 				- make install -j 4
 				- python3 -m pip install virtualenv
 				- yarn install
-    build:
-      commands:
-        - amplifyPush --simple
+				- amplifyPush --simple
 frontend:
   phases:
     build:
