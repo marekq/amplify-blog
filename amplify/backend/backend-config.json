@@ -1,0 +1,9 @@
+{
+	"function": {
+		"rssfeed": {
+			"build": true,
+			"providerPlugin": "awscloudformation",
+			"service": "Lambda"
+		}
+	}
+}
