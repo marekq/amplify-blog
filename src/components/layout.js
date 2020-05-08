@@ -31,23 +31,38 @@ const Layout = ({ location, title, children }) => {
         fontFamily: `Montserrat, sans-serif`,
         marginTop: 0,
         textAlign: "center",
-        fontColor: "#CCCCCC",
-        fontWeight: 0,
+        color: "gray"
       }}>
       <Link style={{
           boxShadow: `none`,
-          color: `inherit`,
+          color: `gray`,
         }}
         to={`/`}>
       Home
       </Link>
-      {` `}
+      {` • `}
       <Link style={{
           boxShadow: `none`,
-          color: `inherit`,
+          color: `gray`,
+        }}
+        to={`/aws`}>
+      AWS feed
+      </Link>
+      {` • `}
+      <Link style={{
+          boxShadow: `none`,
+          color: `gray`,
         }}
         to={`/about`}>
       About
+      </Link>
+      {` • `}
+      <Link style={{
+          boxShadow: `none`,
+          color: `gray`,
+        }}
+        to={`/marek`}>
+      Marek
       </Link>
      </h3>
   )
