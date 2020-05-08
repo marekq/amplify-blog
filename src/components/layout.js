@@ -6,47 +6,52 @@ import { rhythm, scale } from "../utils/typography"
 const Layout = ({ location, title, children }) => {
   const rootPath = `${__PATH_PREFIX__}/`
   let header
+  let menu
 
-  if (location.pathname === rootPath) {
-    header = (
-      <h1
-        style={{
-          ...scale(1.5),
-          marginBottom: rhythm(1.5),
-          marginTop: 0,
+  header = (
+    <h1 style={{
+        fontFamily: `Montserrat, sans-serif`,
+        marginTop: 10,
+        fontColor: "gray",
+        textAlign: "center",
+      }}>
+      <Link style={{
+          boxShadow: `none`,
+          color: `inherit`,
         }}
+        to={`/`}
       >
-        <Link
-          style={{
-            boxShadow: `none`,
-            color: `inherit`,
-          }}
-          to={`/`}
-        >
-          {title}
-        </Link>
-      </h1>
-    )
-  } else {
-    header = (
-      <h3
-        style={{
-          fontFamily: `Montserrat, sans-serif`,
-          marginTop: 0,
+      {title}
+      </Link>
+    </h1>
+  )
+
+  menu = (
+      <h3 style={{
+        fontFamily: `Montserrat, sans-serif`,
+        marginTop: 0,
+        textAlign: "center",
+        fontColor: "#CCCCCC",
+        fontWeight: 0,
+      }}>
+      <Link style={{
+          boxShadow: `none`,
+          color: `inherit`,
         }}
-      >
-        <Link
-          style={{
-            boxShadow: `none`,
-            color: `inherit`,
-          }}
-          to={`/`}
-        >
-          {title}
-        </Link>
-      </h3>
-    )
-  }
+        to={`/`}>
+      Home
+      </Link>
+      {` `}
+      <Link style={{
+          boxShadow: `none`,
+          color: `inherit`,
+        }}
+        to={`/about`}>
+      About
+      </Link>
+     </h3>
+  )
+  
   return (
     <div
       style={{
@@ -57,7 +62,8 @@ const Layout = ({ location, title, children }) => {
       }}
     >
       <header>{header}</header>
-      <main>{children}</main>
+      <main>{menu}
+        {children}</main>
       <footer>
         © {new Date().getFullYear()}, Built with
         {` `}

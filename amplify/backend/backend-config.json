@@ -1,1 +1,9 @@
-{}
+{
+	"function": {
+		"ddbfetch": {
+			"service": "Lambda",
+			"providerPlugin": "awscloudformation",
+			"build": true
+		}
+	}
+}
