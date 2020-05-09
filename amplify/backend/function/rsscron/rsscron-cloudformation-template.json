@@ -161,7 +161,7 @@
 						{
                             "Effect": "Allow",
                             "Action": [
-                                "dynamodb:Scan"
+                                "dynamodb:Query"
                             ],
 							"Resource": [
 								{ 
