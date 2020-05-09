@@ -1,6 +1,6 @@
 {
 	"function": {
-		"rssfeed": {
+		"rsscron": {
 			"build": true,
 			"providerPlugin": "awscloudformation",
 			"service": "Lambda"
