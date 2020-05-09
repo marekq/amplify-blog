@@ -160,7 +160,7 @@
 						{
                             "Effect": "Allow",
                             "Action": [
-                                "dynamodb:scan"
+                                "dynamodb:Scan"
                             ],
 							"Resource": [
 								{ 
