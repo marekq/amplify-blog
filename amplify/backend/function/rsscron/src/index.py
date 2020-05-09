@@ -2,7 +2,7 @@ import boto3, csv, os
 
 # TODO - import based on variables instead of hardcoded values
 c             = boto3.resource('dynamodb').Table('rssaws')
-bucketname    = "marek-temp"
+bucketname    = "rssblog"
 
 # get the contents of the dynamodb table
 def get_table():
@@ -20,10 +20,10 @@ def get_table():
                 res.append(a)
     return res
 
-# copy the file to s3
+# copy the file to s3 with a public acl
 def cp_s3(x):
     s3      = boto3.resource('s3')
-    s3.meta.client.upload_file('/tmp/'+x, bucketname, x)
+    s3.meta.client.upload_file('/tmp/'+x, bucketname, x, ExtraArgs = {'ACL': 'public-read'})
 
 # create a csv file 
 def make_csv(r):
