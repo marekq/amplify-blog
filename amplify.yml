@@ -4,7 +4,7 @@ backend:
     preBuild:
       commands:
         - path=`pwd`
-        - yum -y install gcc openssl-devel bzip2-devel libffi-devel tar wget gzip make
+        - yum -y install gcc openssl-devel bzip2-devel libffi-devel tar wget gzip make yarn
         - yarn install
         - cd /tmp
         - wget https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tgz
@@ -14,7 +14,8 @@ backend:
         - make install -j 4
         - cd $path
         - python3 -m pip install virtualenv
-        
+        - pip3 install --force pipenv 
+
     build:
       commands:
         - amplifyPush --simple
@@ -24,10 +25,12 @@ frontend:
     build:
       commands:
         - yarn run build
+
   artifacts:
     baseDirectory: public
     files:
       - '**/*'
+      
   cache:
     paths:
       - node_modules/**/*
