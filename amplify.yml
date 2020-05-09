@@ -3,28 +3,40 @@ backend:
   phases:
     preBuild:
       commands:
-        # need to install python 3.8 from source to build the lambda function - its unavailable in the Amazon Linux 2 repo
+        # we need to install python 3.8 from source to build the lambda function - its unavailable in the Amazon Linux 2 repo
         - path=`pwd`
-        - yum -y install gcc openssl-devel bzip2-devel libffi-devel tar wget gzip make yarn
-        - yarn install
+        - yum update -y
+
+        # install build tools
+        - yum -y install gcc openssl-devel bzip2-devel libffi-devel tar wget gzip make
+
+        # install python 3.8.2 from source
         - cd /tmp
         - wget https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tgz
-        - tar zxvf Python-3.8.2.tgz
-        - cd Python-3.8.2
+        - tar -zxvf Python-3.8.2.tgz
+        - cd ./Python-3.8.2
+
+        # configure and build the package
         - ./configure --enable-optimizations
         - make install -j 4
         - cd $path
+
+        # install virtualenv and pipenv
         - python3 -m pip install virtualenv
         - pip3 install --force pipenv 
 
     build:
       commands:
+
+        # push the stack to amplify
         - amplifyPush --simple
 
 frontend:
   phases:
     build:
       commands:
+        # install and build with yarn
+        - yarn install
         - yarn run build
 
   artifacts:
