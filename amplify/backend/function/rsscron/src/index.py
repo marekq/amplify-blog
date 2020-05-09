@@ -1,4 +1,5 @@
 import boto3, csv, os
+from datetime import datetime
 
 # TODO - import based on variables instead of hardcoded values
 c             = boto3.resource('dynamodb').Table('rssaws')
