@@ -5,7 +5,6 @@ backend:
       commands:
         # we need to install python 3.8 from source to build the lambda function - its unavailable in the Amazon Linux 2 repo
         - path=`pwd`
-        - yum update -n
 
         # install build tools
         - yum -y install gcc openssl-devel bzip2-devel libffi-devel tar wget gzip make
