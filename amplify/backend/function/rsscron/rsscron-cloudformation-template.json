@@ -187,24 +187,8 @@
 								"s3:Put*",
 								"s3:Get*"
                             ],
-							"Resource": [
-								{ 
-									"Fn::Join": [
-										"",
-										[
-											"arn:aws:s3:",
-											{
-												"Ref": "AWS::Region"
-											},
-											":",
-											{
-												"Ref": "AWS::AccountId"
-											},
-											":rssblog"
-										]
-									]
-								}
-							]
+							"Resource": "arn:aws:s3:::rssblog"
+							
 						}
                     ]
                 }
