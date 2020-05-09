@@ -3,8 +3,7 @@ backend:
   phases:
     preBuild:
       commands:
-        - pwd
-        - yum -y update
+        - path=`pwd`
         - yum -y install gcc openssl-devel bzip2-devel libffi-devel tar wget gzip make
         - yarn install
         - cd /tmp
@@ -13,7 +12,9 @@ backend:
         - cd Python-3.8.2
         - ./configure --enable-optimizations
         - make install -j 4
+        - cd $path
         - python3 -m pip install virtualenv
+        
     build:
       commands:
         - amplifyPush --simple
