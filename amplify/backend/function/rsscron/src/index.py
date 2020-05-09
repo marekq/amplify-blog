@@ -7,14 +7,18 @@ bucketname    = "rssblog"
 # get the contents of the dynamodb table
 def get_table():
     res = []
-    e   = c.scan(ConsistentRead = True)
-    
+    n	  = datetime.now()
+    s	  = n - timedelta(days = 30)
+    ts	= int(time.mktime(s.timetuple()))
+
+    e	  = c.query(IndexName = 'allts', KeyConditionExpression = Key('allts').eq('y'), FilterExpression= Key('timest').gt(str(ts)))
+        
     for a in e['Items']:
         res.append(a)
     
         while 'LastEvaluatedKey' in e:
             z       = e['LastEvaluatedKey']
-            e       = c.scan(ExclusiveStartKey = z, ConsistentRead = True)
+            e	      = c.query(ExclusiveStartKey = z, IndexName = 'allts', KeyConditionExpression = Key('allts').eq('y'), FilterExpression= Key('timest').gt(str(ts)))
             
             for a in e['Items']:
                 res.append(a)
@@ -39,11 +43,11 @@ def make_csv(r):
 # create a json file
 def make_json(r):
     out         = open('/tmp/out.json', 'w')
-    out.write("[")
+    out.write('{"content": [')
     for x in r:
-        out.write(str(x)+', \n')
+        out.write(str(x).replace('//', '\/\/')+", \n")
         
-    out.write(']')
+    out.write(']}')
     out.close()
 
 # delete original files just in case

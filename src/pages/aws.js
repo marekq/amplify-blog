@@ -1,5 +1,5 @@
 import React from "react"
-import { graphql } from "gatsby"
+import AWSblog from "../components/aws"
 
 import SEO from "../components/seo"
 import Layout from "../components/layout"
@@ -11,6 +11,7 @@ const AboutIndex = ({ data, location }) => {
     <Layout location={location} title={siteTitle}>
       <SEO title="AWS blog feed" />
       <h1>AWS blog feed</h1>
+      <AWSblog />
       <p>.</p>
     </Layout>
   )

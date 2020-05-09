@@ -1,6 +1,7 @@
 .cache/
 public/
 package-lock.json
+yarn.lock
 
 #amplify
 amplify/\#current-cloud-backend
