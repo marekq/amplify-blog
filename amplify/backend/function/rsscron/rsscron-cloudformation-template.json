@@ -72,7 +72,8 @@
                     ]
                 },
                 "Runtime": "python3.8",
-                "Timeout": 30,
+				"Timeout": 30,
+				"MemorySize": 256,
                 "Code": {
                     "S3Bucket": "amplify-amplifyblog-prod-193829-deployment",
                     "S3Key": "amplify-builds/rsscron-5254745a33766c6a464a-build.zip"
@@ -183,11 +184,8 @@
 						},
 						{
 							"Effect": "Allow",
-                            "Action": [
-								"s3:Put*",
-								"s3:Get*"
-                            ],
-							"Resource": "arn:aws:s3:::rssblog"
+                            "Action": "s3:*",
+							"Resource": "arn:aws:s3:::rssblog/*"
 							
 						}
                     ]
