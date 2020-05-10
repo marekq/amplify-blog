@@ -1,41 +1,50 @@
 import React from 'react';
+import {Component} from 'react';
 import fetch from 'isomorphic-fetch';
 
-const eventsData = [];
+class AWS extends Component {
+  constructor() {
+    super();
+    this.state = { data: [] };
+  }
 
-fetch('https://rssblog.s3-eu-west-1.amazonaws.com/out.json')
-      .then(data => data.json())
-      .then(data => {
-        eventsData.push(...data.content);
-      });
+  async loadurl() {
+    const response = await fetch('https://rssblog.s3-eu-west-1.amazonaws.com/out.json');
+    const json = await response.json();
+    console.log(json);
+    this.setState = { data: json };
+    return json;
+  }
 
-console.log(eventsData)
-
-const AWS = props => (
-  <div id="main">
-  <table>
-    <thead>
-      <tr>
-        <th>Source</th>
-        <th>Title</th>
-        <th>Date</th>
-        <th>Author</th>
-      </tr>
-    </thead>
-    <tbody>
-      {eventsData.map((data, index) => {
-        return (
+  render() { 
+    this.loadurl();
+    return (
+      <div id="main">
+      <table>
+        <thead>
           <tr>
-            <td>{data.source}</td>
-            <td>{data.title}</td>
-            <td>{data.timest}</td>
-            <td>{data.author}</td>
+            <th>Source</th>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Author</th>
           </tr>
-        )
-      })}
-    </tbody>
-  </table>    
-  </div>  
-)
+        </thead>
+        <tbody>
+          {this.state.map(content => {
+            return (
+              <tr>
+                <td>{content.source}</td>
+                <td>{content.title}</td>
+                <td>{content.timest}</td>
+                <td>{content.author}</td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>    
+      </div>  
+    );
+  }
+}
 
-export default AWS
+export default AWS;

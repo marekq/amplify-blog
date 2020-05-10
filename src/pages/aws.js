@@ -12,7 +12,6 @@ const AboutIndex = ({ data, location }) => {
       <SEO title="AWS blog feed" />
       <h1>AWS blog feed</h1>
       <AWSblog />
-      <p>.</p>
     </Layout>
   )
 }
