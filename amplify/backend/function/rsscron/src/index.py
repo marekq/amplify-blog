@@ -10,20 +10,26 @@ bucketname    = "rssblog"
 def get_table():
     res = []
     n	  = datetime.now()
-    s	  = n - timedelta(days = 30)
+    s	  = n - timedelta(days = 5)
     ts	= int(time.mktime(s.timetuple()))
 
     e	  = c.query(IndexName = 'allts', KeyConditionExpression = Key('allts').eq('y'), FilterExpression= Key('timest').gt(str(ts)))
         
     for a in e['Items']:
-        res.append(a)
+        b = '{"timest": "' + a['timest'] + '","source": "' + a['source'] + '","title": "' + a['title'] + '","author": "' + a['author'] + '"}'
+        print(b)
+        res.append(b)
     
         while 'LastEvaluatedKey' in e:
             z       = e['LastEvaluatedKey']
             e	      = c.query(ExclusiveStartKey = z, IndexName = 'allts', KeyConditionExpression = Key('allts').eq('y'), FilterExpression= Key('timest').gt(str(ts)))
             
             for a in e['Items']:
-                res.append(a)
+                b = '{"timest": "' + a['timest'] + '","source": "' + a['source'] + '","title": "' + a['title'] + '","author": "' + a['author'] + '"}'
+                print(b)
+                res.append(b)
+
+    print(res)
     return res
 
 # copy the file to s3 with a public acl
@@ -45,11 +51,9 @@ def make_csv(r):
 # create a json file
 def make_json(r):
     out         = open('/tmp/out.json', 'w')
-    out.write('{"content": [')
-    for x in r:
-        out.write(str(x).replace('//', '\/\/')+", \n")
-        
-    out.write(']}')
+    out.write('{"content":')
+    out.write(str(r).replace("'", ""))
+    out.write('}')
     out.close()
 
 # delete original files just in case
@@ -74,8 +78,8 @@ def handler(event, context):
     del_file()
 
     # create a csv file and copy it to s3
-    make_csv(r)
-    cp_s3('out.csv')
+    #make_csv(r)
+    #cp_s3('out.csv')
     
     # create a json file and copy it to s3
     make_json(r)
@@ -83,3 +87,5 @@ def handler(event, context):
         
     # return how many records were discovered    
     return('@@@ '+str(len(r)))
+
+handler('','')

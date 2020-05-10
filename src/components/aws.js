@@ -1,7 +1,14 @@
-import React from 'react'
-import jquery from 'jquery'
+import React from 'react';
+import fetch from 'isomorphic-fetch';
 
-const eventsData = jquery.getJSON('https://rssblog.s3-eu-west-1.amazonaws.com/out.json')
+const eventsData = [];
+
+fetch('https://rssblog.s3-eu-west-1.amazonaws.com/out.json')
+      .then(data => data.json())
+      .then(data => {
+        eventsData.push(...data.content);
+      });
+
 console.log(eventsData)
 
 const AWS = props => (
@@ -16,7 +23,7 @@ const AWS = props => (
       </tr>
     </thead>
     <tbody>
-      {eventsData.content.map((data, index) => {
+      {eventsData.map((data, index) => {
         return (
           <tr>
             <td>{data.source}</td>

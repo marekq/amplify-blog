@@ -1,170 +1,170 @@
 {
-    "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Lambda resource stack creation using Amplify CLI",
-    "Parameters": {
-        "CloudWatchRule": {
-            "Type": "String",
-            "Default": "NONE",
-            "Description": " Schedule Expression"
-        },
-        "env": {
-            "Type": "String"
-        },
-        "functionrsscronName": {
-            "Type": "String",
-            "Default": "functionrsscronName"
-        }
-    },
-    "Conditions": {
-        "ShouldNotCreateEnvResources": {
-            "Fn::Equals": [
-                {
-                    "Ref": "env"
-                },
-                "NONE"
-            ]
-        }
-    },
-    "Resources": {
-        "LambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Metadata": {
-                "aws:asset:path": "./src",
-                "aws:asset:property": "Code"
-            },
-            "Properties": {
-                "Handler": "index.handler",
-                "FunctionName": {
-                    "Fn::If": [
-                        "ShouldNotCreateEnvResources",
-                        "rsscron",
-                        {
-                            "Fn::Join": [
-                                "",
-                                [
-                                    "rsscron",
-                                    "-",
-                                    {
-                                        "Ref": "env"
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                },
-                "Environment": {
-                    "Variables": {
-                        "ENV": {
-                            "Ref": "env"
-                        },
-                        "REGION": {
-                            "Ref": "AWS::Region"
-                        },
-                        "FUNCTION_RSSCRON_NAME": {
-                            "Ref": "functionrsscronName"
-                        }
-                    }
-                },
-                "Role": {
-                    "Fn::GetAtt": [
-                        "LambdaExecutionRole",
-                        "Arn"
-                    ]
-                },
-                "Runtime": "python3.8",
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "Lambda resource stack creation using Amplify CLI",
+	"Parameters": {
+		"CloudWatchRule": {
+			"Type": "String",
+			"Default": "NONE",
+			"Description": " Schedule Expression"
+		},
+		"env": {
+			"Type": "String"
+		},
+		"functionrsscronName": {
+			"Type": "String",
+			"Default": "functionrsscronName"
+		}
+	},
+	"Conditions": {
+		"ShouldNotCreateEnvResources": {
+			"Fn::Equals": [
+				{
+					"Ref": "env"
+				},
+				"NONE"
+			]
+		}
+	},
+	"Resources": {
+		"LambdaFunction": {
+			"Type": "AWS::Lambda::Function",
+			"Metadata": {
+				"aws:asset:path": "./src",
+				"aws:asset:property": "Code"
+			},
+			"Properties": {
+				"Handler": "index.handler",
+				"FunctionName": {
+					"Fn::If": [
+						"ShouldNotCreateEnvResources",
+						"rsscron",
+						{
+							"Fn::Join": [
+								"",
+								[
+									"rsscron",
+									"-",
+									{
+										"Ref": "env"
+									}
+								]
+							]
+						}
+					]
+				},
+				"Environment": {
+					"Variables": {
+						"ENV": {
+							"Ref": "env"
+						},
+						"REGION": {
+							"Ref": "AWS::Region"
+						},
+						"FUNCTION_RSSCRON_NAME": {
+							"Ref": "functionrsscronName"
+						}
+					}
+				},
+				"Role": {
+					"Fn::GetAtt": [
+						"LambdaExecutionRole",
+						"Arn"
+					]
+				},
+				"Runtime": "python3.8",
 				"Timeout": 30,
 				"MemorySize": 256,
-                "Code": {
-                    "S3Bucket": "amplify-amplifyblog-prod-193829-deployment",
-                    "S3Key": "amplify-builds/rsscron-5254745a33766c6a464a-build.zip"
-                }
-            }
-        },
-        "LambdaExecutionRole": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-                "RoleName": {
-                    "Fn::If": [
-                        "ShouldNotCreateEnvResources",
-                        "amplifyblogLambdaRolee1ae6bdb",
-                        {
-                            "Fn::Join": [
-                                "",
-                                [
-                                    "amplifyblogLambdaRolee1ae6bdb",
-                                    "-",
-                                    {
-                                        "Ref": "env"
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                },
-                "AssumeRolePolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                        {
-                            "Effect": "Allow",
-                            "Principal": {
-                                "Service": [
-                                    "lambda.amazonaws.com"
-                                ]
-                            },
-                            "Action": [
-                                "sts:AssumeRole"
-                            ]
-                        }
-                    ]
-                }
-            }
-        },
-        "lambdaexecutionpolicy": {
-            "DependsOn": [
-                "LambdaExecutionRole"
-            ],
-            "Type": "AWS::IAM::Policy",
-            "Properties": {
-                "PolicyName": "lambda-execution-policy",
-                "Roles": [
-                    {
-                        "Ref": "LambdaExecutionRole"
-                    }
-                ],
-                "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                        {
-                            "Effect": "Allow",
-                            "Action": [
-                                "logs:CreateLogGroup",
-                                "logs:CreateLogStream",
-                                "logs:PutLogEvents"
-                            ],
-                            "Resource": {
-                                "Fn::Sub": [
-                                    "arn:aws:logs:${region}:${account}:log-group:/aws/lambda/${lambda}:log-stream:*",
-                                    {
-                                        "region": {
-                                            "Ref": "AWS::Region"
-                                        },
-                                        "account": {
-                                            "Ref": "AWS::AccountId"
-                                        },
-                                        "lambda": {
-                                            "Ref": "LambdaFunction"
-                                        }
-                                    }
-                                ]
-                            }
+				"Code": {
+					"S3Bucket": "amplify-amplifyblog-prod-193829-deployment",
+					"S3Key": "amplify-builds/rsscron-434c7a4a6b2b535a5566-build.zip"
+				}
+			}
+		},
+		"LambdaExecutionRole": {
+			"Type": "AWS::IAM::Role",
+			"Properties": {
+				"RoleName": {
+					"Fn::If": [
+						"ShouldNotCreateEnvResources",
+						"amplifyblogLambdaRolee1ae6bdb",
+						{
+							"Fn::Join": [
+								"",
+								[
+									"amplifyblogLambdaRolee1ae6bdb",
+									"-",
+									{
+										"Ref": "env"
+									}
+								]
+							]
+						}
+					]
+				},
+				"AssumeRolePolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Principal": {
+								"Service": [
+									"lambda.amazonaws.com"
+								]
+							},
+							"Action": [
+								"sts:AssumeRole"
+							]
+						}
+					]
+				}
+			}
+		},
+		"lambdaexecutionpolicy": {
+			"DependsOn": [
+				"LambdaExecutionRole"
+			],
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"PolicyName": "lambda-execution-policy",
+				"Roles": [
+					{
+						"Ref": "LambdaExecutionRole"
+					}
+				],
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": [
+								"logs:CreateLogGroup",
+								"logs:CreateLogStream",
+								"logs:PutLogEvents"
+							],
+							"Resource": {
+								"Fn::Sub": [
+									"arn:aws:logs:${region}:${account}:log-group:/aws/lambda/${lambda}:log-stream:*",
+									{
+										"region": {
+											"Ref": "AWS::Region"
+										},
+										"account": {
+											"Ref": "AWS::AccountId"
+										},
+										"lambda": {
+											"Ref": "LambdaFunction"
+										}
+									}
+								]
+							}
 						},
 						{
-                            "Effect": "Allow",
-                            "Action": [
-                                "dynamodb:Query"
-                            ],
+							"Effect": "Allow",
+							"Action": [
+								"dynamodb:Query"
+							],
 							"Resource": [
-								{ 
+								{
 									"Fn::Join": [
 										"",
 										[
@@ -184,130 +184,129 @@
 						},
 						{
 							"Effect": "Allow",
-                            "Action": "s3:*",
+							"Action": "s3:*",
 							"Resource": "arn:aws:s3:::rssblog/*"
-							
 						}
-                    ]
-                }
-            }
-        },
-        "CloudWatchEvent": {
-            "Type": "AWS::Events::Rule",
-            "Properties": {
-                "Description": "Schedule rule for Lambda",
-                "ScheduleExpression": {
-                    "Ref": "CloudWatchRule"
-                },
-                "State": "ENABLED",
-                "Targets": [
-                    {
-                        "Arn": {
-                            "Fn::GetAtt": [
-                                "LambdaFunction",
-                                "Arn"
-                            ]
-                        },
-                        "Id": {
-                            "Ref": "LambdaFunction"
-                        }
-                    }
-                ]
-            }
-        },
-        "PermissionForEventsToInvokeLambda": {
-            "Type": "AWS::Lambda::Permission",
-            "Properties": {
-                "FunctionName": {
-                    "Ref": "LambdaFunction"
-                },
-                "Action": "lambda:InvokeFunction",
-                "Principal": "events.amazonaws.com",
-                "SourceArn": {
-                    "Fn::GetAtt": [
-                        "CloudWatchEvent",
-                        "Arn"
-                    ]
-                }
-            }
-        },
-        "AmplifyResourcesPolicy": {
-            "DependsOn": [
-                "LambdaExecutionRole"
-            ],
-            "Type": "AWS::IAM::Policy",
-            "Properties": {
-                "PolicyName": "amplify-lambda-execution-policy",
-                "Roles": [
-                    {
-                        "Ref": "LambdaExecutionRole"
-                    }
-                ],
-                "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                        {
-                            "Effect": "Allow",
-                            "Action": [
-                                "lambda:Get*",
-                                "lambda:List*",
-                                "lambda:Invoke*"
-                            ],
-                            "Resource": [
-                                {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "arn:aws:lambda:",
-                                            {
-                                                "Ref": "AWS::Region"
-                                            },
-                                            ":",
-                                            {
-                                                "Ref": "AWS::AccountId"
-                                            },
-                                            ":function:",
-                                            {
-                                                "Ref": "functionrsscronName"
-                                            }
-                                        ]
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-    },
-    "Outputs": {
-        "Name": {
-            "Value": {
-                "Ref": "LambdaFunction"
-            }
-        },
-        "Arn": {
-            "Value": {
-                "Fn::GetAtt": [
-                    "LambdaFunction",
-                    "Arn"
-                ]
-            }
-        },
-        "Region": {
-            "Value": {
-                "Ref": "AWS::Region"
-            }
-        },
-        "LambdaExecutionRole": {
-            "Value": {
-                "Ref": "LambdaExecutionRole"
-            }
-        },
-        "CloudWatchEventRule": {
-            "Value": {
-                "Ref": "CloudWatchEvent"
-            }
-        }
-    }
+					]
+				}
+			}
+		},
+		"CloudWatchEvent": {
+			"Type": "AWS::Events::Rule",
+			"Properties": {
+				"Description": "Schedule rule for Lambda",
+				"ScheduleExpression": {
+					"Ref": "CloudWatchRule"
+				},
+				"State": "ENABLED",
+				"Targets": [
+					{
+						"Arn": {
+							"Fn::GetAtt": [
+								"LambdaFunction",
+								"Arn"
+							]
+						},
+						"Id": {
+							"Ref": "LambdaFunction"
+						}
+					}
+				]
+			}
+		},
+		"PermissionForEventsToInvokeLambda": {
+			"Type": "AWS::Lambda::Permission",
+			"Properties": {
+				"FunctionName": {
+					"Ref": "LambdaFunction"
+				},
+				"Action": "lambda:InvokeFunction",
+				"Principal": "events.amazonaws.com",
+				"SourceArn": {
+					"Fn::GetAtt": [
+						"CloudWatchEvent",
+						"Arn"
+					]
+				}
+			}
+		},
+		"AmplifyResourcesPolicy": {
+			"DependsOn": [
+				"LambdaExecutionRole"
+			],
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"PolicyName": "amplify-lambda-execution-policy",
+				"Roles": [
+					{
+						"Ref": "LambdaExecutionRole"
+					}
+				],
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": [
+								"lambda:Get*",
+								"lambda:List*",
+								"lambda:Invoke*"
+							],
+							"Resource": [
+								{
+									"Fn::Join": [
+										"",
+										[
+											"arn:aws:lambda:",
+											{
+												"Ref": "AWS::Region"
+											},
+											":",
+											{
+												"Ref": "AWS::AccountId"
+											},
+											":function:",
+											{
+												"Ref": "functionrsscronName"
+											}
+										]
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		}
+	},
+	"Outputs": {
+		"Name": {
+			"Value": {
+				"Ref": "LambdaFunction"
+			}
+		},
+		"Arn": {
+			"Value": {
+				"Fn::GetAtt": [
+					"LambdaFunction",
+					"Arn"
+				]
+			}
+		},
+		"Region": {
+			"Value": {
+				"Ref": "AWS::Region"
+			}
+		},
+		"LambdaExecutionRole": {
+			"Value": {
+				"Ref": "LambdaExecutionRole"
+			}
+		},
+		"CloudWatchEventRule": {
+			"Value": {
+				"Ref": "CloudWatchEvent"
+			}
+		}
+	}
 }
