@@ -10,8 +10,10 @@ const AboutIndex = ({ data, location }) => {
   return (
     <Layout location={location} title={siteTitle}>
       <SEO title="AWS blog feed" />
+      <center>
       <h1>AWS blog feed</h1>
       <AWSblog />
+      </center>
     </Layout>
   )
 }

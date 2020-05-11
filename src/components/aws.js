@@ -1,50 +1,60 @@
 import React from 'react';
-import {Component} from 'react';
 import fetch from 'isomorphic-fetch';
+import Async from 'react-async';
+import moment from 'moment-timezone';
 
-class AWS extends Component {
-  constructor() {
-    super();
-    this.state = { data: [] };
-  }
+// load the url with aws blog articles from s3
+const loadurl = async () =>
+  fetch('https://rssblog.s3-eu-west-1.amazonaws.com/out.json')
+    .then(res => (res.ok ? res : Promise.reject(res)))
+    .then(res => res.json())
 
-  async loadurl() {
-    const response = await fetch('https://rssblog.s3-eu-west-1.amazonaws.com/out.json');
-    const json = await response.json();
-    console.log(json);
-    this.setState = { data: json };
-    return json;
-  }
+function App() {
+  return (
+    <div>
+      <Async promiseFn={loadurl}>
+      <Async.Loading>Loading...</Async.Loading>
+      <Async.Fulfilled>
+        {data => {
+          return (
+            <table>
+              <thead>
+                <tr>
+                  <th>Source</th>
+                  <th>Title</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.content.map(content=> {
+                  // guess the users timezone
+                  var usertz = moment.tz.guess();
 
-  render() { 
-    this.loadurl();
-    return (
-      <div id="main">
-      <table>
-        <thead>
-          <tr>
-            <th>Source</th>
-            <th>Title</th>
-            <th>Date</th>
-            <th>Author</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.state.map(content => {
-            return (
-              <tr>
-                <td>{content.source}</td>
-                <td>{content.title}</td>
-                <td>{content.timest}</td>
-                <td>{content.author}</td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>    
-      </div>  
-    );
-  }
-}
+                  // convert the blogpost article to datetime
+                  var userdate = Intl.DateTimeFormat('en-US',{
+                    timeZone: usertz,
+                    month: "short",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }).format(content.timest * 1000);
 
-export default AWS;
+                  return (
+                    <tr>
+                      <td>{content.source}</td>
+                      <td title = {userdate}>{content.title}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>   
+        )}}
+        </Async.Fulfilled>
+        <Async.Rejected>
+          {error => `Something went wrong: ${error.message}`}
+        </Async.Rejected>
+      </Async> 
+    </div>  
+  )
+};
+
+export default App;
