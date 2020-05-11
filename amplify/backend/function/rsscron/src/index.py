@@ -10,7 +10,7 @@ bucketname    = "rssblog"
 def get_table():
     res = []
     n	  = datetime.now()
-    s	  = n - timedelta(days = 5)
+    s	  = n - timedelta(days = 30)
     ts	= int(time.mktime(s.timetuple()))
 
     e	  = c.query(IndexName = 'allts', KeyConditionExpression = Key('allts').eq('y'), FilterExpression= Key('timest').gt(str(ts)))
