@@ -36,8 +36,8 @@ def get_table():
     out = sorted(res, reverse = True)
 
     # pretty print the json for easier debugging
-    pp = pprint.PrettyPrinter(indent = 2)
-    pp.pprint(out)
+    #pp = pprint.PrettyPrinter(indent = 2)
+    #pp.pprint(out)
 
     return out
 
