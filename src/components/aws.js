@@ -2,6 +2,7 @@ import React from 'react';
 import fetch from 'isomorphic-fetch';
 import Async from 'react-async';
 import moment from 'moment-timezone';
+import DateDiff from 'date-diff';
 
 // load the url with aws blog articles from s3
 const loadurl = async () =>
@@ -20,6 +21,7 @@ function App() {
             <table>
               <thead>
                 <tr>
+                  <th>Age</th>
                   <th>Source</th>
                   <th>Title</th>
                 </tr>
@@ -38,10 +40,15 @@ function App() {
                     minute: "2-digit",
                   }).format(content.timest * 1000);
 
+                  // calculate the age of the post
+                  // TODO - add age in minutes, hours, days or months instead of just hours
+                  var timediff = new DateDiff(Date.now(), content.timest *1000);
+
                   return (
                     <tr key = {content.timest}>
+                      <td>{timediff.days()}</td>
                       <td>{content.source}</td>
-                      <td title = {userdate} ><a target = "_blank" rel = "noreferrer" href = {content.link}>{content.title}</a></td>
+                  <td title = {userdate}><a target = "_blank" rel = "noreferrer" href = {content.link}>{content.title}</a></td>
                     </tr>
                   )
                 })}
