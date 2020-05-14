@@ -13,6 +13,7 @@
     "fetch": "^1.1.0",
     "fs": "^0.0.1-security",
     "gatsby": "^2.21.21",
+    "gatsby-cli": "^2.12.21",
     "gatsby-image": "^2.4.3",
     "gatsby-plugin-feed": "^2.5.1",
     "gatsby-plugin-manifest": "^2.4.2",

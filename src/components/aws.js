@@ -39,9 +39,9 @@ function App() {
                   }).format(content.timest * 1000);
 
                   return (
-                    <tr>
+                    <tr key = {content.timest}>
                       <td>{content.source}</td>
-                      <td title = {userdate}>{content.title}</td>
+                      <td title = {userdate} ><a target = "_blank" rel = "noreferrer" href = {content.link}>{content.title}</a></td>
                     </tr>
                   )
                 })}
