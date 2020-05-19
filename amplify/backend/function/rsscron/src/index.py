@@ -62,13 +62,13 @@ def make_csv(r):
 def make_json(r):
 
     # write the json raw output to /tmp
-    jsonf         = open('/tmp/out.json', 'wb')
+    jsonf         = open('/tmp/out.json', 'w')
     jsonf.write('{"content":')
     jsonf.write(str(r).replace("'", ""))
     jsonf.write('}')
 
     # write the json gz output to /tmp
-    gzipf         = gzip.GzipFile('/tmp/out.json.gz', 'wb')
+    gzipf         = gzip.GzipFile('/tmp/out.json.gz', 'w')
     gzipf.write('{"content":'.encode('utf-8') )
     gzipf.write(str(r).replace("'", "").encode('utf-8') )
     gzipf.write('}'.encode('utf-8') )
