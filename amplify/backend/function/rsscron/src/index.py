@@ -1,4 +1,4 @@
-import boto3, csv, json, os, pprint, time
+import boto3, csv, json, gzip, os, pprint, time
 from datetime import datetime, timedelta
 from boto3.dynamodb.conditions import Key, Attr
 
@@ -61,22 +61,28 @@ def make_csv(r):
 # create a json file
 def make_json(r):
 
-    # write the json output to /tmp
-    out         = open('/tmp/out.json', 'w')
-    out.write('{"content":')
-    out.write(str(r).replace("'", ""))
-    out.write('}')
-    out.close()
+    # write the json raw output to /tmp
+    jsonf         = open('/tmp/out.json', 'wb')
+    jsonf.write('{"content":')
+    jsonf.write(str(r).replace("'", ""))
+    jsonf.write('}')
+
+    # write the json gz output to /tmp
+    gzipf         = gzip.GzipFile('/tmp/out.json.gz', 'wb')
+    gzipf.write('{"content":'.encode('utf-8') )
+    gzipf.write(str(r).replace("'", "").encode('utf-8') )
+    gzipf.write('}'.encode('utf-8') )
+    gzipf.close()
 
 # try to delete original files from lambda /tmp 
 def del_file():
     try:
-        os.remove('/tmp/out.json')
+        os.remove('/tmp/out.json*')
     except:
         pass    
     
     try:
-        os.remove('/tmp/out.csv')
+        os.remove('/tmp/out.csv*')
     except:
         pass
 
@@ -98,10 +104,15 @@ def handler(event, context):
     '''
 
     # create a json file and copy it to s3
-    fn  = 'out.json'
+    fnr  = 'out.json'
+    fng  = 'out.json.gz'
     make_json(r)
-    cp_s3(fn)
-    print("\nuploaded new file to " + bucketname + "/" + fn) 
+
+    cp_s3(fnr)
+    print("\nuploaded new file to " + bucketname + "/" + fnr) 
+
+    cp_s3(fng)
+    print("\nuploaded new file to " + bucketname + "/" + fng) 
 
     # return how many records were discovered   
     return('@@@ '+str(len(r)))

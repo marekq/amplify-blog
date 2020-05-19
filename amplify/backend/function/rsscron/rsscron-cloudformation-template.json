@@ -34,7 +34,7 @@
 			},
 			"Properties": {
 				"Handler": "index.handler",
-				"TracingConfig" : {
+				"TracingConfig": {
 					"Mode": "Active"
 				},
 				"FunctionName": {
@@ -79,7 +79,7 @@
 				"MemorySize": 256,
 				"Code": {
 					"S3Bucket": "amplify-amplifyblog-prod-193829-deployment",
-					"S3Key": "amplify-builds/rsscron-3343734c564561304673-build.zip"
+					"S3Key": "amplify-builds/rsscron-594c7542763144624450-build.zip"
 				}
 			}
 		},
@@ -242,6 +242,14 @@
 				"PolicyDocument": {
 					"Version": "2012-10-17",
 					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": [
+								"xray:PutTraceSegments",
+								"xray:PutTelemetryRecords"
+							],
+							"Resource": "*"
+						},
 						{
 							"Effect": "Allow",
 							"Action": [
