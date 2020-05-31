@@ -2,7 +2,8 @@ import React from 'react';
 import fetch from 'isomorphic-fetch';
 import Async from 'react-async';
 import moment from 'moment-timezone';
-import DateDiff from 'date-diff';
+import {Component} from 'react';
+import prettyms from 'pretty-ms';
 
 // load the url with aws blog articles from s3
 const loadurl = async () =>
@@ -10,9 +11,14 @@ const loadurl = async () =>
     .then(res => (res.ok ? res : Promise.reject(res)))
     .then(res => res.json())
 
-function App() {
-  return (
-    <div>
+class AWS extends Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
+
+  render() {
+    return <div>
       <Async promiseFn={loadurl}>
       <Async.Loading>Loading...</Async.Loading>
       <Async.Fulfilled>
@@ -41,14 +47,15 @@ function App() {
                   }).format(content.timest * 1000);
 
                   // calculate the age of the post
-                  // TODO - add age in minutes, hours, days or months instead of just hours
-                  var timediff = new DateDiff(Date.now(), content.timest *1000);
+                  var now = new Date();
+                  var timestamp = now.getTime() - (content.timest * 1000);
+                  var timediff = prettyms(timestamp, {compact: true});
 
                   return (
                     <tr key = {content.timest}>
-                      <td>{timediff.days()}</td>
+                      <td>{timediff}</td>
                       <td>{content.source}</td>
-                  <td title = {userdate}><a target = "_blank" rel = "noreferrer" href = {content.link}>{content.title}</a></td>
+                      <td title = {userdate}><a target = "_blank" rel = "noreferrer" href = {content.link}>{content.title}</a></td>
                     </tr>
                   )
                 })}
@@ -61,7 +68,7 @@ function App() {
         </Async.Rejected>
       </Async> 
     </div>  
-  )
+  };
 };
 
-export default App;
+export default AWS;
