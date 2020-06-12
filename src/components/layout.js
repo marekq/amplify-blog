@@ -65,9 +65,11 @@ const Layout = ({ location, title, children }) => {
   )
   
   return (
+    <center>
+
     <div
       style={{
-        maxWidth: '100%',
+        maxWidth: '1000px',
         padding: '5%',
       }}
     >
@@ -75,12 +77,13 @@ const Layout = ({ location, title, children }) => {
       <main>{menu}
         {children}</main>
       <footer>
-        © {new Date().getFullYear()}, Built with
+        © {new Date().getFullYear()}, Find the source code for this page on 
         {` `}
-        <a href="https://www.gatsbyjs.org">Gatsby</a> and {` `}
-        <a href="https://aws.amazon.com/amplify/">AWS Amplify</a>.
+        <a href = "https://github.com/marekq/amplify-blog">GitHub</a>.
       </footer>
     </div>
+    </center>
+
   )
 }
 

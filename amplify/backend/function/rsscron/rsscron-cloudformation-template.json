@@ -75,7 +75,10 @@
 					]
 				},
 				"Runtime": "python3.8",
-				"Timeout": 30,
+				"TracingConfig": {
+                    "Mode": "Active"
+                },
+				"Timeout": 10,
 				"MemorySize": 256,
 				"Code": {
 					"S3Bucket": "amplify-amplifyblog-prod-193829-deployment",
