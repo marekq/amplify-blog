@@ -26,9 +26,7 @@ class AWS extends Component {
             <table>
               <thead>
                 <tr>
-                  <th>Age</th>
-                  <th>Blog</th>
-                  <th>Title</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -41,9 +39,7 @@ class AWS extends Component {
 
                   return (
                     <tr key = {content.link}>
-                      <td>{timediff}</td>
-                      <td>{content.source}</td>
-                      <td><a target = "_blank" rel = "noreferrer" href = {content.link}><center><b>{content.title}</b></center></a><br />{content.desc}</td>
+                      <td><center><a target = "_blank" rel = "noreferrer" href = {content.link}><b>{content.title}</b></a><br /><br /><i>posted {timediff} ago in {content.source}</i></center><br />{content.desc}</td>
                     </tr>
                   )
                 })}

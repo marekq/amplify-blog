@@ -15,7 +15,7 @@ backend:
       commands:
 
         # push the stack to amplify
-        - ln -s /bin/python3.8 /bin/python3
+        - ln -sf /bin/python3.8 /bin/python3
         - amplifyPush --simple
 
 frontend:
