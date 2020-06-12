@@ -6,16 +6,17 @@ backend:
         
         # install python 3.8 from amazon-linux-extras
         - amazon-linux-extras install python3.8
+        - ln -sf /bin/python3.8 /bin/python3
+        - ln -sf /bin/pip3.8 /bin/pip3
 
         # install virtualenv and pipenv
-        - python3.8 -m pip install virtualenv
-        - pip3.8 install --force pipenv 
+        - python3 -m pip install virtualenv
+        - pip3 install --force pipenv 
 
     build:
       commands:
 
         # push the stack to amplify
-        - ln -sf /bin/python3.8 /bin/python3
         - amplifyPush --simple
 
 frontend:

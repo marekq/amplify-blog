@@ -39,7 +39,7 @@ class AWS extends Component {
 
                   return (
                     <tr key = {content.link}>
-                      <td><center><a target = "_blank" rel = "noreferrer" href = {content.link}><b>{content.title}</b></a><br /><br /><i>posted {timediff} ago in {content.source}</i></center><br />{content.desc}</td>
+                      <td><center><a target = "_blank" rel = "noreferrer" href = {content.link}><b>{content.title}</b></a><br /><br /><i>Posted {timediff} ago in {content.source} by {content.author}</i></center><br />{content.desc}</td>
                     </tr>
                   )
                 })}

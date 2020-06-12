@@ -1,16 +1,13 @@
 import React from "react"
 import { Link } from "gatsby"
 
-import { rhythm } from "../utils/typography"
-
 const Layout = ({ location, title, children }) => {
-  //const rootPath = `${__PATH_PREFIX__}/`
   let header
   let menu
 
   header = (
     <h1 style={{
-        fontFamily: `Montserrat, sans-serif`,
+        fontFamily: `Candara, sans-serif`,
         marginTop: 10,
         fontColor: "gray",
         textAlign: "center",
@@ -28,7 +25,7 @@ const Layout = ({ location, title, children }) => {
 
   menu = (
       <h3 style={{
-        fontFamily: `Montserrat, sans-serif`,
+        fontFamily: `Candara, sans-serif`,
         marginTop: 0,
         textAlign: "center",
         color: "gray"
@@ -70,10 +67,8 @@ const Layout = ({ location, title, children }) => {
   return (
     <div
       style={{
-        marginLeft: `auto`,
-        marginRight: `auto`,
-        maxWidth: rhythm(24),
-        padding: `${rhythm(1.5)} ${rhythm(3 / 4)}`,
+        maxWidth: '100%',
+        padding: '5%',
       }}
     >
       <header>{header}</header>

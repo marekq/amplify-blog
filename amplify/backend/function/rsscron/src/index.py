@@ -20,7 +20,7 @@ def get_table():
         
     # iterate over the returned items
     for a in e['Items']:
-        b   = '{"timest": "' + a['timest'] + '", "source": "' + a['source'] + '", "title": "' + a['title'] + '", "author": "' + a['author'] + '", "link": "' + a['link'] + '", "desc": "' + str(a['desc']).strip() + '"}'
+        b   = '{"timest": "' + a['timest'] + '", "source": "' + a['source'] + '", "title": "' + a['title'] + '", "author": "' + a['author'] + '", "link": "' + a['link'] + '", "desc": "' + str(a['desc']).strip() + '", "author": "'+ a['author'] +'"}'
         res.append(b)
     
         # retrieve additional items if lastevaluatedkey was found 
@@ -29,7 +29,7 @@ def get_table():
             e   = c.query(ExclusiveStartKey = z, IndexName = 'allts', KeyConditionExpression = Key('allts').eq('y'), FilterExpression= Key('timest').gt(str(ts)))
             
             for a in e['Items']:
-                b   = '{"timest": "' + a['timest'] + '", "source": "' + a['source'] + '", "title": "' + a['title'] + '", "author": "' + a['author'] + '", "link": "' + a['link'] + '", "desc": "' + str(a['desc']).strip() + '"}'
+                b   = '{"timest": "' + a['timest'] + '", "source": "' + a['source'] + '", "title": "' + a['title'] + '", "author": "' + a['author'] + '", "link": "' + a['link'] + '", "desc": "' + str(a['desc']).strip() + '", "author": "'+ a['author'] +'"}'
                 res.append(b)
 
     # sort the json file by timestamp in reverse
