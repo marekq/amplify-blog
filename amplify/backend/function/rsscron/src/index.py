@@ -48,8 +48,8 @@ def cp_s3(x):
         Bucket = bucketname, 
         Body = open('/tmp/' + x, 'rb'), 
         Key = x, 
-        ACL ='public-read',
-        CacheControl = 'public, max-age=60'
+        ACL = 'public-read',
+        CacheControl = 'public, max-age=3600'
     )
 
 # create a json file
