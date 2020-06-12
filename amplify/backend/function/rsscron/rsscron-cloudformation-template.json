@@ -79,7 +79,7 @@
 				"MemorySize": 256,
 				"Code": {
 					"S3Bucket": "amplify-amplifyblog-prod-193829-deployment",
-					"S3Key": "amplify-builds/rsscron-337231532f4747784543-build.zip"
+					"S3Key": "amplify-builds/rsscron-78685337426a46676a77-build.zip"
 				}
 			}
 		},

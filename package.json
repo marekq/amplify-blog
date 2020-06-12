@@ -1,11 +1,11 @@
 {
-  "name": "gatsby-starter-blog",
+  "name": "amplify-blog",
   "private": true,
   "description": "A starter for a blog powered by Gatsby and Markdown",
-  "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "version": "0.2.0",
+  "author": "Marek Kuczynski <marek.kuczynski@gmail.com>",
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/marekq/amplify-blog"
   },
   "dependencies": {
     "@stackbit/gatsby-plugin-menus": "0.0.4",
@@ -32,7 +32,6 @@
     "gatsby-transformer-sharp": "^2.5.3",
     "helmet": "^3.22.0",
     "isomorphic-fetch": "^2.2.1",
-    "moment-timezone": "^0.5.31",
     "net": "^1.0.2",
     "pretty-ms": "^7.0.0",
     "prismjs": "^1.20.0",

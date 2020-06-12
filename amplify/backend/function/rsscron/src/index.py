@@ -11,8 +11,8 @@ def get_table():
     res = []
     n	  = datetime.now()
 
-    # retrieve blogposts up to 30 days old
-    s	  = n - timedelta(days = 30)
+    # retrieve blogposts up to 10 days old
+    s	  = n - timedelta(days = 10)
     ts	= int(time.mktime(s.timetuple()))
 
     # query the dynamodb table for recent blogposts
@@ -20,7 +20,7 @@ def get_table():
         
     # iterate over the returned items
     for a in e['Items']:
-        b   = '{"timest": "' + a['timest'] + '", "source": "' + a['source'] + '", "title": "' + a['title'] + '", "author": "' + a['author'] + '", "link": "' + a['link'] + '"}'
+        b   = '{"timest": "' + a['timest'] + '", "source": "' + a['source'] + '", "title": "' + a['title'] + '", "author": "' + a['author'] + '", "link": "' + a['link'] + '", "desc": "' + str(a['desc']).strip() + '"}'
         res.append(b)
     
         # retrieve additional items if lastevaluatedkey was found 
@@ -29,34 +29,28 @@ def get_table():
             e   = c.query(ExclusiveStartKey = z, IndexName = 'allts', KeyConditionExpression = Key('allts').eq('y'), FilterExpression= Key('timest').gt(str(ts)))
             
             for a in e['Items']:
-                b   = '{"timest": "' + a['timest'] + '", "source": "' + a['source'] + '", "title": "' + a['title'] + '", "author": "' + a['author'] + '", "link": "' + a['link'] + '"}'
+                b   = '{"timest": "' + a['timest'] + '", "source": "' + a['source'] + '", "title": "' + a['title'] + '", "author": "' + a['author'] + '", "link": "' + a['link'] + '", "desc": "' + str(a['desc']).strip() + '"}'
                 res.append(b)
 
     # sort the json file by timestamp in reverse
     out = sorted(res, reverse = True)
 
     # pretty print the json for easier debugging
-    #pp = pprint.PrettyPrinter(indent = 2)
-    #pp.pprint(out)
+    pp = pprint.PrettyPrinter(indent = 2)
+    pp.pprint(out)
 
     return out
 
 # copy the file to s3 with a public acl
 def cp_s3(x):
-    s3      = boto3.resource('s3')
-    s3.meta.client.upload_file('/tmp/'+x, bucketname, x, ExtraArgs = {'ACL': 'public-read'})
-
-# create a csv file 
-def make_csv(r):
-    out         = open('/tmp/out.csv', 'w')
-    csvwriter   = csv.writer(out, delimiter = ',',  quoting = csv.QUOTE_ALL)
-    head        = r[0].keys()
-    csvwriter.writerow(head)
-    
-    # write values to csv file and close it
-    for x in r:
-        csvwriter.writerow(x.values())
-    out.close()
+    s3      = boto3.client('s3')
+    s3.put_object(
+        Bucket = bucketname, 
+        Body = open('/tmp/' + x, 'rb'), 
+        Key = x, 
+        ACL ='public-read',
+        CacheControl = 'public, max-age=60'
+    )
 
 # create a json file
 def make_json(r):
@@ -64,13 +58,13 @@ def make_json(r):
     # write the json raw output to /tmp
     jsonf         = open('/tmp/out.json', 'w')
     jsonf.write('{"content":')
-    jsonf.write(str(r).replace("'", ""))
+    jsonf.write(str(r).replace("'", "").replace("\\", ""))
     jsonf.write('}')
 
     # write the json gz output to /tmp
     gzipf         = gzip.GzipFile('/tmp/out.json.gz', 'w')
     gzipf.write('{"content":'.encode('utf-8') )
-    gzipf.write(str(r).replace("'", "").encode('utf-8') )
+    gzipf.write(str(r).replace("'", "").replace("\\", "").encode('utf-8') )
     gzipf.write('}'.encode('utf-8') )
     gzipf.close()
 
@@ -95,14 +89,6 @@ def handler(event, context):
     # delete old files in case /tmp is not empty
     del_file()
 
-    '''
-    # create a csv file and copy it to s3
-    fn  = 'out.json'
-    make_csv(r)
-    cp_s3('out.csv')
-    print("\nuploaded new file to " + bucketname + "/" + fn) 
-    '''
-
     # create a json file and copy it to s3
     fnr  = 'out.json'
     fng  = 'out.json.gz'
@@ -117,4 +103,4 @@ def handler(event, context):
     # return how many records were discovered   
     return('@@@ '+str(len(r)))
 
-#handler('','')
+handler('','')
