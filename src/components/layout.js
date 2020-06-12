@@ -42,14 +42,6 @@ const Layout = ({ location, title, children }) => {
           boxShadow: `none`,
           color: `gray`,
         }}
-        to={`/aws`}>
-      AWS feed
-      </Link>
-      {` • `}
-      <Link style={{
-          boxShadow: `none`,
-          color: `gray`,
-        }}
         to={`/about`}>
       About
       </Link>
@@ -74,8 +66,9 @@ const Layout = ({ location, title, children }) => {
       }}
     >
       <header>{header}</header>
-      <main>{menu}
-        {children}</main>
+      <main>
+        {menu}{children}
+      </main>
       <footer>
         © {new Date().getFullYear()}, Find the source code for this page on 
         {` `}

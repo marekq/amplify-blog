@@ -11,10 +11,7 @@ const loadurl = async () =>
     .then(res => res.json())
 
 class AWS extends Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
+
 
   render() {
     return <div>
