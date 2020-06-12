@@ -12,7 +12,6 @@ const loadurl = async () =>
 
 class AWS extends Component {
 
-
   render() {
     return <div>
       <Async promiseFn={loadurl}>
@@ -37,7 +36,12 @@ class AWS extends Component {
 
                   return (
                     <tr key = {content.link}>
-                      <td><center><a target = "_blank" rel = "noreferrer" href = {content.link}><b>{content.title}</b></a><br /><br /><i>{timediff} ago in {sourcename} by {content.author}</i></center><br />{content.desc}</td>
+                      <td>
+                        <button class="collapsible">{content.title}</button>
+                        <div class="content"><a target = "_blank" rel = "noreferrer" href = {content.link}><b>{content.title}</b></a><br /><br />
+                          <i>{timediff} ago in {sourcename} by {content.author}</i><br />{content.desc}
+                        </div>
+                      </td>
                     </tr>
                   )
                 })}

@@ -8,6 +8,7 @@ const BlogIndex = ({ location }) => {
   return (
     <Layout location={location} title="Serverless Blog">
       <SEO title="All posts" />
+      A serverless blog built by Marek Kuczynski powered by AWS Amplify. 
       <AWS />
     </Layout>
   )
