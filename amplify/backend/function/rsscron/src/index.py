@@ -11,7 +11,7 @@ def get_table():
     res = []
     n	  = datetime.now()
 
-    # retrieve blogposts up to 10 days old
+    # retrieve blogposts up to 21 days old
     s	  = n - timedelta(days = 21)
     ts	= int(time.mktime(s.timetuple()))
 

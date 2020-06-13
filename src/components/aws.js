@@ -22,7 +22,7 @@ class AWS extends Component {
             <table>
               <thead>
                 <tr>
-                  <th></th>
+                <th>'{ }'</th>
                 </tr>
               </thead>
               <tbody>
@@ -33,13 +33,18 @@ class AWS extends Component {
                   var timestamp = now.getTime() - (content.timest * 1000);
                   var timediff = prettyms(timestamp, {compact: true});
                   var sourcename = content.source.replace('-', ' ');
+                  var ddbkey = content.source + content.timest;
 
                   return (
-                    <tr key = {content.link}>
+                    <tr key = {ddbkey}>
                       <td>
-                        <button class="collapsible">{content.title}</button>
-                        <div class="content"><a target = "_blank" rel = "noreferrer" href = {content.link}><b>{content.title}</b></a><br /><br />
-                          <i>{timediff} ago in {sourcename} by {content.author}</i><br />{content.desc}
+                        <button className = "collapsible">{content.title}</button>
+                        <div className = "content">
+                          <p id = "desc">
+                            <a target = "_blank" rel = "noreferrer" href = {content.link}><b>{content.title}</b></a><br />
+                            <i>{timediff} ago in {sourcename} by {content.author}</i><br />
+                            {content.desc}
+                          </p>
                         </div>
                       </td>
                     </tr>

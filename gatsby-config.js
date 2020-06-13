@@ -30,7 +30,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-load-script`,
       options: {
-        src: `/collapse.js`,
+        src: `collapse.js`,
       }
     },
     {
@@ -58,6 +58,7 @@ module.exports = {
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     `gatsby-plugin-feed`,
+    'gatsby-plugin-brotli',
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
