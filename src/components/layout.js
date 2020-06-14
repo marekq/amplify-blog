@@ -35,7 +35,7 @@ const Layout = ({ location, title, children }) => {
           color: `gray`,
         }}
         to={`/`}>
-      Home
+      AWS Blog
       </Link>
       {` • `}
       <Link style={{
@@ -43,7 +43,7 @@ const Layout = ({ location, title, children }) => {
           color: `gray`,
         }}
         to={`/about`}>
-      About
+      About this page
       </Link>
       {` • `}
       <Link style={{
@@ -51,7 +51,7 @@ const Layout = ({ location, title, children }) => {
           color: `gray`,
         }}
         to={`/marek`}>
-      Marek
+      About Marek
       </Link>
      </h3>
   )
