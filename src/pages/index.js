@@ -6,7 +6,7 @@ const Index = ({ location }) => {
 
   return (
     <Layout location = {location} title = "Serverless Blog">
-      A serverless blog built by Marek Kuczynski, powered by AWS Amplify. 
+      A serverless blog built by Marek Kuczynski, powered by AWS Amplify.<br /><br />
       <AWS />
     </Layout>
   )

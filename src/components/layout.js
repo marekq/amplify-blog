@@ -70,7 +70,7 @@ const Layout = ({ location, title, children }) => {
         {menu}{children}
       </main>
       <footer>
-        © {new Date().getFullYear()}, Find the source code for this page on 
+        Find the source code for this page on 
         {` `}
         <a href = "https://github.com/marekq/amplify-blog">GitHub</a>.
       </footer>
