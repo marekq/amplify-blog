@@ -6,7 +6,6 @@ verify_ssl = true
 [packages]
 aws-xray-sdk = '>2.5.0'
 Brotli = '>1.0.0'
-brotlipy = '>0.6.0'
 
 [requires]
 python_version = "3.8"
