@@ -3,11 +3,10 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
-[dev-packages]
-
 [packages]
-brotlipy = '>0.6.0'
 aws-xray-sdk = '>2.5.0'
+Brotli = '>1.0.0'
+brotlipy = '>0.6.0'
 
 [requires]
 python_version = "3.8"
