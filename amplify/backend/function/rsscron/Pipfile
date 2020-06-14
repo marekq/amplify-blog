@@ -6,8 +6,8 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-brotli = '*'
-aws-xray-sdk = '*'
+Brotli = '>1.0.0'
+aws-xray-sdk = '>2.5.0'
 
 [requires]
 python_version = "3.8"
