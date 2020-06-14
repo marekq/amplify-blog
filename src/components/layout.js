@@ -7,7 +7,7 @@ const Layout = ({ location, title, children }) => {
 
   header = (
     <h1 style={{
-        fontFamily: `Candara, sans-serif`,
+        fontFamily: `Amazon Ember`,
         marginTop: 10,
         fontColor: "gray",
         textAlign: "center",
@@ -25,7 +25,7 @@ const Layout = ({ location, title, children }) => {
 
   menu = (
       <h3 style={{
-        fontFamily: `Candara, sans-serif`,
+        fontFamily: `Amazon Ember`,
         marginTop: 0,
         textAlign: "center",
         color: "gray"

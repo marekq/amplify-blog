@@ -1,56 +1,62 @@
 import React from 'react';
-import fetch from 'isomorphic-fetch';
-import Async from 'react-async';
 import {Component} from 'react';
 import prettyms from 'pretty-ms';
+import axios from 'axios';
+import "./style.css";
 
-// load the url with aws blog articles from s3
-const loadurl = async () =>
-  fetch('https://rssblog.s3-eu-west-1.amazonaws.com/out.json')
-    .then(res => (res.ok ? res : Promise.reject(res)))
-    .then(res => res.json())
+export default class AWS extends Component {
 
-class AWS extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: []
+    };
+  }
 
+  // load the url with aws blog articles from s3
+  async getData() {
+    const resp = await axios.get('https://rssblog.s3-eu-west-1.amazonaws.com/out.json')
+    var data = resp.data
+    this.state.data = resp.data.content;
+    console.log("getdata", data);
+    return data;
+  }
 
-  render() {
-    return <div>
-      <Async promiseFn={loadurl}>
-      <Async.Loading>Loading...</Async.Loading>
-      <Async.Fulfilled>
-        {data => {
-          return (
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.content.map(content=> {
+  // mount the component before render
+  async componentDidMount() {
+    this.setState(await this.getData())
+  }
 
-                  // calculate the age of the post
-                  var now = new Date();
-                  var timestamp = now.getTime() - (content.timest * 1000);
-                  var timediff = prettyms(timestamp, {compact: true});
-                  var sourcename = content.source.replace('-', ' ');
+  // render the page
+  render() {  
+    return (
+    <div>
+      <table>
+        <tbody>
+          {this.state.data.map(content => {
 
-                  return (
-                    <tr key = {content.link}>
-                      <td><center><a target = "_blank" rel = "noreferrer" href = {content.link}><b>{content.title}</b></a><br /><br /><i>{timediff} ago in {sourcename} by {content.author}</i></center><br />{content.desc}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>   
-        )}}
-        </Async.Fulfilled>
-        <Async.Rejected>
-          {error => `Something went wrong: ${error.message}`}
-        </Async.Rejected>
-      </Async> 
-    </div>  
-  };
+            // calculate the age of the post
+            var now = new Date();
+            var timestamp = now.getTime() - (content.timest * 1000);
+            var timediff = prettyms(timestamp, {compact: true});
+            var sourcename = content.source.replace('-', ' ');
+            var ddbkey = content.source + content.timest;
+
+            // return table values
+            return (
+              <tr key = {ddbkey}>
+                <td>
+                <a target = "_blank" rel = "noreferrer" href = {content.link}><b>{content.title}</b></a><br />
+                <div>
+                <i>{timediff} ago in {sourcename} by {content.author}</i><br />
+                  {content.desc}
+                  </div>
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>  
+    </div>
+    )};
 };
-
-export default AWS;
