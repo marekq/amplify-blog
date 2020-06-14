@@ -1,6 +1,11 @@
 import boto3, csv, json, gzip, os, pprint, time
 from datetime import datetime, timedelta
 from boto3.dynamodb.conditions import Key, Attr
+from aws_xray_sdk.core import xray_recorder
+from aws_xray_sdk.core import patch_all
+
+# patch libraries for xray tracing
+patch_all()
 
 # TODO - import based on variables instead of hardcoded values
 c             = boto3.resource('dynamodb').Table('rssaws')
