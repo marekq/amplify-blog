@@ -11,7 +11,8 @@ Roadmap
 -------
 
 - [ ] Add AWS blog filtering and searching.
-- [X] Reduce build time to under three minutes.
+- [ ] Reduce build time to under three minutes using AL2 or using a custom build container.
+- [ ] Optimize website loading performance.
 
 
 Contact
