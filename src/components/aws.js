@@ -14,25 +14,24 @@ export default class AWS extends Component {
   }
 
   // load the url with aws blog articles from s3
-  async componentDidMount() {
-    try {
-      const resp = await axios.get('https://rssblog.s3-eu-west-1.amazonaws.com/out.json')
-      this.state.data = resp.data.content;
-      console.log(resp.data.content);
-    } catch (e) {
-      console.log(e);
-    }
+  async getData() {
+    const resp = await axios.get('https://rssblog.s3-eu-west-1.amazonaws.com/out.json')
+    var data = resp.data
+    this.state.data = resp.data.content;
+    console.log("getdata", data);
+    return data;
   }
 
-  render() {
+  // mount the component before render
+  async componentDidMount() {
+    this.setState(await this.getData())
+  }
+
+  // render the page
+  render() {  
     return (
     <div>
       <table>
-        <thead>
-          <tr>
-          <th><button>Toggle</button></th>
-          </tr>
-        </thead>
         <tbody>
           {this.state.data.map(content => {
 
@@ -43,6 +42,7 @@ export default class AWS extends Component {
             var sourcename = content.source.replace('-', ' ');
             var ddbkey = content.source + content.timest;
 
+            // return table values
             return (
               <tr key = {ddbkey}>
                 <td>
@@ -60,5 +60,3 @@ export default class AWS extends Component {
     </div>
     )};
 };
-
-//export default AWS;
