@@ -1,65 +1,64 @@
 import React from 'react';
-import fetch from 'isomorphic-fetch';
-import Async from 'react-async';
 import {Component} from 'react';
 import prettyms from 'pretty-ms';
+import axios from 'axios';
+import "./style.css";
 
-// load the url with aws blog articles from s3
-const loadurl = async () =>
-  fetch('https://rssblog.s3-eu-west-1.amazonaws.com/out.json')
-    .then(res => (res.ok ? res : Promise.reject(res)))
-    .then(res => res.json())
+export default class AWS extends Component {
 
-class AWS extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: []
+    };
+  }
+
+  // load the url with aws blog articles from s3
+  async componentDidMount() {
+    try {
+      const resp = await axios.get('https://rssblog.s3-eu-west-1.amazonaws.com/out.json')
+      this.state.data = resp.data.content;
+      console.log(resp.data.content);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   render() {
-    return <div>
-      <Async promiseFn={loadurl}>
-      <Async.Loading>Loading...</Async.Loading>
-      <Async.Fulfilled>
-        {data => {
-          return (
-            <table>
-              <thead>
-                <tr>
-                <th>'{ }'</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.content.map(content=> {
+    return (
+    <div>
+      <table>
+        <thead>
+          <tr>
+          <th><button>Toggle</button></th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.state.data.map(content => {
 
-                  // calculate the age of the post
-                  var now = new Date();
-                  var timestamp = now.getTime() - (content.timest * 1000);
-                  var timediff = prettyms(timestamp, {compact: true});
-                  var sourcename = content.source.replace('-', ' ');
-                  var ddbkey = content.source + content.timest;
+            // calculate the age of the post
+            var now = new Date();
+            var timestamp = now.getTime() - (content.timest * 1000);
+            var timediff = prettyms(timestamp, {compact: true});
+            var sourcename = content.source.replace('-', ' ');
+            var ddbkey = content.source + content.timest;
 
-                  return (
-                    <tr key = {ddbkey}>
-                      <td>
-                        <button className = "collapsible">{content.title}</button>
-                        <div className = "content">
-                          <p id = "desc">
-                            <a target = "_blank" rel = "noreferrer" href = {content.link}><b>{content.title}</b></a><br />
-                            <i>{timediff} ago in {sourcename} by {content.author}</i><br />
-                            {content.desc}
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>   
-        )}}
-        </Async.Fulfilled>
-        <Async.Rejected>
-          {error => `Something went wrong: ${error.message}`}
-        </Async.Rejected>
-      </Async> 
-    </div>  
-  };
+            return (
+              <tr key = {ddbkey}>
+                <td>
+                <a target = "_blank" rel = "noreferrer" href = {content.link}><b>{content.title}</b></a><br />
+                <div>
+                <i>{timediff} ago in {sourcename} by {content.author}</i><br />
+                  {content.desc}
+                  </div>
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>  
+    </div>
+    )};
 };
 
-export default AWS;
+//export default AWS;
