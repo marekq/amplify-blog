@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-Brotli = '>1.0.0'
+brotlipy = '>0.6.0'
 aws-xray-sdk = '>2.5.0'
 
 [requires]
