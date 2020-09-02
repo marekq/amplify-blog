@@ -2,7 +2,7 @@ import React from "react"
 import AWS from "../components/aws"
 import Layout from "../components/layout"
 import Helmet from "react-helmet"
-import { withPrefix, Link } from "gatsby"
+import { withPrefix } from "gatsby"
 
 const Index = ({ location }) => {
 
