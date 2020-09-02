@@ -12,7 +12,6 @@ backend:
         # install virtualenv and pipenv
         - python3 -m pip install virtualenv
         - pip3 install --force pipenv 
-        - ls -alFhR
 
     build:
       commands:
