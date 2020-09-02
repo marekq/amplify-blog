@@ -28,12 +28,6 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-plugin-load-script`,
-      options: {
-        src: `collapse.js`,
-      }
-    },
-    {
       resolve: `gatsby-transformer-remark`,
       options: {
         plugins: [

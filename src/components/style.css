@@ -1,8 +1,12 @@
 a:link, a:visited {
 	color: gray;
 }
+
+.table {
+	max-width: 800px; 
+}
 	
-td {
+.td {
 	font-family: Amazon Ember;
 	font-size: 16px;
 	color: #555;
@@ -17,7 +21,8 @@ td {
 	font-family: Amazon Ember;
 	cursor: pointer;
 	width: 100%;
-	font-size: 16px;
+	outline: none;
+	font-size: 18px;
 	text-align: left;
 }
     

@@ -2,7 +2,6 @@ import React from 'react';
 import {Component} from 'react';
 import prettyms from 'pretty-ms';
 import axios from 'axios';
-import "./style.css";
 
 export default class AWS extends Component {
 
@@ -46,10 +45,14 @@ export default class AWS extends Component {
             return (
               <tr key = {ddbkey}>
                 <td>
-                <a target = "_blank" rel = "noreferrer" href = {content.link}><b>{content.title}</b></a><br />
-                <div>
-                <i>{timediff} ago in {sourcename} by {content.author}</i><br />
-                  {content.desc}
+                  <button className = "collapsible">{content.source} - {content.title}</button>
+                  <div className = "content"><br />
+                    <p id = "desc">
+                      <i>{timediff} ago in {sourcename} by {content.author}</i><br /><br />
+                        {content.desc}<br /><br />
+                        <a target = "_blank" rel = "noreferrer" href = {content.link}>Visit article here</a>
+
+                    </p>
                   </div>
                 </td>
               </tr>
