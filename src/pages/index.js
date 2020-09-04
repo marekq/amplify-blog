@@ -8,7 +8,7 @@ const Index = ({ location }) => {
 
   return (
     <Layout location = {location} title = "Serverless Blog">
-      <Helmet>
+      <Helmet async={false}>
           <script src={withPrefix('click.js')} type="text/javascript" />
           <script src={withPrefix('collapse.js')} type="text/javascript" />
       </Helmet>
