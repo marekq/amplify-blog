@@ -39,6 +39,7 @@
     "react": "^16.13.1",
     "react-async": "^10.0.1",
     "react-dom": "^16.13.1",
+    "react-filterable-table": "^0.3.434",
     "react-helmet": "^6.1.0",
     "react-typography": "^0.16.19",
     "typeface-merriweather": "0.0.72",
