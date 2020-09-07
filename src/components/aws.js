@@ -5,6 +5,7 @@ import FilterableTable from 'react-filterable-table';
 
 // Fields to show in the table, and what object properties in the data they bind to
 const fields = [
+	{ name: 'timest', displayName: "Timest", inputFilterable: true, sortable: true, visible: false},
 	{ name: 'title', displayName: "Title", inputFilterable: true, sortable: true },
 	{ name: 'source', displayName: "Blog", inputFilterable: true, exactFilterable: true, sortable: true },
 	{ name: 'desc', displayName: "Description", inputFilterable: true, exactFilterable: true, sortable: true }
@@ -42,6 +43,8 @@ export default class AWS extends Component {
           <FilterableTable
             namespace = "blogs"
             initialSort = "timest"
+            pageSize = "500"
+            topPagerVisible = "false"
             data = {this.state.data}
             fields = {fields}
             noRecordsMessage = "There are no blogs to display"
