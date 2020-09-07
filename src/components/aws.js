@@ -1,7 +1,14 @@
 import React from 'react';
 import {Component} from 'react';
-import prettyms from 'pretty-ms';
 import axios from 'axios';
+import FilterableTable from 'react-filterable-table';
+
+// Fields to show in the table, and what object properties in the data they bind to
+const fields = [
+	{ name: 'title', displayName: "Title", inputFilterable: true, sortable: true },
+	{ name: 'source', displayName: "Blog", inputFilterable: true, exactFilterable: true, sortable: true },
+	{ name: 'desc', displayName: "Description", inputFilterable: true, exactFilterable: true, sortable: true }
+];
 
 export default class AWS extends Component {
 
@@ -32,32 +39,14 @@ export default class AWS extends Component {
     <div>
       <table>
         <tbody>
-          {this.state.data.map(content => {
-
-            // calculate the age of the post
-            var now = new Date();
-            var timestamp = now.getTime() - (content.timest * 1000);
-            var timediff = prettyms(timestamp, {compact: true});
-            var sourcename = content.source.replace('-', ' ');
-            var ddbkey = content.source + content.timest;
-
-            // return table values
-            return (
-              <tr key = {ddbkey}>
-                <td>
-                  <button className = "collapsible">{content.source} - {content.title}</button>
-                  <div className = "content"><br />
-                    <p id = "desc">
-                      <i>{timediff} ago in {sourcename} by {content.author}</i><br /><br />
-                        {content.desc}<br /><br />
-                        <a target = "_blank" rel = "noreferrer" href = {content.link}>Visit article here</a>
-
-                    </p>
-                  </div>
-                </td>
-              </tr>
-            )
-          })}
+          <FilterableTable
+            namespace = "blogs"
+            initialSort = "timest"
+            data = {this.state.data}
+            fields = {fields}
+            noRecordsMessage = "There are no blogs to display"
+            noFilteredRecordsMessage = "No blogs match your filters"
+          />
         </tbody>
       </table>  
     </div>

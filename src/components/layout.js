@@ -7,7 +7,6 @@ const Layout = ({ location, title, children }) => {
 
   header = (
     <h1 style={{
-        fontFamily: `Amazon Ember`,
         marginTop: 10,
         fontColor: "gray",
         textAlign: "center",
@@ -25,33 +24,28 @@ const Layout = ({ location, title, children }) => {
 
   menu = (
       <h3 style={{
-        fontFamily: `Amazon Ember`,
         marginTop: 0,
         textAlign: "center",
-        color: "gray"
       }}>
       <Link style={{
           boxShadow: `none`,
-          color: `gray`,
         }}
         to={`/`}>
-      AWS Blog
+        AWS Blog
       </Link>
       {` • `}
       <Link style={{
           boxShadow: `none`,
-          color: `gray`,
         }}
         to={`/about`}>
-      About this page
+        About
       </Link>
       {` • `}
       <Link style={{
           boxShadow: `none`,
-          color: `gray`,
         }}
         to={`/marek`}>
-      About Marek
+        Marek
       </Link>
      </h3>
   )
@@ -61,11 +55,13 @@ const Layout = ({ location, title, children }) => {
 
     <div
       style={{
-        maxWidth: '1000px',
         padding: '5%',
       }}
     >
-      <header>{header}</header>
+      <header>
+        {header}
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"></link>
+      </header>
       <main>
         {menu}{children}
       </main>

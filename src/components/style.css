@@ -1,13 +1,8 @@
 a:link, a:visited {
 	color: gray;
 }
-
-.table {
-	max-width: 800px; 
-}
 	
 .td {
-	font-family: Amazon Ember;
 	font-size: 16px;
 	color: #555;
 	padding: 5px;
@@ -35,63 +30,6 @@ a:link, a:visited {
 	display: none;
 	overflow: hidden;
 	background-color: white;
-}
-
-.menucontent {
-	padding: 0 10px;
-	display: none;
-	overflow: visible;
-	background-color: white;
-}
-
-.sidebar {
-	height: 100%;
-	width: 0;
-	position: fixed;
-	z-index: 1;
-	top: 0;
-	left: 0;
-	background-color: #111;
-	overflow-x: hidden;
-	transition: 0.5s;
-}
-
-.sidebar a {
-	padding: 8px 8px 8px 32px;
-	text-decoration: none;
- 	font-size: 25px;
-	color: #818181;
- 	display: block;
- 	transition: 0.3s;
-}
-
-.sidebar a:hover {
-	color: #f1f1f1;
-}
-
-.urls {
-	text-align: center;
-}
-
-.sidebar .closebtn {
-	position: absolute;
-	top: 0;
-	right: 25px;
-	font-size: 36px;
-	margin-left: 50px;
-}
-
-.openbtn {
-	font-size: 20px;
-	cursor: pointer;
-	background-color: #111;
-	color: white;
-	padding: 10px 15px;
-	border: none;
-}
-
-.openbtn:hover {
-	background-color: #444;
 }
 
 main {
