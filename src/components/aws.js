@@ -5,18 +5,20 @@ import FilterableTable from 'react-filterable-table';
 
 // Fields to show in the table, and what object properties in the data they bind to
 const fields = [
-	{ name: 'timest', displayName: "Timest", inputFilterable: true, sortable: true, visible: false},
-	{ name: 'title', displayName: "Title", inputFilterable: true, sortable: true },
+	{ name: 'timest', displayName: "timest", visible: false },
 	{ name: 'source', displayName: "Blog", inputFilterable: true, exactFilterable: true, sortable: true },
-	{ name: 'desc', displayName: "Description", inputFilterable: true, exactFilterable: true, sortable: true }
+	{ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: true, sortable: true },
+	{ name: 'desc', displayName: "Description", inputFilterable: true}
 ];
+
+const isBrowser = () => typeof(window) !== "undefined";
 
 export default class AWS extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+			data: []
     };
   }
 
@@ -35,23 +37,35 @@ export default class AWS extends Component {
   }
 
   // render the page
-  render() {  
-    return (
-    <div>
-      <table>
-        <tbody>
-          <FilterableTable
-            namespace = "blogs"
-            initialSort = "timest"
-            pageSize = "500"
-            topPagerVisible = "false"
-            data = {this.state.data}
-            fields = {fields}
-            noRecordsMessage = "There are no blogs to display"
-            noFilteredRecordsMessage = "No blogs match your filters"
-          />
-        </tbody>
-      </table>  
-    </div>
-    )};
+  render() {
+		if (isBrowser()) {  
+			return (
+			<div>
+				<table>
+					<tbody>
+						<FilterableTable
+							namespace="blogs"
+							topPagerVisible={false}
+							pagersVisible={false}
+							headerVisible={true}
+							pageSize="10000"
+							initialSort="timest"
+							initialSortDir={false}
+							data={this.state.data}
+							fields={fields}
+							noRecordsMessage="There are no blogs to display"
+							noFilteredRecordsMessage="No blogs match your filters"
+							recordCountName="blog"
+							recordCountNamePlural="blogs"
+						/>
+					</tbody>
+				</table>  
+			</div>
+			)
+		} else {
+			return (
+				<div></div>
+			)
+		}
+	}
 };
