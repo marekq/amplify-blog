@@ -5,10 +5,12 @@ import FilterableTable from 'react-filterable-table';
 
 // Fields to show in the table, and what object properties in the data they bind to
 const fields = [
-	{ name: 'timest', displayName: "timest", visible: false },
-	{ name: 'source', displayName: "Blog", inputFilterable: true, exactFilterable: true, sortable: true },
+	{ name: 'timest', visible: false },
+	{ name: 'datestr', visible: false },
+	{ name: 'blogsource', displayName: "Blog", inputFilterable: true, exactFilterable: true, sortable: true },
 	{ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: true, sortable: true },
-	{ name: 'desc', displayName: "Description", inputFilterable: true}
+	{ name: 'desc', displayName: "Description", inputFilterable: true},
+	{ name: 'link', inputFilterable: false, visible: false}
 ];
 
 const isBrowser = () => typeof(window) !== "undefined";
@@ -24,7 +26,8 @@ export default class AWS extends Component {
 
   // load the url with aws blog articles from s3
   async getData() {
-    const resp = await axios.get('https://rssblog.s3-eu-west-1.amazonaws.com/out.json')
+		const url = 'https://feed.marek.rocks/all.json'
+    const resp = await axios.get(url)
     var data = resp.data
     this.state.data = resp.data.content;
     console.log("getdata", data);

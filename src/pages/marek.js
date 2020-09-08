@@ -6,7 +6,7 @@ const AboutIndex = ({ location }) => {
   return (
     <Layout location={location} title="Serverless Blog">
       <div style={{ margin: `0 auto`, maxWidth: 600}}>
-        <h2>Marek Kuczynski</h2>
+        <br />
         <img src = "./mk.jpg" width = "250" alt = "Marek" />
         <p>Marek Kuczynski is a Senior Serverless Solutions Architect at Amazon Web Services in The Netherlands. He has been with the company since late 2016 and worked with enterprise and startup customers before working fulltime on serverless.</p>
         <p>Marek mostly develops using containers and Lambda functions on AWS, where he enjoys working with Golang and Python most. He also helps to co-organize the ServerlessDays meetup and conference in The Netherlands and speaks regularly at various other meetups.</p>
