@@ -48,10 +48,9 @@ export default class AWS extends Component {
 					<tbody>
 						<FilterableTable
 							namespace="blogs"
-							topPagerVisible={false}
+							topPagerVisible={true}
 							pagersVisible={false}
 							headerVisible={true}
-							pageSize="10000"
 							initialSort="timest"
 							initialSortDir={false}
 							data={this.state.data}
