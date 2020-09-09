@@ -7,66 +7,65 @@ import FilterableTable from 'react-filterable-table';
 const fields = [
 	{ name: 'timest', visible: false },
 	{ name: 'datestr', visible: false },
-	{ name: 'blogsource', displayName: "Blog", inputFilterable: true, exactFilterable: true, sortable: true },
+	{ name: 'source', displayName: "Blog", inputFilterable: true, exactFilterable: true, sortable: true },
 	{ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: true, sortable: true },
 	{ name: 'desc', displayName: "Description", inputFilterable: true},
 	{ name: 'link', inputFilterable: false, visible: false}
 ];
 
-const isBrowser = () => typeof(window) !== "undefined";
-
+// main component
 export default class AWS extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
+	// define constructor and load data
+	constructor(props) {
+		super(props);
+		this.state = {
 			data: []
-    };
-  }
+		};
+		
+		this.getData();
+	}
 
-  // load the url with aws blog articles from s3
-  async getData() {
+	// load the url with aws blog articles from s3
+	async getData() {
 		const url = 'https://feed.marek.rocks/all.json'
-    const resp = await axios.get(url)
-    var data = resp.data
-    this.state.data = resp.data.content;
-    console.log("getdata", data);
-    return data;
-  }
 
-  // mount the component before render
-  async componentDidMount() {
-    this.setState(await this.getData())
-  }
+		const resp = await axios.get(url)
+		this.state.data = resp.data.content
+	}
 
-  // render the page
-  render() {
-		if (isBrowser()) {  
+  	// render the page
+  	render() {
+
+		// check if a window is present to prevent 'gatsby build' issues
+		if (typeof window !== 'undefined') {
+			
+			// return filtertable
 			return (
-			<div>
-				<table>
-					<tbody>
-						<FilterableTable
-							namespace="blogs"
-							topPagerVisible={true}
-							pagersVisible={false}
-							headerVisible={true}
-							initialSort="timest"
-							initialSortDir={false}
-							data={this.state.data}
-							fields={fields}
-							noRecordsMessage="There are no blogs to display"
-							noFilteredRecordsMessage="No blogs match your filters"
-							recordCountName="blog"
-							recordCountNamePlural="blogs"
-						/>
-					</tbody>
-				</table>  
-			</div>
+		
+				<div>
+					<FilterableTable
+						namespace="blogs"
+						topPagerVisible={true}
+						pagersVisible={false}
+						headerVisible={true}
+						initialSort="timest"
+						initialSortDir={false}
+						data={this.state.data}
+						fields={fields}
+						noRecordsMessage="There are no blogs to display"
+						noFilteredRecordsMessage="No blogs match your filters"
+						recordCountName="blog"
+						recordCountNamePlural="blogs"
+					/>
+				</div>
 			)
+
 		} else {
+
+			// return empty page
 			return (
-				<div></div>
+				<div />
 			)
 		}
 	}
