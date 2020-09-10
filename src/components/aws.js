@@ -3,14 +3,16 @@ import {Component} from 'react';
 import axios from 'axios';
 import FilterableTable from 'react-filterable-table';
 
-// Fields to show in the table, and what object properties in the data they bind to
+const url = 'https://feed.marek.rocks/all.json'
+
+// fields to show in the table
 const fields = [
 	{ name: 'timest', visible: false },
 	{ name: 'datestr', visible: false },
-	{ name: 'source', displayName: "Blog", inputFilterable: true, exactFilterable: true, sortable: true },
-	{ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: true, sortable: true },
-	{ name: 'desc', displayName: "Description", inputFilterable: true},
-	{ name: 'link', inputFilterable: false, visible: false}
+	{ name: 'source', displayName: "Blog", inputFilterable: true, exactFilterable: false, sortable: true },
+	{ name: 'title', displayName: "Title", inputFilterable: false, exactFilterable: false, sortable: true },
+	{ name: 'desc', displayName: "Description", inputFilterable: false },
+	{ name: 'link', inputFilterable: false, visible: false }
 ];
 
 // main component
@@ -19,16 +21,15 @@ export default class AWS extends Component {
 	// define constructor and load data
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			data: []
 		};
-		
 		this.getData();
 	}
 
 	// load the url with aws blog articles from s3
 	async getData() {
-		const url = 'https://feed.marek.rocks/all.json'
 
 		const resp = await axios.get(url)
 		this.state.data = resp.data.content
@@ -39,7 +40,7 @@ export default class AWS extends Component {
 
 		// check if a window is present to prevent 'gatsby build' issues
 		if (typeof window !== 'undefined') {
-			
+
 			// return filtertable
 			return (
 		
