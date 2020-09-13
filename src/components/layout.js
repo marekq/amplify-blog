@@ -55,7 +55,7 @@ const Layout = ({ location, title, children }) => {
 
     <div
       style={{
-        padding: '5%',
+        padding: '1%',
       }}
     >
       <header>

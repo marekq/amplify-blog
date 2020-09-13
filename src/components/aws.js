@@ -21,7 +21,7 @@ const loadUsers = () =>
 
 function App() {
 	return (
-	  	<div className="container">
+	  	<div className="table">
 		<Async promiseFn={loadUsers}>
 		<Async.Loading>Loading...</Async.Loading>
 		<Async.Fulfilled>
