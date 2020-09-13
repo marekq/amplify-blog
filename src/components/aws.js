@@ -7,10 +7,10 @@ const url = 'https://feed.marek.rocks/all.json'
 // fields to show in the table
 const fields = [
 	{ name: 'timest', visible: false },
-	{ name: 'datestr', visible: false },
+	{ name: 'datestr', displayName: "Date", visible: true },
 	{ name: 'blogsource', displayName: "Blog", inputFilterable: true, exactFilterable: false, sortable: true },
 	{ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: false, sortable: true },
-	{ name: 'description', displayName: "Description", inputFilterable: true },
+	{ name: 'description', displayName: "Description", inputFilterable: true, exactFilterable: false },
 	{ name: 'link', inputFilterable: false, visible: false }
 ];
 
