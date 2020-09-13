@@ -1,6 +1,5 @@
 import React from 'react';
-import {Component} from 'react';
-import axios from 'axios';
+import Async from 'react-async';
 import FilterableTable from 'react-filterable-table';
 
 const url = 'https://feed.marek.rocks/all.json'
@@ -9,41 +8,25 @@ const url = 'https://feed.marek.rocks/all.json'
 const fields = [
 	{ name: 'timest', visible: false },
 	{ name: 'datestr', visible: false },
-	{ name: 'source', displayName: "Blog", inputFilterable: true, exactFilterable: false, sortable: true },
-	{ name: 'title', displayName: "Title", inputFilterable: false, exactFilterable: false, sortable: true },
-	{ name: 'desc', displayName: "Description", inputFilterable: false },
+	{ name: 'blogsource', displayName: "Blog", inputFilterable: true, exactFilterable: false, sortable: true },
+	{ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: false, sortable: true },
+	{ name: 'description', displayName: "Description", inputFilterable: true },
 	{ name: 'link', inputFilterable: false, visible: false }
 ];
 
-// main component
-export default class AWS extends Component {
+const loadUsers = () =>
+  fetch(url)
+	.then(res => (res.ok ? res : Promise.reject(res)))
+    .then(res => res.json())
 
-	// define constructor and load data
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			data: []
-		};
-		this.getData();
-	}
-
-	// load the url with aws blog articles from s3
-	async getData() {
-
-		const resp = await axios.get(url)
-		this.state.data = resp.data.content
-	}
-
-  	// render the page
-  	render() {
-
-		// check if a window is present to prevent 'gatsby build' issues
-		if (typeof window !== 'undefined') {
-
-			// return filtertable
+function App() {
+	return (
+	  	<div className="container">
+		<Async promiseFn={loadUsers}>
+		<Async.Loading>Loading...</Async.Loading>
+		<Async.Fulfilled>
+			{data => {
 			return (
-		
 				<div>
 					<FilterableTable
 						namespace="blogs"
@@ -52,7 +35,7 @@ export default class AWS extends Component {
 						headerVisible={true}
 						initialSort="timest"
 						initialSortDir={false}
-						data={this.state.data}
+						data={data}
 						fields={fields}
 						noRecordsMessage="There are no blogs to display"
 						noFilteredRecordsMessage="No blogs match your filters"
@@ -60,14 +43,17 @@ export default class AWS extends Component {
 						recordCountNamePlural="blogs"
 					/>
 				</div>
-			)
+			)}}
+			</Async.Fulfilled>
+			<Async.Rejected>
+			  {error => `Something went wrong: ${error.message}`}
+			</Async.Rejected>
+		</Async>
+	  </div>
+	);
+  }
 
-		} else {
-
-			// return empty page
-			return (
-				<div />
-			)
-		}
-	}
-};
+  export default App;
+ 
+ 
+ 
