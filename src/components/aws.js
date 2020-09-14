@@ -1,13 +1,14 @@
 import React from 'react';
 import Async from 'react-async';
 import FilterableTable from 'react-filterable-table';
+import prettyMilliseconds from 'pretty-ms';
 
 const url = 'https://feed.marek.rocks/all.json'
 
 // fields to show in the table
 const fields = [
 	{ name: 'timest', visible: false },
-	{ name: 'datestr', displayName: "Date", visible: true },
+	{ name: 'datestr', displayName: "Age", visible: true },
 	{ name: 'blogsource', displayName: "Blog", inputFilterable: true, exactFilterable: false, sortable: true },
 	{ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: false, sortable: true },
 	{ name: 'description', displayName: "Description", inputFilterable: true, exactFilterable: false },
@@ -17,33 +18,50 @@ const fields = [
 const loadUsers = () =>
   fetch(url)
 	.then(res => (res.ok ? res : Promise.reject(res)))
-    .then(res => res.json())
+	.then(res => res.json())
+
 
 function App() {
 	return (
-	  	<div className="table">
+	  	<div className="container">
 		<Async promiseFn={loadUsers}>
 		<Async.Loading>Loading...</Async.Loading>
 		<Async.Fulfilled>
 			{data => {
-			return (
-				<div>
-					<FilterableTable
-						namespace="blogs"
-						topPagerVisible={true}
-						pagersVisible={false}
-						headerVisible={true}
-						initialSort="timest"
-						initialSortDir={false}
-						data={data}
-						fields={fields}
-						noRecordsMessage="There are no blogs to display"
-						noFilteredRecordsMessage="No blogs match your filters"
-						recordCountName="blog"
-						recordCountNamePlural="blogs"
-					/>
-				</div>
-			)}}
+				
+				// get the current time
+				var now = new Date().getTime();
+
+				// convert the unix timestamp of the blog to a timediff string
+				data.map(function(blog, index){
+					
+					// get the time difference in seconds
+					var timestamp = now - (blog.timest * 1000);
+
+					// get the time difference string and set it in data
+					var timediff = prettyMilliseconds(timestamp, {compact: true});
+					blog.datestr = timediff;
+
+				});
+
+				return (
+					<div>
+						<FilterableTable
+							namespace="blogs"
+							topPagerVisible={true}
+							pagersVisible={false}
+							headerVisible={true}
+							initialSort="timest"
+							initialSortDir={false}
+							data={data}
+							fields={fields}
+							noRecordsMessage="There are no blogs to display"
+							noFilteredRecordsMessage="No blogs match your filters"
+							recordCountName="blog"
+							recordCountNamePlural="blogs"
+						/>
+					</div>
+				)}}
 			</Async.Fulfilled>
 			<Async.Rejected>
 			  {error => `Something went wrong: ${error.message}`}
