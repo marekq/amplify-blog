@@ -2,6 +2,7 @@ import React from 'react';
 import Async from 'react-async';
 import FilterableTable from 'react-filterable-table';
 import prettyMilliseconds from 'pretty-ms';
+import Button from '@material-ui/core/Button';
 
 const url = 'https://feed.marek.rocks/all.json'
 
@@ -20,7 +21,6 @@ const loadUsers = () =>
 	.then(res => (res.ok ? res : Promise.reject(res)))
 	.then(res => res.json())
 
-
 function App() {
 	return (
 	  	<div className="container">
@@ -31,6 +31,7 @@ function App() {
 				
 				// get the current time
 				var now = new Date().getTime();
+				var categories = [];
 
 				// convert the unix timestamp of the blog to a timediff string
 				data.map(function(blog, index){
@@ -42,10 +43,21 @@ function App() {
 					var timediff = prettyMilliseconds(timestamp, {compact: true});
 					blog.datestr = timediff;
 
+					// add the blog source to the categories array for link generation
+					categories.indexOf(blog.blogsource) === -1 ? categories.push(blog.blogsource) : console.log("This item already exists");
+					
 				});
+
+				const menu = [];
+
+				for (const [index, value] of categories.sort().entries()) {
+					menu.push(<Button size = "small" variant = "outlined" disableElevation key={index} href={value}>{value}</Button>)
+				}
 
 				return (
 					<div>
+						{menu}
+						<br /><br />
 						<FilterableTable
 							namespace="blogs"
 							topPagerVisible={true}
@@ -69,9 +81,6 @@ function App() {
 		</Async>
 	  </div>
 	);
-  }
+}
 
-  export default App;
- 
- 
- 
+export default App;
