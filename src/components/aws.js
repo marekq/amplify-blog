@@ -3,6 +3,7 @@ import Async from 'react-async';
 import FilterableTable from 'react-filterable-table';
 import prettyMilliseconds from 'pretty-ms';
 import Button from '@material-ui/core/Button';
+import fetch from 'node-fetch';
 
 const url = 'https://feed.marek.rocks/all.json'
 
@@ -16,71 +17,81 @@ const fields = [
 	{ name: 'link', inputFilterable: false, visible: false }
 ];
 
-const loadUsers = () =>
+const loadBlogs = () =>
   fetch(url)
 	.then(res => (res.ok ? res : Promise.reject(res)))
 	.then(res => res.json())
 
-function App() {
-	return (
-	  	<div className="container">
-		<Async promiseFn={loadUsers}>
-		<Async.Loading>Loading...</Async.Loading>
-		<Async.Fulfilled>
-			{data => {
-				
-				// get the current time
-				var now = new Date().getTime();
-				var categories = [];
+class App extends React.Component {
 
-				// convert the unix timestamp of the blog to a timediff string
-				data.map(function(blog, index){
+	constructor(props) {
+		super(props);
+		this.state = { blog: 'all' };
+	}
+
+	render() {
+		return (
+			<div className="container">
+			<Async promiseFn={loadBlogs}>
+			<Async.Loading>Loading...</Async.Loading>
+			<Async.Fulfilled>
+				{data => {
 					
-					// get the time difference in seconds
-					var timestamp = now - (blog.timest * 1000);
+					// get the current time
+					var now = new Date().getTime();
+					var categories = [];
 
-					// get the time difference string and set it in data
-					var timediff = prettyMilliseconds(timestamp, {compact: true});
-					blog.datestr = timediff;
+					// convert the unix timestamp of the blog to a timediff string
+					data.map(function(blog, index){
+						
+						// get the time difference in seconds
+						var timestamp = now - (blog.timest * 1000);
 
-					// add the blog source to the categories array for link generation
-					categories.indexOf(blog.blogsource) === -1 ? categories.push(blog.blogsource) : console.log("This item already exists");
+						// get the time difference string and set it in data
+						var timediff = prettyMilliseconds(timestamp, {compact: true});
+						blog.datestr = timediff;
+
+						// add the blog source to the categories array for link generation
+						categories.indexOf(blog.blogsource) === -1 ? categories.push(blog.blogsource) : console.log("This item already exists");
+						
+					});
+
+					const menu = [];
 					
-				});
+					/*
+					for (const [index, value] of categories.sort().entries()) {
+						menu.push(<Button size = "small" variant = "outlined" disableElevation key={index} href={value}>{value}</Button>)
+					}
+					*/
 
-				const menu = [];
-
-				for (const [index, value] of categories.sort().entries()) {
-					menu.push(<Button size = "small" variant = "outlined" disableElevation key={index} href={value}>{value}</Button>)
-				}
-
-				return (
-					<div>
-						{menu}
-						<br /><br />
-						<FilterableTable
-							namespace="blogs"
-							topPagerVisible={true}
-							pagersVisible={false}
-							headerVisible={true}
-							initialSort="timest"
-							initialSortDir={false}
-							data={data}
-							fields={fields}
-							noRecordsMessage="There are no blogs to display"
-							noFilteredRecordsMessage="No blogs match your filters"
-							recordCountName="blog"
-							recordCountNamePlural="blogs"
-						/>
-					</div>
-				)}}
-			</Async.Fulfilled>
-			<Async.Rejected>
-			  {error => `Something went wrong: ${error.message}`}
-			</Async.Rejected>
-		</Async>
-	  </div>
-	);
+					return (
+						<div>
+							{menu}
+							<br /><br />
+							<FilterableTable
+								namespace="blogs"
+								topPagerVisible={true}
+								pagersVisible={false}
+								headerVisible={true}
+								initialSort="timest"
+								initialSortDir={false}
+								data={data}
+								fields={fields}
+								noRecordsMessage="There are no blogs to display"
+								noFilteredRecordsMessage="No blogs match your filters"
+								recordCountName="blog"
+								recordCountNamePlural="blogs"
+							/>
+						</div>
+					)}}
+				</Async.Fulfilled>
+				<Async.Rejected>
+				{error => `Something went wrong: ${error.message}`}
+				</Async.Rejected>
+			</Async>
+		</div>
+		);
+	}
 }
 
 export default App;
