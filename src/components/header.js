@@ -16,9 +16,6 @@ const Header = () => (
         </Link>
       </h1>
       <nav role="main" className={styles[`header__nav`]}>
-        <Link to="/app/aws" className={styles[`header__link`]}>
-          AWS Blog
-        </Link>
         <Link to="/app/about" className={styles[`header__link`]}>
           About
         </Link>

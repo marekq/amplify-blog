@@ -5,6 +5,7 @@ import prettyMilliseconds from 'pretty-ms';
 //import Button from '@material-ui/core/Button';
 //import Layout from "../components/layout"
 import fetch from 'node-fetch';
+import View from "./view"
 
 const url = 'https://feed.marek.rocks/all.json'
 
@@ -32,7 +33,8 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<div className="container" style={{ margin: `0 auto`, maxWidth: 1250}}>
+			<View>
+			<div className="container">
 			<Async promiseFn={loadBlogs}>
 			<Async.Loading>Loading...</Async.Loading>
 			<Async.Fulfilled>
@@ -91,6 +93,7 @@ class App extends React.Component {
 				</Async.Rejected>
 			</Async>
 		</div>
+		</View>
 		);
 	}
 }
