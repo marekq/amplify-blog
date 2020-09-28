@@ -1,85 +1,29 @@
 {
-  "name": "amplify-blog",
-  "private": true,
-  "description": "A starter for a blog powered by Gatsby and Markdown",
-  "version": "0.2.0",
+  "name": "Marek Serverless Blog",
+  "description": "Marek Serverless Blog",
+  "version": "0.0.1",
   "author": "Marek Kuczynski <marek.kuczynski@gmail.com>",
-  "bugs": {
-    "url": "https://github.com/marekq/amplify-blog"
-  },
   "dependencies": {
-    "@material-ui/core": "^4.11.0",
-    "@mdx-js/mdx": "^1.6.16",
-    "@stackbit/gatsby-plugin-menus": "0.0.4",
-    "aws-amplify": "^3.2.0",
-    "aws-amplify-react": "^4.2.3",
-    "bootstrap": "^4.5.2",
-    "child_process": "^1.0.2",
-    "date-diff": "^0.2.2",
-    "dom-storage": "^2.1.0",
-    "fetch": "^1.1.0",
-    "fs": "^0.0.1-security",
-    "gatsby": "^2.24.57",
-    "gatsby-cli": "^2.12.95",
-    "gatsby-image": "^2.4.17",
-    "gatsby-plugin-brotli": "^2.0.0",
-    "gatsby-plugin-feed": "^2.5.11",
-    "gatsby-plugin-load-script": "^1.1.0",
-    "gatsby-plugin-manifest": "^2.4.28",
-    "gatsby-plugin-offline": "^3.2.27",
-    "gatsby-plugin-react-helmet": "^3.3.10",
-    "gatsby-plugin-sharp": "^2.6.35",
-    "gatsby-plugin-typography": "^2.5.10",
-    "gatsby-remark-copy-linked-files": "^2.3.14",
-    "gatsby-remark-images": "^3.3.29",
-    "gatsby-remark-prismjs": "^3.5.11",
-    "gatsby-remark-responsive-iframe": "^2.4.13",
-    "gatsby-remark-smartypants": "^2.3.10",
-    "gatsby-source-filesystem": "^2.3.29",
-    "gatsby-transformer-remark": "^2.8.34",
-    "gatsby-transformer-sharp": "^2.5.14",
-    "helmet": "^4.1.1",
-    "isomorphic-fetch": "^2.2.1",
-    "net": "^1.0.2",
-    "pretty-ms": "^7.0.0",
-    "prismjs": "^1.21.0",
+    "gatsby": "^2.24.66",
+    "gatsby-plugin-react-helmet": "^3.3.12",
+    "node-fetch": "^2.6.1",
+    "pretty-ms": "^7.0.1",
+    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-async": "^10.0.1",
-    "react-bootstrap": "^1.3.0",
     "react-dom": "^16.13.1",
     "react-filterable-table": "^0.3.434",
-    "react-helmet": "^6.1.0",
-    "react-horizontal-scrolling-menu": "^0.7.7",
-    "react-tabledata-async": "^0.1.0",
-    "react-typography": "^0.16.19",
-    "typeface-merriweather": "0.0.72",
-    "typeface-montserrat": "0.0.75",
-    "typography": "^0.16.19",
-    "typography-theme-wordpress-2016": "^0.16.19"
+    "react-helmet": "^6.1.0"
   },
-  "optionalDependencies": {
-    "fsevents": "^2.1.3"
-  },
-  "devDependencies": {
-    "prettier": "2.1.1"
-  },
-  "homepage": "https://github.com/gatsbyjs/gatsby-starter-blog#readme",
   "keywords": [
     "gatsby"
   ],
   "license": "MIT",
-  "main": "n/a",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gatsbyjs/gatsby-starter-blog.git"
-  },
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
-    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "format": "prettier --write 'src/**/*.js'",
     "start": "npm run develop",
-    "serve": "gatsby serve",
-    "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

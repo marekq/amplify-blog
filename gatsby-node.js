@@ -1,31 +1,18 @@
+/**
+ * Implement Gatsby's Node APIs in this file.
+ *
+ * See: https://www.gatsbyjs.com/docs/node-apis/
+ */
 
-exports.createPages = async ({ graphql, actions }) => {
-  const path = require(`path`)
+exports.onCreatePage = async ({ page, actions }) => {
   const { createPage } = actions
-}
 
-exports.onCreateWebpackConfig = ({
-  stage,
-  rules,
-  loaders,
-  plugins,
-  actions,
-}) => {
-  actions.setWebpackConfig({
-    node: {},
-  })
-}
+  // page.matchPath is a special key that's used for matching pages
+  // only on the client.
+  if (page.path.match(/^\/app/)) {
+    page.matchPath = `/app/*`
 
-exports.onCreateNode = ({ node, actions, getNode }) => {
-  const { createNodeField } = actions
-  const { createFilePath } = require(`gatsby-source-filesystem`)
-
-  if (node.internal.type === `MarkdownRemark`) {
-    const value = createFilePath({ node, getNode })
-    createNodeField({
-      name: `slug`,
-      node,
-      value
-    })
+    // Update the page.
+    createPage(page)
   }
 }

@@ -2,7 +2,8 @@ import React from 'react';
 import Async from 'react-async';
 import FilterableTable from 'react-filterable-table';
 import prettyMilliseconds from 'pretty-ms';
-import Button from '@material-ui/core/Button';
+//import Button from '@material-ui/core/Button';
+import Layout from "../components/Layout"
 import fetch from 'node-fetch';
 
 const url = 'https://feed.marek.rocks/all.json'
@@ -31,7 +32,7 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<div className="container">
+			<div className="container" style={{ margin: `0 auto`, maxWidth: 1250}}>
 			<Async promiseFn={loadBlogs}>
 			<Async.Loading>Loading...</Async.Loading>
 			<Async.Fulfilled>
@@ -41,7 +42,7 @@ class App extends React.Component {
 					var now = new Date().getTime();
 					var categories = [];
 
-					// convert the unix timestamp of the blog to a timediff string
+					// convert the unix timestamp of every blog to a timediff string
 					data.map(function(blog, index){
 						
 						// get the time difference in seconds
