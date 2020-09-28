@@ -1,5 +1,5 @@
 import React from "react"
-import View from "./view.js"
+import View from "./view"
 
 const About = () => {
 

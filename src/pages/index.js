@@ -1,7 +1,7 @@
 import React from "react"
-import { Link } from "gatsby"
-import Layout from "../components/Layout"
-import View from "../components/View"
+//import { Link } from "gatsby"
+import Layout from "../components/layout"
+import View from "../components/view"
 
 const Index = () => (
   <Layout>

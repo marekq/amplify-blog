@@ -3,7 +3,7 @@ import Async from 'react-async';
 import FilterableTable from 'react-filterable-table';
 import prettyMilliseconds from 'pretty-ms';
 //import Button from '@material-ui/core/Button';
-import Layout from "../components/Layout"
+//import Layout from "../components/layout"
 import fetch from 'node-fetch';
 
 const url = 'https://feed.marek.rocks/all.json'
