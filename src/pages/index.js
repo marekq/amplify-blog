@@ -5,9 +5,9 @@ import View from "../components/view"
 
 const Index = () => (
   <Layout>
-    <View title="Serverless Blog">
+    <View>
       <p>
-        Welcome to the serverless blog demo. 
+        Welcome to the serverless blog demo.
       </p>
     </View>
   </Layout>
