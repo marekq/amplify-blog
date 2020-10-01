@@ -5,13 +5,15 @@ import About from "../components/about"
 import AWS from "../components/aws"
 import Marek from "../components/marek"
 
+const NotFound = () => <p>Sorry, nothing here</p>
 
 const App = () => (
   <Layout>
     <Router>
+      <NotFound default />
       <About path="/app/about" />
-      <AWS path="/app/aws" />
       <Marek path="/app/marek" />
+      <AWS path="/app/aws/:blog" />
     </Router>
   </Layout>
 )

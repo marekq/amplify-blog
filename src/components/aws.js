@@ -2,12 +2,10 @@ import React from 'react';
 import Async from 'react-async';
 import FilterableTable from 'react-filterable-table';
 import prettyMilliseconds from 'pretty-ms';
-//import Button from '@material-ui/core/Button';
-//import Layout from "../components/layout"
 import fetch from 'node-fetch';
-import View from "./view"
 
-const url = 'https://feed.marek.rocks/all.json'
+const url = 'https://feed.marek.rocks/'
+
 
 // fields to show in the table
 const fields = [
@@ -19,8 +17,8 @@ const fields = [
 	{ name: 'link', inputFilterable: false, visible: false }
 ];
 
-const loadBlogs = () =>
-  fetch(url)
+const loadBlogs = ({ blogUrl }) =>
+  fetch(blogUrl)
 	.then(res => (res.ok ? res : Promise.reject(res)))
 	.then(res => res.json())
 
@@ -28,72 +26,58 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { blog: 'all' };
+		this.state = { url1: url + props.blog + '.json', blog1: 'all', props1: props.blog };
 	}
 
 	render() {
 		return (
-			<View>
-			<div className="container">
-			<Async promiseFn={loadBlogs}>
-			<Async.Loading>Loading...</Async.Loading>
-			<Async.Fulfilled>
-				{data => {
-					
-					// get the current time
-					var now = new Date().getTime();
-					var categories = [];
-
-					// convert the unix timestamp of every blog to a timediff string
-					data.map(function(blog, index){
+			<div className = "container" width = "1200px">
+				
+				<Async promiseFn = {loadBlogs} blogUrl = {this.state.url1}>
+				<Async.Loading>Loading... </Async.Loading>
+				<Async.Fulfilled>
+					{data => {
 						
-						// get the time difference in seconds
-						var timestamp = now - (blog.timest * 1000);
+						// get the current time
+						var now = new Date().getTime();
 
-						// get the time difference string and set it in data
-						var timediff = prettyMilliseconds(timestamp, {compact: true});
-						blog.datestr = timediff;
+						// convert the unix timestamp of every blog to a timediff string
+						data.map(function(blog, index){
+							
+							// get the time difference in seconds
+							var timestamp = now - (blog.timest * 1000);
 
-						// add the blog source to the categories array for link generation
-						categories.indexOf(blog.blogsource) === -1 ? categories.push(blog.blogsource) : console.log("This item already exists");
-						
-					});
+							// get the time difference string and set it in data
+							var timediff = prettyMilliseconds(timestamp, {compact: true});
+							blog.datestr = timediff;
 
-					const menu = [];
-					
-					/*
-					for (const [index, value] of categories.sort().entries()) {
-						menu.push(<Button size = "small" variant = "outlined" disableElevation key={index} href={value}>{value}</Button>)
-					}
-					*/
+						});
 
-					return (
-						<div>
-							{menu}
-							<br /><br />
-							<FilterableTable
-								namespace="blogs"
-								topPagerVisible={true}
-								pagersVisible={false}
-								headerVisible={true}
-								initialSort="timest"
-								initialSortDir={false}
-								data={data}
-								fields={fields}
-								noRecordsMessage="There are no blogs to display"
-								noFilteredRecordsMessage="No blogs match your filters"
-								recordCountName="blog"
-								recordCountNamePlural="blogs"
-							/>
-						</div>
-					)}}
-				</Async.Fulfilled>
-				<Async.Rejected>
-				{error => `Something went wrong: ${error.message}`}
-				</Async.Rejected>
-			</Async>
-		</div>
-		</View>
+						return (
+							<div>
+								Getting {this.state.url1} {this.state.blog1} <br />
+								<FilterableTable
+									namespace="blogs"
+									topPagerVisible={true}
+									pagersVisible={false}
+									headerVisible={true}
+									initialSort="timest"
+									initialSortDir={false}
+									data={data}
+									fields={fields}
+									noRecordsMessage="There are no blogs to display"
+									noFilteredRecordsMessage="No blogs match your filters"
+									recordCountName="blog"
+									recordCountNamePlural="blogs"
+								/>
+							</div>
+						)}}
+					</Async.Fulfilled>
+					<Async.Rejected>
+						{error => `Something went wrong: ${error.message}`}
+					</Async.Rejected>
+				</Async>
+			</div>
 		);
 	}
 }
