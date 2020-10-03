@@ -2,21 +2,24 @@ import React from "react"
 import { Link } from "gatsby"
 import styles from "./css/header.module.css"
 
+// create refresh page function
+function refreshPage() {
+  window.location.render(true);
+}
+
 const Header = () => (
   <header className={styles.header}>
     <div className={styles[`header__wrap`]}>
-      <h1 className={styles[`header__heading`]}>
+      <h2>
         <Link
           to="/"
-          className={`${styles[`header__link`]} ${
-            styles[`header__link--home`]
-          }`}
+          className={styles[`header__link`]}
         >
-          Serverless Blog
+          Home
         </Link>
-      </h1>
+      </h2>
       <nav role="main" className={styles[`header__nav`]}>
-        <Link to="/app/aws/all" className={styles[`header__link`]}>
+        <Link to="/app/aws/all" className={styles[`header__link`]} onClick = {refreshPage}>
           AWS Blog
         </Link>
         <Link to="/app/marek" className={styles[`header__link`]}>

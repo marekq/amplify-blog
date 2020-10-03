@@ -3,6 +3,7 @@ import Async from 'react-async';
 import FilterableTable from 'react-filterable-table';
 import prettyMilliseconds from 'pretty-ms';
 import fetch from 'node-fetch';
+import { Link } from "gatsby";
 
 const url = 'https://feed.marek.rocks/'
 
@@ -38,6 +39,11 @@ class App extends React.Component {
 				<Async.Fulfilled>
 					{data => {
 						
+						// create refresh page function
+						function refreshPage() {
+							window.location.render(true);
+						}
+
 						// get the current time
 						var now = new Date().getTime();
 
@@ -51,11 +57,22 @@ class App extends React.Component {
 							var timediff = prettyMilliseconds(timestamp, {compact: true});
 							blog.datestr = timediff;
 
+							// add link for blogsource to blog category url
+							var blogurl = `/app/aws/${blog.blogsource}`; 
+							var blogsource = blog.blogsource
+							blog.blogsource = <Link to = {blogurl} onClick = {refreshPage}>{blogsource}</Link>;
+
+							// add link for blogtitle to blog link url
+							var blogtitle = blog.title;
+							var bloglink = blog.link;
+							blog.title = <a href = {bloglink} target = '_blank' rel = "noreferrer">{blogtitle}</a>;
+
+							return '';
 						});
 
 						return (
 							<div>
-								Getting {this.state.url1} {this.state.blog1} <br />
+								<Link onClick = {refreshPage} to = "/app/aws/all/">All blogs</Link>
 								<FilterableTable
 									namespace="blogs"
 									topPagerVisible={true}
