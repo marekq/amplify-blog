@@ -2,9 +2,8 @@ import React from "react"
 import { Link } from "gatsby"
 import styles from "./css/header.module.css"
 
-// create refresh page function
 function refreshPage() {
-  window.location.render(true);
+  console.log(this.props1)
 }
 
 const Header = () => (
@@ -19,7 +18,7 @@ const Header = () => (
         </Link>
       </h2>
       <nav role="main" className={styles[`header__nav`]}>
-        <Link to="/app/aws/all" className={styles[`header__link`]} onClick = {refreshPage}>
+        <Link to="/app/aws/all" onClick = {refreshPage} className={styles[`header__link`]}>
           AWS Blog
         </Link>
         <Link to="/app/marek" className={styles[`header__link`]}>

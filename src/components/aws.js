@@ -30,6 +30,11 @@ class App extends React.Component {
 		this.state = { url1: url + props.blog + '.json', blog1: 'all', props1: props.blog };
 	}
 
+	componentDidUpdate() {
+		console.log('update');
+		console.log(this.props1)
+	}
+
 	render() {
 		return (
 			<div className = "container" width = "1200px">
@@ -41,7 +46,7 @@ class App extends React.Component {
 						
 						// create refresh page function
 						function refreshPage() {
-							window.location.render(true);
+							console.log(this.props)
 						}
 
 						// get the current time
