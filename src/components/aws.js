@@ -70,7 +70,14 @@ class App extends React.Component {
 
 						return (
 							<div>
-								<Link to = "/app/all/">All blogs</Link>
+								<center>
+								<br /><br />
+								<Link to = "/app/all/">All blogs</Link>{' • '}
+								<Link to = "/app/whats-new/">What's New</Link>{' • '}
+								<Link to = "/app/compute/">Compute</Link>{' • '}
+								<Link to = "/app/developer/">Developer</Link>{' • '}
+								<Link to = "/app/mobile/">Mobile</Link>
+
 								<FilterableTable
 									namespace="blogs"
 									topPagerVisible={true}
@@ -85,6 +92,7 @@ class App extends React.Component {
 									recordCountName="blog"
 									recordCountNamePlural="blogs"
 								/>
+								</center>
 							</div>
 						)}}
 					</Async.Fulfilled>
