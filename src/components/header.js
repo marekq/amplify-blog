@@ -18,7 +18,7 @@ const Header = () => (
         </Link>
       </h2>
       <nav role="main" className={styles[`header__nav`]}>
-        <Link to="/app/aws/all" onClick = {refreshPage} className={styles[`header__link`]}>
+        <Link to="/app/all" onClick = {refreshPage} className={styles[`header__link`]}>
           AWS Blog
         </Link>
         <Link to="/app/marek" className={styles[`header__link`]}>

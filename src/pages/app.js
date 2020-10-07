@@ -13,9 +13,9 @@ const App = () => (
       <NotFound default />
       <About path="/app/about" />
       <Marek path="/app/marek" />
-      <AWS path="/app/aws/all" />
-      <AWS path="/app/aws/whats-new" />
-      <AWS path="/app/aws/devops" />
+      <AWS path="/app/all" />
+      <AWS path="/app/whats-new" />
+      <AWS path="/app/devops" />
     </Router>
   </Layout>
 )

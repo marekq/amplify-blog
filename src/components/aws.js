@@ -28,17 +28,10 @@ class App extends React.Component {
 		super(props);
 
 		// to be improved - get the uri of the url by stripping /app/aws
-		var bloguri = props.path.slice(9, 999);
+		var bloguri = props.path.slice(5, 999);
 		console.log(bloguri);
 		this.state = { url1: url + bloguri + '.json' };
 	}
-
-	/*
-	componentDidUpdate() {
-		console.log('update');
-		console.log(this.props1)
-	}
-	*/
 
 	render() {
 		return (
@@ -48,13 +41,6 @@ class App extends React.Component {
 				<Async.Loading>Loading... </Async.Loading>
 				<Async.Fulfilled>
 					{data => {
-						
-						/*
-						// create refresh page function
-						function refreshPage() {
-							console.log(this.props);
-						}
-						*/
 
 						// get the current time
 						var now = new Date().getTime();
@@ -70,7 +56,7 @@ class App extends React.Component {
 							blog.datestr = timediff;
 
 							// add link for blogsource to blog category url
-							var blogurl = `/app/aws/${blog.blogsource}`; 
+							var blogurl = `/app/${blog.blogsource}`; 
 							var blogsource = blog.blogsource
 							blog.blogsource = <Link to = {blogurl}>{blogsource}</Link>;
 
@@ -84,7 +70,7 @@ class App extends React.Component {
 
 						return (
 							<div>
-								<Link to = "/app/aws/all/">All blogs</Link>
+								<Link to = "/app/all/">All blogs</Link>
 								<FilterableTable
 									namespace="blogs"
 									topPagerVisible={true}
