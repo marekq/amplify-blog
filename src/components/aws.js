@@ -7,7 +7,6 @@ import { Link } from "gatsby";
 
 const url = 'https://feed.marek.rocks/'
 
-
 // fields to show in the table
 const fields = [
 	{ name: 'timest', visible: false },
@@ -27,13 +26,19 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { url1: url + props.blog + '.json', blog1: 'all', props1: props.blog };
+
+		// to be improved - get the uri of the url by stripping /app/aws
+		var bloguri = props.path.slice(9, 999);
+		console.log(bloguri);
+		this.state = { url1: url + bloguri + '.json' };
 	}
 
+	/*
 	componentDidUpdate() {
 		console.log('update');
 		console.log(this.props1)
 	}
+	*/
 
 	render() {
 		return (
@@ -44,10 +49,12 @@ class App extends React.Component {
 				<Async.Fulfilled>
 					{data => {
 						
+						/*
 						// create refresh page function
 						function refreshPage() {
-							console.log(this.props)
+							console.log(this.props);
 						}
+						*/
 
 						// get the current time
 						var now = new Date().getTime();
@@ -65,7 +72,7 @@ class App extends React.Component {
 							// add link for blogsource to blog category url
 							var blogurl = `/app/aws/${blog.blogsource}`; 
 							var blogsource = blog.blogsource
-							blog.blogsource = <Link to = {blogurl} onClick = {refreshPage}>{blogsource}</Link>;
+							blog.blogsource = <Link to = {blogurl}>{blogsource}</Link>;
 
 							// add link for blogtitle to blog link url
 							var blogtitle = blog.title;
@@ -77,7 +84,7 @@ class App extends React.Component {
 
 						return (
 							<div>
-								<Link onClick = {refreshPage} to = "/app/aws/all/">All blogs</Link>
+								<Link to = "/app/aws/all/">All blogs</Link>
 								<FilterableTable
 									namespace="blogs"
 									topPagerVisible={true}
