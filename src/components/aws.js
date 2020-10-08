@@ -7,16 +7,6 @@ import { Link } from "gatsby";
 
 const url = 'https://feed.marek.rocks/'
 
-// fields to show in the table
-const fields = [
-	{ name: 'timest', visible: false },
-	{ name: 'datestr', displayName: "Age", visible: true },
-	{ name: 'blogsource', displayName: "Blog", inputFilterable: true, exactFilterable: false, sortable: true },
-	{ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: false, sortable: true },
-	{ name: 'description', displayName: "Description", inputFilterable: true, exactFilterable: false },
-	{ name: 'link', inputFilterable: false, visible: false }
-];
-
 const loadBlogs = ({ blogUrl }) =>
   fetch(blogUrl)
 	.then(res => (res.ok ? res : Promise.reject(res)))
@@ -27,9 +17,8 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 
-		// to be improved - get the uri of the url by stripping /app/aws
+		// to be improved - get the uri of the url by stripping /app from the url
 		var bloguri = props.path.slice(5, 999);
-		console.log(bloguri);
 		this.state = { url1: url + bloguri + '.json' };
 	}
 
@@ -67,6 +56,20 @@ class App extends React.Component {
 
 							return '';
 						});
+
+						// set the table fields of the aws blog post table
+						const fields = [
+							{ name: 'timest', visible: false },
+							{ name: 'datestr', displayName: "Age", visible: true },
+							{ name: 'blogsource', displayName: "Blog", inputFilterable: true, exactFilterable: false, sortable: true },
+							{ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: false, sortable: true },
+							{ name: 'link', inputFilterable: false, visible: false }
+						];
+
+						// add description field if the page is shown on a device with larger resolution
+						if (window.innerWidth > 1000) {
+							fields.push({ name: 'description', displayName: "Description", inputFilterable: true, exactFilterable: false })
+						};
 
 						return (
 							<div>
