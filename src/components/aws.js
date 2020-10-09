@@ -19,7 +19,8 @@ class App extends React.Component {
 
 		// to be improved - get the uri of the url by stripping /app from the url
 		var bloguri = props.path.slice(5, 999);
-		this.state = { url1: url + bloguri + '.json', compact: true };
+		this.state = { url1: url + bloguri + '.json', path1: String(bloguri)};
+
 	}
 
 	render() {
@@ -30,9 +31,6 @@ class App extends React.Component {
 				<Async.Loading>Loading... </Async.Loading>
 				<Async.Fulfilled>
 					{data => {
-
-						// get compact state
-						var compact = this.state.compact;
 
 						// get the current time
 						var now = new Date().getTime();
@@ -60,7 +58,7 @@ class App extends React.Component {
 
 							// if compact state is set, show the timediff and blogsource in one field
 							// this makes it easier to read the table on an iPhone
-							if (compact === true) {
+							if (window.innerWidth < 750 && blog.blogsource === 'all') {
 								blogsource = timediff + ' ' + blog.blogsource
 
 							// if full mode is selected, return the blogsource
@@ -69,40 +67,41 @@ class App extends React.Component {
 							}
 
 							// set a link for the blog source to the blog url
-							blog.blogsource = <Link to = {blogurl}>{blogsource}</Link>;
+							blog.blogsource = <Link to = {blogurl}>{blogsource.replace("-", " ")}</Link>;
 
 							return '';
 						});
 
 						// set the table fields of the aws blog post table and the viewswitch option
 						const fields = [];
-						const viewswitch = [];
-
-						// add description and datestr field if the compact view state is false
-						if (this.state.compact !== true) {
-							fields.push({ name: 'timest', visible: false })
-							fields.push({ name: 'datestr', displayName: "Age", visible: true })
-							fields.push({ name: 'blogsource', displayName: "Blog", inputFilterable: true, exactFilterable: false, sortable: true })
-							fields.push({ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: false, sortable: true})
-							fields.push({ name: 'link', inputFilterable: false, visible: false })
-							fields.push({ name: 'description', displayName: "Description", inputFilterable: true, exactFilterable: false })
 						
-						// do NOT add description and datestr field if the compact view state is true
-						} else {
-							fields.push({ name: 'timest', visible: false })
-							fields.push({ name: 'blogsource', displayName: "Blog", inputFilterable: true, exactFilterable: false, sortable: true })
-							fields.push({ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: false, sortable: true})
-							fields.push({ name: 'link', inputFilterable: false, visible: false })
+						// get the url value
+						console.log(this.state.url1);
+						var tmpurl = this.state.url1;
 
-						}
-
-
-						// if the page is shown on a large resolution, add the compact and full view buttons
+						// if fullmode is true, add description and datestr field if the compact view state is false
 						if (window.innerWidth > 750) {
-							viewswitch.push(<Link onClick = {() => {this.setState({ compact: true })}} to = '.'><i>Compact View</i></Link>);
-							viewswitch.push(' • ')
-							viewswitch.push(<Link onClick = {() => {this.setState({ compact: false })}} to = '.'><i>Full Mode</i></Link>);
-							viewswitch.push(' • ')
+							fields.push({ name: 'timest', visible: false });
+							fields.push({ name: 'datestr', displayName: "Age", visible: true });
+
+							if (tmpurl.endsWith("all.json")) {
+								fields.push({ name: 'blogsource', displayName: "Blog", inputFilterable: true, exactFilterable: false, sortable: true })
+							};
+
+							fields.push({ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: false, sortable: true});
+							fields.push({ name: 'link', inputFilterable: false, visible: false });
+							fields.push({ name: 'description', displayName: "Description", inputFilterable: true, exactFilterable: false });
+						
+						// if fullmode is false, do NOT add description and datestr field if the compact view state is true
+						} else {
+							fields.push({ name: 'timest', visible: false });
+
+							if (tmpurl.endsWith("all.json")) {
+								fields.push({ name: 'blogsource', displayName: "Blog", inputFilterable: true, exactFilterable: false, sortable: true })
+							};
+
+							fields.push({ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: false, sortable: true});
+							fields.push({ name: 'link', inputFilterable: false, visible: false });
 
 						}
 
@@ -110,15 +109,15 @@ class App extends React.Component {
 							<div>
 								<center>
 
-								<br /><br />
-								{viewswitch}
-
-								<Link to = "/app/all/">All blogs</Link>{' • '}
-								<Link to = "/app/whats-new/">What's New</Link>{' • '}
-								<Link to = "/app/compute/">Compute</Link>{' • '}
-								<Link to = "/app/developer/">Developer</Link>{' • '}
-								<Link to = "/app/mobile/">Mobile</Link>
 								<br />
+									<Link to = "/app/all/">All blogs</Link>{' • '}
+									<Link to = "/app/whats-new/">What's New</Link>{' • '}
+									<Link to = "/app/compute/">Compute</Link>{' • '}
+									<Link to = "/app/developer/">Developer</Link>{' • '}
+									<Link to = "/app/mobile/">Mobile</Link>
+								<br /><br />
+
+								<h3>{this.state.path1.toUpperCase()} BLOGS</h3>
 
 								<FilterableTable
 									namespace="blogs"
