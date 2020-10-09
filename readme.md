@@ -1,7 +1,7 @@
 amplify-blog
 ============
 
-This is the backend of the blog hosted on [blog.marek.rocks](https://blog.marek.rocks). It's deployed using AWS Amplify and uses the Gatsby Starter Theme as a base. 
+This is the backend of the blog hosted on [marek.rocks](https://marek.rocks). It's deployed using AWS Amplify and uses the Gatsby Starter Theme as a base. 
 
 
 ![alt text](./docs/main.png)
@@ -10,9 +10,10 @@ This is the backend of the blog hosted on [blog.marek.rocks](https://blog.marek.
 Roadmap
 -------
 
-- [ ] Add AWS blog filtering and searching.
-- [ ] Reduce build time to under three minutes using AL2 or using a custom build container.
-- [ ] Optimize website loading performance.
+- [ ] Add better search options and add more flexible blog table layout.
+- [X] Add AWS blog filtering and searching.
+- [X] Reduce build time to under three minutes using AL2 or using a custom build container.
+- [X] Optimize website loading performance.
 
 
 Contact
