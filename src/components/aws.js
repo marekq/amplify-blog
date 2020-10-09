@@ -31,7 +31,8 @@ class App extends React.Component {
 				<Async.Fulfilled>
 					{data => {
 
-						console.log(this.state.compact);
+						// get compact state
+						var compact = this.state.compact;
 
 						// get the current time
 						var now = new Date().getTime();
@@ -48,18 +49,32 @@ class App extends React.Component {
 
 							// add link for blogsource to blog category url
 							var blogurl = `/app/${blog.blogsource}`; 
-							var blogsource = blog.blogsource
-							blog.blogsource = <Link to = {blogurl}>{blogsource}</Link>;
-
+							
 							// add link for blogtitle to blog link url
 							var blogtitle = blog.title;
 							var bloglink = blog.link;
 							blog.title = <a href = {bloglink} target = '_blank' rel = "noreferrer">{blogtitle}</a>;
 
+							// set blogsource
+							var blogsource = '';
+
+							// if compact state is set, show the timediff and blogsource in one field
+							// this makes it easier to read the table on an iPhone
+							if (compact === true) {
+								blogsource = timediff + ' ' + blog.blogsource
+
+							// if full mode is selected, return the blogsource
+							} else {
+								blogsource = blog.blogsource
+							}
+
+							// set a link for the blog source to the blog url
+							blog.blogsource = <Link to = {blogurl}>{blogsource}</Link>;
+
 							return '';
 						});
 
-						// set the table fields of the aws blog post table
+						// set the table fields of the aws blog post table and the viewswitch option
 						const fields = [];
 						const viewswitch = [];
 
@@ -72,9 +87,8 @@ class App extends React.Component {
 							fields.push({ name: 'link', inputFilterable: false, visible: false })
 							fields.push({ name: 'description', displayName: "Description", inputFilterable: true, exactFilterable: false })
 						
-						// do not add description and datestr field if the compact view state is true
+						// do NOT add description and datestr field if the compact view state is true
 						} else {
-
 							fields.push({ name: 'timest', visible: false })
 							fields.push({ name: 'blogsource', displayName: "Blog", inputFilterable: true, exactFilterable: false, sortable: true })
 							fields.push({ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: false, sortable: true})
@@ -82,18 +96,22 @@ class App extends React.Component {
 
 						}
 
-						if (window.innerWidth > 1000) {
+
+						// if the page is shown on a large resolution, add the compact and full view buttons
+						if (window.innerWidth > 750) {
 							viewswitch.push(<Link onClick = {() => {this.setState({ compact: true })}} to = '.'><i>Compact View</i></Link>);
+							viewswitch.push(' • ')
 							viewswitch.push(<Link onClick = {() => {this.setState({ compact: false })}} to = '.'><i>Full Mode</i></Link>);
+							viewswitch.push(' • ')
 
 						}
 
 						return (
 							<div>
 								<center>
-								{viewswitch}
 
 								<br /><br />
+								{viewswitch}
 
 								<Link to = "/app/all/">All blogs</Link>{' • '}
 								<Link to = "/app/whats-new/">What's New</Link>{' • '}
@@ -106,7 +124,7 @@ class App extends React.Component {
 									namespace="blogs"
 									topPagerVisible={true}
 									pagersVisible={false}
-									headerVisible={true}
+									headerVisible={false}
 									initialSort="timest"
 									initialSortDir={false}
 									data={data}
