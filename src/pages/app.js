@@ -2,8 +2,8 @@ import React from "react"
 import { Router } from "@reach/router"
 import Layout from "../components/layout"
 import About from "../components/about"
-import AWS from "../components/aws"
 import Marek from "../components/marek"
+import Table from "../components/aws"
 
 const NotFound = () => <p>Sorry, the page was not found.</p>
 
@@ -13,54 +13,55 @@ const App = () => (
       <NotFound default />
       <About path="/app/about" />
       <Marek path="/app/marek" />
-      <AWS path="/app/all" />
-      <AWS path="/app/apn" />
-      <AWS path="/app/architecture" />
-      <AWS path="/app/big-data" />
-      <AWS path="/app/biz-prod" />
-      <AWS path="/app/cli" />
-      <AWS path="/app/cloudguru" />
-      <AWS path="/app/compute" />
-      <AWS path="/app/contact-center" />
-      <AWS path="/app/containers" />
-      <AWS path="/app/corey" />
-      <AWS path="/app/cost-mgmt" />
-      <AWS path="/app/database" />
-      <AWS path="/app/desktop" />
-      <AWS path="/app/developer" />
-      <AWS path="/app/devops" />
-      <AWS path="/app/enterprise-strat" />
-      <AWS path="/app/eric" />
-      <AWS path="/app/gamedev" />
-      <AWS path="/app/gametech" />
-      <AWS path="/app/governance" />
-      <AWS path="/app/industries" />
-      <AWS path="/app/infrastructure" />
-      <AWS path="/app/iot" />
-      <AWS path="/app/james" />
-      <AWS path="/app/java" />
-      <AWS path="/app/jeremy" />
-      <AWS path="/app/management-tools" />
-      <AWS path="/app/marketplace" />
-      <AWS path="/app/media" />
-      <AWS path="/app/messaging" />
-      <AWS path="/app/ml" />
-      <AWS path="/app/mobile" />
-      <AWS path="/app/modernizing" />
-      <AWS path="/app/networking" />
-      <AWS path="/app/newsblog" />
-      <AWS path="/app/open-source" />
-      <AWS path="/app/public-sector" />
-      <AWS path="/app/robotics" />
-      <AWS path="/app/sap" />
-      <AWS path="/app/security" />
-      <AWS path="/app/security-bulletins" />
-      <AWS path="/app/serverless" />
-      <AWS path="/app/storage" />
-      <AWS path="/app/training" />
-      <AWS path="/app/werner" />
-      <AWS path="/app/whats-new" />
-      <AWS path="/app/yan" />
+      <Table path="/app/table" />
+      <Table path="/app/all" />
+      <Table path="/app/apn" />
+      <Table path="/app/architecture" />
+      <Table path="/app/big-data" />
+      <Table path="/app/biz-prod" />
+      <Table path="/app/cli" />
+      <Table path="/app/cloudguru" />
+      <Table path="/app/compute" />
+      <Table path="/app/contact-center" />
+      <Table path="/app/containers" />
+      <Table path="/app/corey" />
+      <Table path="/app/cost-mgmt" />
+      <Table path="/app/database" />
+      <Table path="/app/desktop" />
+      <Table path="/app/developer" />
+      <Table path="/app/devops" />
+      <Table path="/app/enterprise-strat" />
+      <Table path="/app/eric" />
+      <Table path="/app/gamedev" />
+      <Table path="/app/gametech" />
+      <Table path="/app/governance" />
+      <Table path="/app/industries" />
+      <Table path="/app/infrastructure" />
+      <Table path="/app/iot" />
+      <Table path="/app/james" />
+      <Table path="/app/java" />
+      <Table path="/app/jeremy" />
+      <Table path="/app/management-tools" />
+      <Table path="/app/marketplace" />
+      <Table path="/app/media" />
+      <Table path="/app/messaging" />
+      <Table path="/app/ml" />
+      <Table path="/app/mobile" />
+      <Table path="/app/modernizing" />
+      <Table path="/app/networking" />
+      <Table path="/app/newsblog" />
+      <Table path="/app/open-source" />
+      <Table path="/app/public-sector" />
+      <Table path="/app/robotics" />
+      <Table path="/app/sap" />
+      <Table path="/app/security" />
+      <Table path="/app/security-bulletins" />
+      <Table path="/app/serverless" />
+      <Table path="/app/storage" />
+      <Table path="/app/training" />
+      <Table path="/app/werner" />
+      <Table path="/app/whats-new" />
+      <Table path="/app/yan" />
     </Router>
   </Layout>
 )

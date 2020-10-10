@@ -1,11 +1,33 @@
-import React from 'react';
+import React, { forwardRef } from 'react'
 import Async from 'react-async';
-import FilterableTable from 'react-filterable-table';
 import prettyMilliseconds from 'pretty-ms';
 import fetch from 'node-fetch';
 import { Link } from "gatsby";
+import MaterialTable from 'material-table';
+import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search } from "@material-ui/icons";
+import { MuiThemeProvider } from "@material-ui/core";
+import { createMuiTheme } from "@material-ui/core/styles";
 
 const url = 'https://feed.marek.rocks/'
+
+let direction = "ltr";
+
+const theme = createMuiTheme({
+  direction: direction,
+  palette: {
+    type: "light",
+  },
+});
+
+const tableIcons = {
+	Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+	FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+	LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+	NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+	PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+	ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+	Search: forwardRef((props, ref) => <Search {...props} ref={ref} />)
+  };
 
 const loadBlogs = ({ blogUrl }) =>
   fetch(blogUrl)
@@ -44,9 +66,6 @@ class App extends React.Component {
 							// get the time difference string and set it in data
 							var timediff = prettyMilliseconds(timestamp, {compact: true});
 							blog.datestr = timediff;
-
-							// add link for blogsource to blog category url
-							var blogurl = `/app/${blog.blogsource}`; 
 							
 							// add link for blogtitle to blog link url
 							var blogtitle = blog.title;
@@ -67,46 +86,43 @@ class App extends React.Component {
 							}
 
 							// set a link for the blog source to the blog url
-							blog.blogsource = <Link to = {blogurl}>{blogsource.replace("-", " ")}</Link>;
+							blog.blogsource = blogsource.toString().replace("-", " ");
 
 							return '';
+
 						});
 
 						// set the table fields of the aws blog post table and the viewswitch option
 						const fields = [];
 						
 						// get the url value
-						console.log(this.state.url1);
 						var tmpurl = this.state.url1;
 
 						// if fullmode is true, add description and datestr field if the compact view state is false
 						if (window.innerWidth > 750) {
-							fields.push({ name: 'timest', visible: false });
-							fields.push({ name: 'datestr', displayName: "Age", visible: true });
+							fields.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true});
+							fields.push({ title: 'Age', field: 'datestr', width: 20 });
 
 							if (tmpurl.endsWith("all.json")) {
-								fields.push({ name: 'blogsource', displayName: "Blog", inputFilterable: true, exactFilterable: false, sortable: true })
+								fields.push({ title: 'Blog', field: 'blogsource', width: 50 })
 							};
 
-							fields.push({ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: false, sortable: true});
-							fields.push({ name: 'link', inputFilterable: false, visible: false });
-							fields.push({ name: 'description', displayName: "Description", inputFilterable: true, exactFilterable: false });
+							fields.push({ title: 'Title', field: 'title', minwidth: 500 });
 						
 						// if fullmode is false, do NOT add description and datestr field if the compact view state is true
 						} else {
-							fields.push({ name: 'timest', visible: false });
+							fields.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true});
 
 							if (tmpurl.endsWith("all.json")) {
-								fields.push({ name: 'blogsource', displayName: "Blog", inputFilterable: true, exactFilterable: false, sortable: true })
+								fields.push({ title: 'Blog', field: 'blogsource', width: 50 })
 							};
 
-							fields.push({ name: 'title', displayName: "Title", inputFilterable: true, exactFilterable: false, sortable: true});
-							fields.push({ name: 'link', inputFilterable: false, visible: false });
+							fields.push({ title: 'Title', field: 'title', minwidth: 500 });
 
 						}
 
 						return (
-							<div>
+							<MuiThemeProvider theme={theme}>
 								<center>
 
 								<br />
@@ -117,25 +133,36 @@ class App extends React.Component {
 									<Link to = "/app/mobile/">Mobile</Link>
 								<br /><br />
 
-								<h3>{this.state.path1.toUpperCase()} BLOGS</h3>
-
-								<FilterableTable
-									namespace="blogs"
-									topPagerVisible={true}
-									pagersVisible={false}
-									headerVisible={false}
-									initialSort="timest"
-									initialSortDir={false}
+								<MaterialTable
+								    title = {this.state.path1.toUpperCase()}
+									options={{
+										search: true,
+										sorting: true,
+										columnResizable: true,
+										pageSize: 100
+									}}
+									tableLayout="fixed"
+									filtering={true}
 									data={data}
-									fields={fields}
-									noRecordsMessage="There are no blogs to display"
-									noFilteredRecordsMessage="No blogs match your filters"
-									recordCountName="blog"
-									recordCountNamePlural="blogs"
+									icons={tableIcons}
+									columns={fields}
+									style={ { overflow: 'visible' } } 
+									detailPanel={[
+										{
+										  tooltip: 'Show Description',
+										  render: data => {
+											return (
+												<div class = "container">
+													{data.description}
+											  	</div>
+											)
+										  },
+										}
+									]}
 								/>
-								</center>
-							</div>
-						)}}
+							</center>
+						</ MuiThemeProvider>
+					)}}
 					</Async.Fulfilled>
 					<Async.Rejected>
 						{error => `Something went wrong: ${error.message}`}
