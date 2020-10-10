@@ -7,6 +7,10 @@ import MaterialTable from 'material-table';
 import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search } from "@material-ui/icons";
 import { MuiThemeProvider } from "@material-ui/core";
 import { createMuiTheme } from "@material-ui/core/styles";
+import Sidebar from "react-sidebar";
+
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 
 const url = 'https://feed.marek.rocks/'
 
@@ -18,6 +22,7 @@ const theme = createMuiTheme({
     type: "light",
   },
 });
+
 
 const tableIcons = {
 	Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
@@ -41,9 +46,16 @@ class App extends React.Component {
 
 		// to be improved - get the uri of the url by stripping /app from the url
 		var bloguri = props.path.slice(5, 999);
-		this.state = { url1: url + bloguri + '.json', path1: String(bloguri)};
+
+		// set the state of url, path and sidebar status
+		this.state = { url1: url + bloguri + '.json', path1: String(bloguri), sidebarOpen: false };
+		this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
 
 	}
+
+	onSetSidebarOpen(open) {
+		this.setState({ sidebarOpen: true });
+	  }
 
 	render() {
 		return (
@@ -67,11 +79,6 @@ class App extends React.Component {
 							var timediff = prettyMilliseconds(timestamp, {compact: true});
 							blog.datestr = timediff;
 							
-							// add link for blogtitle to blog link url
-							var blogtitle = blog.title;
-							var bloglink = blog.link;
-							blog.title = <a href = {bloglink} target = '_blank' rel = "noreferrer">{blogtitle}</a>;
-
 							// set blogsource
 							var blogsource = '';
 
@@ -125,27 +132,32 @@ class App extends React.Component {
 						// add the description as non visible to allow search 
 						fields.push({ title: 'Description', field: 'description', hidden: true, searchable: true});
 
+						// create sidebar menu
+						const sidebar = [];
+						//sidebar.push(<b>Menu</b>)
+						sidebar.push(<Link key = "abc" onClick = {() => {this.setState({ sidebarOpen: false })}} to = '.'><i>Close menu</i></Link>);
+
+						const blogpaths = ['apn', 'architecture', 'big-data', 'biz-prod', 'cli', 'compute', 'contact-center', 'containers', 'cost-mgmt', 'database', 'desktop', 'developer', 'devops', 'enterprise-strat', 'gamedev', 'gametech', 'governance', 'industries', 'infrastructure', 'iot', 'java', 'management-tools', 'marketplace', 'media', 'messaging', 'ml', 'mobile', 'modernizing', 'networking', 'newsblog', 'open-source', 'public-sector', 'robotics', 'sap', 'security', 'security-bulletins', 'serverless', 'storage', 'training', 'whats-new', 'yan', 'corey', 'cloudguru', 'werner', 'james', 'jeremy', 'eric'];
+						console.log(this.state.path1);
+
+						for (const [index, value] of blogpaths.entries()) {
+
+							sidebar.push(<p><Link to = {`/app/${value}`} key = {value}><i>{value}</i></Link></p>)
+						}
+
 						return (
 							<MuiThemeProvider theme={theme}>
-								<center>
-
-								<br />
-									<Link to = "/app/all/">All blogs</Link>{' • '}
-									<Link to = "/app/whats-new/">What's New</Link>{' • '}
-									<Link to = "/app/compute/">Compute</Link>{' • '}
-									<Link to = "/app/developer/">Developer</Link>{' • '}
-									<Link to = "/app/mobile/">Mobile</Link>
-								<br /><br />
+								<h3>{this.state.path1} blogs</h3>
 
 								<MaterialTable
-								    title = {this.state.path1.toUpperCase()}
+								    title = ''
 									options={{
 										search: true,
 										sorting: true,
 										columnResizable: true,
-										pageSize: 100
+										pageSize: 100,
+										pageSizeOptions: [100, 500, 1000]
 									}}
-									tableLayout="fixed"
 									filtering={true}
 									data={data}
 									icons={tableIcons}
@@ -153,18 +165,32 @@ class App extends React.Component {
 									detailPanel={[
 										{
 										  tooltip: 'Show Description',
+										  icon: ArrowForwardIosIcon,
+										  openIcon: SubdirectoryArrowRightIcon,
 										  render: data => {
 											return (
-												<div class = "container">
+												<div id = "container" style={{
+													fontSize: 16,
+													color: 'black'
+												  }}><br />
 													<i>Posted {data.datestr} ago by {data.author} in {data.blogsource}</i><br /><br />
-													{data.description}
+													{data.description}<br />
 											  	</div>
 											)
 										  },
 										}
 									]}
 								/>
-							</center>
+								<Sidebar
+									sidebar={sidebar}
+									open={this.state.sidebarOpen}
+									onSetOpen={this.onSetSidebarOpen}
+									styles={{ sidebar: { background: "white" } }}
+								>
+									<Link to = "." onClick={() => this.onSetSidebarOpen(true)}>
+										Menu
+									</Link>
+								</Sidebar>
 						</ MuiThemeProvider>
 					)}}
 					</Async.Fulfilled>
