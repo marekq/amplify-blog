@@ -100,26 +100,30 @@ class App extends React.Component {
 
 						// if fullmode is true, add description and datestr field if the compact view state is false
 						if (window.innerWidth > 750) {
-							fields.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true});
-							fields.push({ title: 'Age', field: 'datestr', width: 20 });
+							fields.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false});
+							fields.push({ title: 'Age', field: 'datestr', width: 20, searchable: true });
 
+							// add the blogsource if the 'all' category is selected
 							if (tmpurl.endsWith("all.json")) {
-								fields.push({ title: 'Blog', field: 'blogsource', width: 50 })
+								fields.push({ title: 'Blog', field: 'blogsource', width: 50, searchable: true })
 							};
 
-							fields.push({ title: 'Title', field: 'title', minwidth: 500 });
-						
+							fields.push({ title: 'Title', field: 'title', minwidth: 500, searchable: true });
+
 						// if fullmode is false, do NOT add description and datestr field if the compact view state is true
 						} else {
-							fields.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true});
+							fields.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false});
 
 							if (tmpurl.endsWith("all.json")) {
-								fields.push({ title: 'Blog', field: 'blogsource', width: 50 })
+								fields.push({ title: 'Blog', field: 'blogsource', width: 50, searchable: true })
 							};
 
-							fields.push({ title: 'Title', field: 'title', minwidth: 500 });
+							fields.push({ title: 'Title', field: 'title', minwidth: 500, searchable: true });
 
 						}
+
+						// add the description as non visible to allow search 
+						fields.push({ title: 'Description', field: 'description', hidden: true, searchable: true});
 
 						return (
 							<MuiThemeProvider theme={theme}>
@@ -146,13 +150,13 @@ class App extends React.Component {
 									data={data}
 									icons={tableIcons}
 									columns={fields}
-									style={ { overflow: 'visible' } } 
 									detailPanel={[
 										{
 										  tooltip: 'Show Description',
 										  render: data => {
 											return (
 												<div class = "container">
+													<i>Posted {data.datestr} ago by {data.author} in {data.blogsource}</i><br /><br />
 													{data.description}
 											  	</div>
 											)
