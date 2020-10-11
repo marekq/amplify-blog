@@ -5,24 +5,12 @@ import fetch from 'node-fetch';
 import { Link } from "gatsby";
 import MaterialTable from 'material-table';
 import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search } from "@material-ui/icons";
-import { MuiThemeProvider } from "@material-ui/core";
-import { createMuiTheme } from "@material-ui/core/styles";
 import Sidebar from "react-sidebar";
 
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 
 const url = 'https://feed.marek.rocks/'
-
-let direction = "ltr";
-
-const theme = createMuiTheme({
-  direction: direction,
-  palette: {
-    type: "light",
-  },
-});
-
 
 const tableIcons = {
 	Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
@@ -38,6 +26,17 @@ const loadBlogs = ({ blogUrl }) =>
   fetch(blogUrl)
 	.then(res => (res.ok ? res : Promise.reject(res)))
 	.then(res => res.json())
+
+const styles = {
+	contentHeaderMenuLink: {
+		textDecoration: "none",
+		color: "white",
+		padding: 8
+	},
+	content: {
+		padding: "16px"
+	}
+};
 
 class App extends React.Component {
 
@@ -134,65 +133,63 @@ class App extends React.Component {
 
 						// create sidebar menu
 						const sidebar = [];
-						//sidebar.push(<b>Menu</b>)
-						sidebar.push(<Link key = "abc" onClick = {() => {this.setState({ sidebarOpen: false })}} to = '.'><i>Close menu</i></Link>);
+						sidebar.push(<p><b>Menu</b></p>)
+						sidebar.push(<p><Link key = "abc" onClick = {() => {this.setState({ sidebarOpen: false })}} to = '.'><i>Close menu</i></Link></p>);
 
 						const blogpaths = ['apn', 'architecture', 'big-data', 'biz-prod', 'cli', 'compute', 'contact-center', 'containers', 'cost-mgmt', 'database', 'desktop', 'developer', 'devops', 'enterprise-strat', 'gamedev', 'gametech', 'governance', 'industries', 'infrastructure', 'iot', 'java', 'management-tools', 'marketplace', 'media', 'messaging', 'ml', 'mobile', 'modernizing', 'networking', 'newsblog', 'open-source', 'public-sector', 'robotics', 'sap', 'security', 'security-bulletins', 'serverless', 'storage', 'training', 'whats-new', 'yan', 'corey', 'cloudguru', 'werner', 'james', 'jeremy', 'eric'];
 						console.log(this.state.path1);
 
 						for (const [index, value] of blogpaths.entries()) {
 
-							sidebar.push(<p><Link to = {`/app/${value}`} key = {value}><i>{value}</i></Link></p>)
+							sidebar.push(<p><Link to = {`/app/${value}`} key = {index}><i>{value}</i></Link></p>)
 						}
 
 						return (
-							<MuiThemeProvider theme={theme}>
-								<h3>{this.state.path1} blogs</h3>
-
-								<MaterialTable
-								    title = ''
-									options={{
-										search: true,
-										sorting: true,
-										columnResizable: true,
-										pageSize: 100,
-										pageSizeOptions: [100, 500, 1000]
-									}}
-									filtering={true}
-									data={data}
-									icons={tableIcons}
-									columns={fields}
-									detailPanel={[
-										{
-										  tooltip: 'Show Description',
-										  icon: ArrowForwardIosIcon,
-										  openIcon: SubdirectoryArrowRightIcon,
-										  render: data => {
-											return (
-												<div id = "container" style={{
-													fontSize: 16,
-													color: 'black'
-												  }}><br />
-													<i>Posted {data.datestr} ago by {data.author} in {data.blogsource}</i><br /><br />
-													{data.description}<br />
-											  	</div>
-											)
-										  },
-										}
-									]}
-								/>
-								<Sidebar
-									sidebar={sidebar}
-									open={this.state.sidebarOpen}
-									onSetOpen={this.onSetSidebarOpen}
-									styles={{ sidebar: { background: "white" } }}
-								>
+							<Sidebar
+								sidebar={sidebar}
+								open={this.state.sidebarOpen}
+								onSetOpen={this.onSetSidebarOpen}
+								styles={{ sidebar: { background: "white", zIndex: 2, overflow: "hidden"}}}
+							>
+								<div style={styles.content} overflow="hidden">
 									<Link to = "." onClick={() => this.onSetSidebarOpen(true)}>
 										Menu
 									</Link>
-								</Sidebar>
-						</ MuiThemeProvider>
-					)}}
+								<MaterialTable
+									title = ''
+									options={{
+											search: true,
+											sorting: true,
+											columnResizable: true,
+											pageSize: 100,
+											pageSizeOptions: [100, 500, 1000]
+										}}
+										filtering={true}
+										data={data}
+										icons={tableIcons}
+										columns={fields}
+										detailPanel={[
+											{
+												tooltip: 'Show Description',
+												icon: ArrowForwardIosIcon,
+												openIcon: SubdirectoryArrowRightIcon,
+												render: data => {
+													return (
+														<div id = "container" style={{
+															fontSize: 16,
+															color: 'black'
+														}}><br />
+															<i>Posted {data.datestr} ago by {data.author} in {data.blogsource}</i><br /><br />
+															{data.description}<br />
+														</div>
+													)
+												},
+											}
+										]}
+								/>
+								</div>
+							</Sidebar>
+						)}}
 					</Async.Fulfilled>
 					<Async.Rejected>
 						{error => `Something went wrong: ${error.message}`}
