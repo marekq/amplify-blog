@@ -8,7 +8,7 @@ import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search } from "@
 import Sidebar from "react-sidebar";
 import Header from "../components/header"
 import View from "./view.js"
-import Button from 'react-bootstrap/Button';
+//import Button from 'react-bootstrap/Button';
 
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
@@ -72,7 +72,7 @@ class App extends React.Component {
 			<div className = "container">
 				
 				<Async promiseFn = {loadBlogs} blogUrl = {this.state.url1}>
-				<Async.Loading>Loading... </Async.Loading>
+				<Async.Loading>Loading page... </Async.Loading>
 				<Async.Fulfilled>
 					{data => {
 
@@ -89,21 +89,12 @@ class App extends React.Component {
 							var timediff = prettyMilliseconds(timestamp, {compact: true});
 							blog.datestr = timediff;
 							
-							// set blogsource
-							var blogsource = '';
-
-							// if compact state is set, show the timediff and blogsource in one field
-							// this makes it easier to read the table on an iPhone
-							if (window.innerWidth < 750 && blog.blogsource === 'all') {
-								blogsource = timediff + ' ' + blog.blogsource
-
-							// if full mode is selected, return the blogsource
-							} else {
-								blogsource = blog.blogsource
-							}
-
 							// set a link for the blog source to the blog url
-							blog.blogsource = blogsource.toString().replace("-", " ");
+							blog.blogsource = blog.blogsource.toString().replace("-", " ");
+
+							if (!mql) {
+								blog.title = blog.datestr.toString() + ' - ' + blog.title.toString();
+							}
 
 							return '';
 
@@ -116,7 +107,7 @@ class App extends React.Component {
 						var tmpurl = this.state.url1;
 
 						// if fullmode is true, add description and datestr field if the compact view state is false
-						if (window.innerWidth > 750) {
+						if (mql) {
 							fields.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false});
 							fields.push({ title: 'Age', field: 'datestr', width: 20, searchable: true });
 
@@ -125,18 +116,21 @@ class App extends React.Component {
 								fields.push({ title: 'Blog', field: 'blogsource', width: 20, searchable: true })
 							};
 
-							fields.push({ title: 'Title', field: 'title', minwidth: 500, searchable: true });
+							fields.push({ title: 'Title', field: 'title', minwidth: 1000, searchable: true });
 
 						// if fullmode is false, do NOT add description and datestr field if the compact view state is true
 						} else {
 							fields.push({ title: 'Timest', field: 'timest', width: 10, defaultSort: 'desc', hidden: true, searchable: false});
 
-							// temporary disabled age column for all blogs view
-							//fields.push({ title: 'Age', field: 'datestr', width: 10, hidden: false, searchable: true});
-
-							if (tmpurl.endsWith("all.json")) {
+							console.log(tmpurl)
+							console.log(mql)
+			
+							if (tmpurl === "all") {
 								fields.push({ title: 'Blog', field: 'blogsource', width: 10, searchable: true })
-							};
+
+							} else {
+								fields.push({ title: 'Age', field: 'datestr', width: 10, searchable: true});
+							}
 
 							fields.push({ title: 'Title', field: 'title', searchable: true });
 
@@ -161,12 +155,12 @@ class App extends React.Component {
 
 						for (const [index, value] of blogpaths.entries()) {
 
-							sidebar.push(<p><Link to = {`/app/${value}`} size = "sm" variant = "secondary" key = {index}><i>{value}</i></Link></p>)
+							sidebar.push(<p id = {value}><Link to = {`/app/${value}`} size = "sm" variant = "secondary" key = {index}><i>{value}</i></Link></p>)
 						}
 
 						const menulink = [];
 						if (!this.state.sidebarDocked) {
-							menulink.push(<Link to = "." onClick={() => this.onSetSidebarOpen(true) }><b>Click for AWS Blog Menu</b></Link>)
+							menulink.push(<center><Link to = "." onClick={() => this.onSetSidebarOpen(true) }>blog menu<br /></Link></center>)
 						}
 
 						return (
@@ -176,24 +170,23 @@ class App extends React.Component {
 								open={this.state.sidebarOpen}
 								onSetOpen={this.onSetSidebarOpen}
 								docked={this.state.sidebarDocked}
-								styles={{ sidebar: { background: "white", textAlign: "left"}}}
+								styles={{ sidebar: { background: "white", textAlign: "left", padding: "20px"}}}
+								transitions={false}
+								shadow={false}
 							>
 							<View title = "">  
-
 								<Header />
-								<br />
-								{menulink}
-								<br />
+								<br />								
 								<center>
-									<h2>{this.state.path1.replace('-', ' ')} blogs</h2>
+									<h1>{this.state.path1.replace('-', ' ')} blogs</h1><h3>{menulink}</h3><br />
 								</center>
 
 								<MaterialTable
 									title = ''
+									style={{position: "sticky", padding: "0px" }}
 									options={{
 											search: true,
 											sorting: true,
-											columnResizable: true,
 											pageSize: 50,
 											pageSizeOptions: [50, 100, 1000]
 										}}
@@ -209,12 +202,12 @@ class App extends React.Component {
 												render: data => {
 													return (
 														<div id = "container" style={{
-															fontSize: 16,
+															fontSize: 18,
 															color: 'black'
 														}}><br />
-															<i>Posted {data.datestr} ago by {data.author} in {data.blogsource}</i><br /><br />
+															<center><i>Posted {data.datestr} ago by {data.author} in {data.blogsource}</i></center><br /><br />
 															{data.description}<br /><br />
-															<a href = {data.link} target = "_blank" rel="noreferrer">Visit blog here</a>
+															<center><a href = {data.link} target = "_blank" rel="noreferrer">Visit blog here</a></center>
 														</div>
 													)
 												},
