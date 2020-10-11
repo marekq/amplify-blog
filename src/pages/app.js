@@ -1,16 +1,13 @@
 import React from "react"
 import { Router } from "@reach/router"
-import Layout from "../components/layout"
 import About from "../components/about"
 import Marek from "../components/marek"
 import Table from "../components/aws"
-
-const NotFound = () => <p>Sorry, the page was not found.</p>
+import FourZeroFour from "./404.js"
 
 const App = () => (
-  <Layout>
     <Router>
-      <NotFound default />
+      <FourZeroFour default />
       <About path="/app/about" />
       <Marek path="/app/marek" />
       <Table path="/app/table" />
@@ -63,7 +60,6 @@ const App = () => (
       <Table path="/app/whats-new" />
       <Table path="/app/yan" />
     </Router>
-  </Layout>
 )
 
 export default App

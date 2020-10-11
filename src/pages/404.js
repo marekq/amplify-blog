@@ -1,13 +1,15 @@
 import React from "react"
-import Layout from "../components/layout"
 import View from "../components/view"
+import Header from "../components/header"
 
 const NotFound = () => (
-  <Layout>
-    <View title="Not Found">
-      <p>You just hit a route that doesn&#39;t exist... </p>
+    <View title="">
+      <Header />
+      <center>
+        <h1 className = "display-6">404</h1>
+        <p>You just hit a route that doesn&#39;t exist... </p>
+      </center>
     </View>
-  </Layout>
 )
 
 export default NotFound

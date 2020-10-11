@@ -6,11 +6,15 @@ import { Link } from "gatsby";
 import MaterialTable from 'material-table';
 import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search } from "@material-ui/icons";
 import Sidebar from "react-sidebar";
+import Header from "../components/header"
+import View from "./view.js"
 
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 
 const url = 'https://feed.marek.rocks/'
+
+const mql = window.matchMedia(`(min-width: 800px)`);
 
 const tableIcons = {
 	Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
@@ -27,17 +31,6 @@ const loadBlogs = ({ blogUrl }) =>
 	.then(res => (res.ok ? res : Promise.reject(res)))
 	.then(res => res.json())
 
-const styles = {
-	contentHeaderMenuLink: {
-		textDecoration: "none",
-		color: "white",
-		padding: 8
-	},
-	content: {
-		padding: "16px"
-	}
-};
-
 class App extends React.Component {
 
 	constructor(props) {
@@ -47,14 +40,23 @@ class App extends React.Component {
 		var bloguri = props.path.slice(5, 999);
 
 		// set the state of url, path and sidebar status
-		this.state = { url1: url + bloguri + '.json', path1: String(bloguri), sidebarOpen: false };
+		this.state = { url1: url + bloguri + '.json', path1: String(bloguri), sidebarOpen: false, sidebarDocked: mql.matches };
 		this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
+		this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
+		this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
+	}
 
+	componentWillMount() {
+		mql.addListener(this.mediaQueryChanged);
+	}
+
+	mediaQueryChanged() {
+		this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
 	}
 
 	onSetSidebarOpen(open) {
 		this.setState({ sidebarOpen: true });
-	  }
+	}
 
 	render() {
 		return (
@@ -144,25 +146,38 @@ class App extends React.Component {
 							sidebar.push(<p><Link to = {`/app/${value}`} key = {index}><i>{value}</i></Link></p>)
 						}
 
+						const menulink = [];
+						if (!this.state.sidebarDocked) {
+							menulink.push(<center><Link to = "." onClick={() => this.onSetSidebarOpen(true) }><b>Click for AWS Blog Menu</b></Link></center>)
+						}
+
 						return (
+
 							<Sidebar
 								sidebar={sidebar}
 								open={this.state.sidebarOpen}
 								onSetOpen={this.onSetSidebarOpen}
-								styles={{ sidebar: { background: "white", zIndex: 2, overflow: "hidden"}}}
+								docked={this.state.sidebarDocked}
+								styles={{ sidebar: { background: "white", textAlign: "center"}}}
 							>
-								<div style={styles.content} overflow="hidden">
-									<Link to = "." onClick={() => this.onSetSidebarOpen(true)}>
-										Menu
-									</Link>
+							<View title = "">  
+
+								<Header />
+								<br />
+								{menulink}
+								<br />
+								<center>
+									<h2>{this.state.path1.replace('-', ' ')} blogs</h2>
+								</center>
+
 								<MaterialTable
 									title = ''
 									options={{
 											search: true,
 											sorting: true,
 											columnResizable: true,
-											pageSize: 100,
-											pageSizeOptions: [100, 500, 1000]
+											pageSize: 50,
+											pageSizeOptions: [50, 100, 1000]
 										}}
 										filtering={true}
 										data={data}
@@ -170,7 +185,7 @@ class App extends React.Component {
 										columns={fields}
 										detailPanel={[
 											{
-												tooltip: 'Show Description',
+												tooltip: 'Show blogpost details',
 												icon: ArrowForwardIosIcon,
 												openIcon: SubdirectoryArrowRightIcon,
 												render: data => {
@@ -180,19 +195,20 @@ class App extends React.Component {
 															color: 'black'
 														}}><br />
 															<i>Posted {data.datestr} ago by {data.author} in {data.blogsource}</i><br /><br />
-															{data.description}<br />
+															{data.description}<br /><br />
+															<a href = {data.link} target = "_blank" rel="noreferrer">Visit blog here</a>
 														</div>
 													)
 												},
 											}
 										]}
-								/>
-								</div>
+									/>
+								</View>
 							</Sidebar>
 						)}}
 					</Async.Fulfilled>
 					<Async.Rejected>
-						{error => `Something went wrong: ${error.message}`}
+						Something went wrong, <a href ="javascript:history.back()">go back</a>
 					</Async.Rejected>
 				</Async>
 			</div>

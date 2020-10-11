@@ -1,14 +1,15 @@
 import React from "react"
-import Layout from "../components/layout"
 import View from "../components/view"
+import Header from "../components/header"
 
 const Index = () => (
-  <Layout>
+  <View>
+    <Header />
     <View title = "">
         <br />
         Welcome to my serverless blog!
     </View>
-  </Layout>
+  </View>
 )
 
 export default Index

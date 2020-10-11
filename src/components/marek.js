@@ -1,10 +1,12 @@
 import React from "react"
 import View from "./view.js"
+import Header from "../components/header"
 
 const Marek = () => {
 
   return (
-    <View title = "">    
+    <View title = "">  
+      <Header />  
       <center>
         <h1 className = "display-6">Marek Kuczynski</h1>
         <img src = {'/mk.jpg'} width = "250" alt = "Marek" /><br /><br />
