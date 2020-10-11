@@ -6,7 +6,7 @@ const NotFound = () => (
     <View title="">
       <Header />
       <center>
-        <h1 className = "display-6">404</h1>
+        <h1>404</h1>
         <p>You just hit a route that doesn&#39;t exist... </p>
       </center>
     </View>

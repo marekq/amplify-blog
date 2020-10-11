@@ -8,14 +8,21 @@ import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search } from "@
 import Sidebar from "react-sidebar";
 import Header from "../components/header"
 import View from "./view.js"
+import Button from 'react-bootstrap/Button';
 
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 
+// set the blogfeed
 const url = 'https://feed.marek.rocks/'
 
-const mql = window.matchMedia(`(min-width: 800px)`);
+// disable mql during server build
+var mql = ''
+if (typeof window !== `undefined`) {
+	mql = window.matchMedia(`(min-width: 800px)`);
+} 
 
+// set table icons
 const tableIcons = {
 	Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
 	FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
@@ -26,11 +33,13 @@ const tableIcons = {
 	Search: forwardRef((props, ref) => <Search {...props} ref={ref} />)
   };
 
+// load the blog from s3
 const loadBlogs = ({ blogUrl }) =>
   fetch(blogUrl)
 	.then(res => (res.ok ? res : Promise.reject(res)))
 	.then(res => res.json())
 
+// main react class
 class App extends React.Component {
 
 	constructor(props) {
@@ -113,20 +122,23 @@ class App extends React.Component {
 
 							// add the blogsource if the 'all' category is selected
 							if (tmpurl.endsWith("all.json")) {
-								fields.push({ title: 'Blog', field: 'blogsource', width: 50, searchable: true })
+								fields.push({ title: 'Blog', field: 'blogsource', width: 20, searchable: true })
 							};
 
 							fields.push({ title: 'Title', field: 'title', minwidth: 500, searchable: true });
 
 						// if fullmode is false, do NOT add description and datestr field if the compact view state is true
 						} else {
-							fields.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false});
+							fields.push({ title: 'Timest', field: 'timest', width: 10, defaultSort: 'desc', hidden: true, searchable: false});
+
+							// temporary disabled age column for all blogs view
+							//fields.push({ title: 'Age', field: 'datestr', width: 10, hidden: false, searchable: true});
 
 							if (tmpurl.endsWith("all.json")) {
-								fields.push({ title: 'Blog', field: 'blogsource', width: 50, searchable: true })
+								fields.push({ title: 'Blog', field: 'blogsource', width: 10, searchable: true })
 							};
 
-							fields.push({ title: 'Title', field: 'title', minwidth: 500, searchable: true });
+							fields.push({ title: 'Title', field: 'title', searchable: true });
 
 						}
 
@@ -135,20 +147,26 @@ class App extends React.Component {
 
 						// create sidebar menu
 						const sidebar = [];
-						sidebar.push(<p><b>Menu</b></p>)
-						sidebar.push(<p><Link key = "abc" onClick = {() => {this.setState({ sidebarOpen: false })}} to = '.'><i>Close menu</i></Link></p>);
 
-						const blogpaths = ['apn', 'architecture', 'big-data', 'biz-prod', 'cli', 'compute', 'contact-center', 'containers', 'cost-mgmt', 'database', 'desktop', 'developer', 'devops', 'enterprise-strat', 'gamedev', 'gametech', 'governance', 'industries', 'infrastructure', 'iot', 'java', 'management-tools', 'marketplace', 'media', 'messaging', 'ml', 'mobile', 'modernizing', 'networking', 'newsblog', 'open-source', 'public-sector', 'robotics', 'sap', 'security', 'security-bulletins', 'serverless', 'storage', 'training', 'whats-new', 'yan', 'corey', 'cloudguru', 'werner', 'james', 'jeremy', 'eric'];
+						// if the sidebar is undocked, add menu close button
+						if (!this.state.sidebarDocked) {
+							sidebar.push(<p><br /><Link key = "menuClose" onClick = {() => {this.setState({ sidebarOpen: false })}} to = '.'><i><b>Close menu</b></i></Link></p>);
+						}
+
+						// disabled showing all categories
+						//const blogpaths = ['apn', 'architecture', 'big-data', 'biz-prod', 'cli', 'compute', 'contact-center', 'containers', 'cost-mgmt', 'database', 'desktop', 'developer', 'devops', 'enterprise-strat', 'gamedev', 'gametech', 'governance', 'industries', 'infrastructure', 'iot', 'java', 'management-tools', 'marketplace', 'media', 'messaging', 'ml', 'mobile', 'modernizing', 'networking', 'newsblog', 'open-source', 'public-sector', 'robotics', 'sap', 'security', 'security-bulletins', 'serverless', 'storage', 'training', 'whats-new', 'yan', 'corey', 'cloudguru', 'werner', 'james', 'jeremy', 'eric'];
+						const blogpaths = ['all', 'cloudguru', 'compute', 'corey', 'containers', 'database', 'devops', 'jeremy', 'ml', 'mobile', 'newsblog', 'open-source', 'security', 'serverless', 'whats-new', 'yan'];
+
 						console.log(this.state.path1);
 
 						for (const [index, value] of blogpaths.entries()) {
 
-							sidebar.push(<p><Link to = {`/app/${value}`} key = {index}><i>{value}</i></Link></p>)
+							sidebar.push(<p><Link to = {`/app/${value}`} size = "sm" variant = "secondary" key = {index}><i>{value}</i></Link></p>)
 						}
 
 						const menulink = [];
 						if (!this.state.sidebarDocked) {
-							menulink.push(<center><Link to = "." onClick={() => this.onSetSidebarOpen(true) }><b>Click for AWS Blog Menu</b></Link></center>)
+							menulink.push(<Link to = "." onClick={() => this.onSetSidebarOpen(true) }><b>Click for AWS Blog Menu</b></Link>)
 						}
 
 						return (
@@ -158,7 +176,7 @@ class App extends React.Component {
 								open={this.state.sidebarOpen}
 								onSetOpen={this.onSetSidebarOpen}
 								docked={this.state.sidebarDocked}
-								styles={{ sidebar: { background: "white", textAlign: "center"}}}
+								styles={{ sidebar: { background: "white", textAlign: "left"}}}
 							>
 							<View title = "">  
 
