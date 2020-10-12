@@ -159,7 +159,10 @@ class App extends React.Component {
 						}
 
 						const menulink = [];
-						if (!this.state.sidebarDocked) {
+						if (true) {
+						// temporary disabled dock mode
+						//if (!this.state.sidebarDocked) {
+							
 							menulink.push(<center><Link to = "." onClick={() => this.onSetSidebarOpen(true) }>blog menu<br /></Link></center>)
 						}
 

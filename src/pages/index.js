@@ -10,7 +10,7 @@ const Index = () => (
         <center>
           <h3><u>Marek's serverless blog</u></h3>
           <br />
-          <p>Welcome to my serverless blog..</p>
+          <p>Welcome to my serverless blog.</p>
           <p>Please select one of the menu options above to continue.</p>
         </center>
     </div>
