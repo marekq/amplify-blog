@@ -169,7 +169,8 @@ class App extends React.Component {
 								sidebar={sidebar}
 								open={this.state.sidebarOpen}
 								onSetOpen={this.onSetSidebarOpen}
-								docked={this.state.sidebarDocked}
+								// disabled for better viewability in full screen mode
+								//docked={this.state.sidebarDocked}
 								styles={{ sidebar: { background: "white", textAlign: "left", padding: "20px"}}}
 								transitions={false}
 								shadow={false}
