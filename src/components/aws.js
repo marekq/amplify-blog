@@ -143,8 +143,10 @@ class App extends React.Component {
 						const sidebar = [];
 
 						// if the sidebar is undocked, add menu close button
-						if (!this.state.sidebarDocked) {
-							sidebar.push(<p><br /><Link key = "menuClose" onClick = {() => {this.setState({ sidebarOpen: false })}} to = '.'><i><b>Close menu</b></i></Link></p>);
+						if (true) {
+							// temporary disabled dock mode
+							//if (!this.state.sidebarDocked) {
+							sidebar.push(<p><br /><Link key = "menuClose" onClick = {() => {this.setState({ sidebarOpen: false })}} to = '.'><i><b>close menu</b></i></Link></p>);
 						}
 
 						// disabled showing all categories
@@ -162,7 +164,7 @@ class App extends React.Component {
 						if (true) {
 						// temporary disabled dock mode
 						//if (!this.state.sidebarDocked) {
-							
+
 							menulink.push(<center><Link to = "." onClick={() => this.onSetSidebarOpen(true) }>blog menu<br /></Link></center>)
 						}
 
@@ -175,7 +177,7 @@ class App extends React.Component {
 								// disabled for better viewability in full screen mode
 								//docked={this.state.sidebarDocked}
 								styles={{ sidebar: { background: "white", textAlign: "left", padding: "20px"}}}
-								transitions={false}
+								transitions={true}
 								shadow={false}
 							>
 							<View title = "">  
