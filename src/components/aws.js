@@ -51,7 +51,6 @@ class App extends React.Component {
 		this.state = { url1: url + bloguri + '.json', path1: String(bloguri), sidebarOpen: false, sidebarDocked: mql.matches };
 		this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
 		this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
-		this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
 	}
 
 	componentWillMount() {
@@ -165,6 +164,7 @@ class App extends React.Component {
 								sidebar={sidebar}
 								open={this.state.sidebarOpen}
 								onSetOpen={this.onSetSidebarOpen}
+								onSetSidebarOpen={this.onSetSidebarOpen}
 								// disabled for better viewability in full screen mode
 								//docked={this.state.sidebarDocked}
 								styles={{ sidebar: { background: "white", textAlign: "left", padding: "20px"}}}
