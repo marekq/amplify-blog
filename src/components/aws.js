@@ -4,11 +4,10 @@ import prettyMilliseconds from 'pretty-ms';
 import fetch from 'node-fetch';
 import { Link } from "gatsby";
 import MaterialTable from 'material-table';
-import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search } from "@material-ui/icons";
+import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search, Menu } from "@material-ui/icons";
 import Sidebar from "react-sidebar";
 import Header from "../components/header"
 import View from "./view.js"
-//import Button from 'react-bootstrap/Button';
 
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
@@ -160,14 +159,6 @@ class App extends React.Component {
 							sidebar.push(<p id = {value}><Link to = {`/app/${value}`} size = "sm" variant = "secondary" key = {index}><i>{value}</i></Link></p>)
 						}
 
-						const menulink = [];
-						if (true) {
-						// temporary disabled dock mode
-						//if (!this.state.sidebarDocked) {
-
-							menulink.push(<center><Link to = "." onClick={() => this.onSetSidebarOpen(true) }>blog menu<br /></Link></center>)
-						}
-
 						return (
 
 							<Sidebar
@@ -184,11 +175,11 @@ class App extends React.Component {
 								<Header />
 								<br />								
 								<center>
-									<h1>{this.state.path1.replace('-', ' ')} blogs</h1><h3>{menulink}</h3><br />
+									<h1>{this.state.path1.replace('-', ' ')} blogs</h1><br />
 								</center>
 
 								<MaterialTable
-									title = ''
+									title = {<Link to = "." onClick={() => this.onSetSidebarOpen(true) }><Menu /><br /></Link>}
 									style={{position: "sticky", padding: "0px" }}
 									options={{
 											search: true,
