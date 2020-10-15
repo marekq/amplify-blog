@@ -17,8 +17,12 @@ const Index = () => (
         <center>
           <h1>marek.rocks</h1>
           <br />
-          <p>Welcome to my serverless blog.</p>
-          <p>Please select one of the menu options above to continue.</p>
+          <p>
+            Welcome to my serverless blog! 
+          </p>
+          <p>
+            This page is hosted by AWS Amplify and you can find the full sourcecode for the page on <a href = "https://github.com/marekq/amplify-blog">GitHub</a>.
+          </p>
         </center>
     </div>
   </View>

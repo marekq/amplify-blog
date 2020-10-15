@@ -4,13 +4,10 @@ import prettyMilliseconds from 'pretty-ms';
 import fetch from 'node-fetch';
 import { Link } from "gatsby";
 import MaterialTable from 'material-table';
-import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search, Menu } from "@material-ui/icons";
+import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search, Menu, KeyboardArrowDown, KeyboardArrowRight } from "@material-ui/icons";
 import Sidebar from "react-sidebar";
 import Header from "../components/header"
 import View from "./view.js"
-
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 
 // set the blogfeed
 const url = 'https://feed.marek.rocks/'
@@ -86,9 +83,13 @@ class App extends React.Component {
 							// get the time difference string and set it in data
 							var timediff = prettyMilliseconds(timestamp, {compact: true});
 							blog.datestr = timediff;
+
+							// get the long pretty date string for detailpane
+							var longdatestr = prettyMilliseconds(timestamp);
+							blog.longdatestr = longdatestr;
 							
-							// set a link for the blog source to the blog url
-							blog.blogsource = blog.blogsource.toString().replace("-", " ");
+							// strip dashes from blog source
+							blog.blogsource = blog.blogsource.toString().replace("-", " ")
 
 							if (!mql) {
 								blog.title = blog.datestr.toString() + ' - ' + blog.title.toString();
@@ -119,9 +120,6 @@ class App extends React.Component {
 						// if fullmode is false, do NOT add description and datestr field if the compact view state is true
 						} else {
 							fields.push({ title: 'Timest', field: 'timest', width: 10, defaultSort: 'desc', hidden: true, searchable: false});
-
-							console.log(tmpurl)
-							console.log(mql)
 			
 							if (tmpurl === "all") {
 								fields.push({ title: 'Blog', field: 'blogsource', width: 10, searchable: true })
@@ -139,19 +137,10 @@ class App extends React.Component {
 
 						// create sidebar menu
 						const sidebar = [];
+						sidebar.push(<p><br /><Link key = "menuClose" onClick = {() => {this.setState({ sidebarOpen: false })}} to = '.'><i><b>close menu</b></i></Link></p>);
 
-						// if the sidebar is undocked, add menu close button
-						if (true) {
-							// temporary disabled dock mode
-							//if (!this.state.sidebarDocked) {
-							sidebar.push(<p><br /><Link key = "menuClose" onClick = {() => {this.setState({ sidebarOpen: false })}} to = '.'><i><b>close menu</b></i></Link></p>);
-						}
-
-						// disabled showing all categories
-						//const blogpaths = ['apn', 'architecture', 'big-data', 'biz-prod', 'cli', 'compute', 'contact-center', 'containers', 'cost-mgmt', 'database', 'desktop', 'developer', 'devops', 'enterprise-strat', 'gamedev', 'gametech', 'governance', 'industries', 'infrastructure', 'iot', 'java', 'management-tools', 'marketplace', 'media', 'messaging', 'ml', 'mobile', 'modernizing', 'networking', 'newsblog', 'open-source', 'public-sector', 'robotics', 'sap', 'security', 'security-bulletins', 'serverless', 'storage', 'training', 'whats-new', 'yan', 'corey', 'cloudguru', 'werner', 'james', 'jeremy', 'eric'];
+						// create a list of blog categories for the menu
 						const blogpaths = ['all', 'cloudguru', 'compute', 'corey', 'containers', 'database', 'devops', 'jeremy', 'ml', 'mobile', 'newsblog', 'open-source', 'security', 'serverless', 'whats-new', 'yan'];
-
-						console.log(this.state.path1);
 
 						for (const [index, value] of blogpaths.entries()) {
 
@@ -165,8 +154,6 @@ class App extends React.Component {
 								open={this.state.sidebarOpen}
 								onSetOpen={this.onSetSidebarOpen}
 								onSetSidebarOpen={this.onSetSidebarOpen}
-								// disabled for better viewability in full screen mode
-								//docked={this.state.sidebarDocked}
 								styles={{ sidebar: { background: "white", textAlign: "left", padding: "20px"}}}
 								transitions={true}
 								shadow={false}
@@ -194,17 +181,22 @@ class App extends React.Component {
 										detailPanel={[
 											{
 												tooltip: 'Show blogpost details',
-												icon: ArrowForwardIosIcon,
-												openIcon: SubdirectoryArrowRightIcon,
+												icon: KeyboardArrowRight,
+												openIcon: KeyboardArrowDown,
 												render: data => {
 													return (
 														<div id = "container" style={{
-															fontSize: 18,
+															fontSize: 16,
+															margin: 20,
+															fontFamily: "-apple-system,BlinkMacSystemFont,Roboto,Arial",
 															color: 'black'
-														}}><br />
-															<center><i>Posted {data.datestr} ago by {data.author} in {data.blogsource}</i></center><br /><br />
-															{data.description}<br /><br />
-															<center><a href = {data.link} target = "_blank" rel="noreferrer">Visit blog here</a></center>
+														}}>
+															<center>
+																<u>Posted {data.longdatestr} ago by {data.author} in {data.blogsource}</u>
+																<br /><br />
+																{data.description}<br /><br />
+																<a href = {data.link} target = "_blank" rel = "noreferrer"><b>Visit blog here</b></a>
+															</center>
 														</div>
 													)
 												},
