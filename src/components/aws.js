@@ -137,14 +137,14 @@ class App extends React.Component {
 
 						// create sidebar menu
 						const sidebar = [];
-						sidebar.push(<p><br /><Link key = "menuClose" onClick = {() => {this.setState({ sidebarOpen: false })}} to = '.'><i><b>close menu</b></i></Link></p>);
+						sidebar.push(<p key = "close"><br /><Link key = "menuClose" onClick = {() => {this.setState({ sidebarOpen: false })}} to = '.'><i><b>close menu</b></i></Link></p>);
 
 						// create a list of blog categories for the menu
 						const blogpaths = ['all', 'cloudguru', 'compute', 'corey', 'containers', 'database', 'devops', 'jeremy', 'ml', 'mobile', 'newsblog', 'open-source', 'security', 'serverless', 'whats-new', 'yan'];
 
 						for (const [index, value] of blogpaths.entries()) {
 
-							sidebar.push(<p id = {value}><Link to = {`/app/${value}`} size = "sm" variant = "secondary" key = {index}><i>{value}</i></Link></p>)
+							sidebar.push(<p key = {value}><Link to = {`/app/${value}`} size = "sm" variant = "secondary" key = {index}><i>{value}</i></Link></p>)
 						}
 
 						return (
@@ -208,7 +208,7 @@ class App extends React.Component {
 						)}}
 					</Async.Fulfilled>
 					<Async.Rejected>
-						Something went wrong, <a href ="javascript:history.back()">go back</a>
+						Something went wrong, <Link to ="/">go back</Link>
 					</Async.Rejected>
 				</Async>
 			</div>
