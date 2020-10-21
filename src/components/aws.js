@@ -83,10 +83,6 @@ class App extends React.Component {
 							// get the time difference string and set it in data
 							var timediff = prettyMilliseconds(timestamp, {compact: true});
 							blog.datestr = timediff;
-
-							// get the long pretty date string for detailpane
-							var longdatestr = prettyMilliseconds(timestamp);
-							blog.longdatestr = longdatestr;
 							
 							// strip dashes from blog source
 							blog.blogsource = blog.blogsource.toString().replace("-", " ")
@@ -192,7 +188,7 @@ class App extends React.Component {
 															color: 'black'
 														}}>
 															<center>
-																<u>Posted {data.longdatestr} ago by {data.author} in {data.blogsource}</u>
+																<u>Posted {data.datestr} ago by {data.author} in {data.blogsource}</u>
 																<br /><br />
 																{data.description}<br /><br />
 																<a href = {data.link} target = "_blank" rel = "noreferrer"><b>Visit blog here</b></a>
