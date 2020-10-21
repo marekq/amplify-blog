@@ -10,16 +10,16 @@ const Header = () => (
     <div className={styles[`header__wrap`]}>
       <nav role="main" className={styles[`header__nav`]}>
         <Link to="/" className={styles[`header__link`]}>
-          Home
+          HOME
         </Link>
         <Link to="/app/all" className={styles[`header__link`]}>
-          Blog
+          BLOG
         </Link>
         <Link to="/app/marek" className={styles[`header__link`]}>
-          Marek
+          MAREK
         </Link>
         <Link to="/app/about" className={styles[`header__link`]}>
-          About
+          ABOUT
         </Link>
       </nav>
     </div>
