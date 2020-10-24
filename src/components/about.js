@@ -15,7 +15,7 @@ const About = () => {
           </p><p>
             This page was built using AWS Amplify, which is a serverless web development platform created by AWS. The frontend code was created with Gatsby and is deployed to a managed web distribution by Amplify. You can find the sourcecode for the webpage on <a href = "https://github.com/marekq/amplify-blog">GitHub</a>.
           </p><p>
-            <h3>Backend</h3>
+            <h4>Backend</h4>
           </p><p>
             <img src = {'/architecture.png'} width = "100%" alt = "X-Ray overview" />
           </p><p>
