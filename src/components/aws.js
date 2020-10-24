@@ -88,7 +88,7 @@ class App extends React.Component {
 							blog.datestr = timediff;
 							
 							// strip dashes from blog source and add link
-							blog.blogsource = <Link to = {`/app/${blog.blogsource}`}>{blog.blogsource.toString().replace("-", " ")}</Link>
+							blog.bloglink = <Link to = {`/app/${blog.blogsource}`}>{blog.blogsource.toString().replace("-", " ")}</Link>
 
 							return '';
 
@@ -97,7 +97,6 @@ class App extends React.Component {
 						// set the table fields of the aws blog post table and the viewswitch option
 						const fields = [];
 						
-
 						// if fullmode is true, add description and datestr field if the compact view state is false
 						if (mql) {
 							fields.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false});
@@ -105,7 +104,7 @@ class App extends React.Component {
 
 							// add the blogsource if the 'all' category is selected
 							if (tmpurl.endsWith("all.json")) {
-								fields.push({ title: 'Blog', field: 'blogsource', width: 20, searchable: true })
+								fields.push({ title: 'Blog', field: 'bloglink', width: 20, searchable: true })
 							};
 
 							fields.push({ title: 'Title', field: 'title', minwidth: 1000, searchable: true });
@@ -115,7 +114,7 @@ class App extends React.Component {
 							fields.push({ title: 'Timest', field: 'timest', width: 10, defaultSort: 'desc', hidden: true, searchable: false});
 			
 							if (tmpurl === "all") {
-								fields.push({ title: 'Blog', field: 'blogsource', width: 10, searchable: true })
+								fields.push({ title: 'Blog', field: 'bloglink', width: 10, searchable: true })
 
 							} else {
 								fields.push({ title: 'Age', field: 'datestr', width: 10, searchable: true});
@@ -162,46 +161,47 @@ class App extends React.Component {
 									title = {<Link to = "." onClick={() => this.onSetSidebarOpen(true) }><Menu /><br /></Link>}
 									style = {{position: "sticky", padding: "0px" }}
 									options = {{
-											search: true,
-											sorting: true,
-											pageSize: 50,
-											pageSizeOptions: [50, 100, 1000]
-										}}
-										filtering = {true}
-										data = {data}
-										icons = {tableIcons}
-										columns = {fields}
-										detailPanel = {[
-											{
-												tooltip: 'Show blogpost details',
-												icon: KeyboardArrowRight,
-												openIcon: KeyboardArrowDown,
-												render: data => {
-													return (
-														<div id = "container" style={{
-															fontSize: 16,
-															margin: 20,
-															fontFamily: "-apple-system,BlinkMacSystemFont,Roboto,Arial",
-															color: 'black'
-														}}>
-															<center>
-																<i>Posted {data.datestr} ago by {data.author} in {data.blogsource}</i>
-																<br /><br />
-																{data.description}<br /><br />
-																<a href = {data.link} target = "_blank" rel = "noreferrer"><b>Visit blog here</b></a>
-															</center>
-														</div>
-													)
-												},
-											}
-										]}
-									/>
+										search: true,
+										sorting: true,
+										pageSize: 50,
+										pageSizeOptions: [50, 100, 1000]
+									}}
+									filtering = {true}
+									data = {data}
+									icons = {tableIcons}
+									columns = {fields}
+									detailPanel = {[
+										{
+											tooltip: 'Show blogpost details',
+											icon: KeyboardArrowRight,
+											openIcon: KeyboardArrowDown,
+											render: data => {
+												return (
+													<div id = "container" style = {{
+														fontSize: 16,
+														margin: 20,
+														fontFamily: "-apple-system,BlinkMacSystemFont,Roboto,Arial",
+														color: 'black'
+													}}>
+														<center>
+															<i>Posted {data.datestr} ago by {data.author} in {data.bloglink}</i>
+															<br /><br />
+																{data.description}
+															<br /><br />
+															<a href = {data.link} target = "_blank" rel = "noreferrer"><b>Visit blog here</b></a>
+														</center>
+													</div>
+												)
+											},
+										}
+									]}
+								/>
 								</View>
 							</Sidebar>
 						)}}
 					</Async.Fulfilled>
 					<Async.Rejected>
-						Something went wrong, <Link to ="/">go back</Link>
+						Something went wrong, <Link to ="/">go home</Link>
 					</Async.Rejected>
 				</Async>
 			</div>
