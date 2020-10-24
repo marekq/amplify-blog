@@ -15,13 +15,13 @@ const Index = () => (
     <div id = "container">
         <br />
         <center>
-          <h1>marek.rocks</h1>
+          <h2>Welcome to my serverless blog!</h2>
           <br />
           <p>
-            Welcome to my serverless blog! 
+            You can find recent AWS blogs on this page, read more about how it was build or learn more about Marek. 
           </p>
           <p>
-            This page is hosted by AWS Amplify and you can find the full sourcecode for the page on <a href = "https://github.com/marekq/amplify-blog">GitHub</a>.
+            This page is hosted by AWS Amplify and you can find the full sourcecode for the page on <a href = "https://github.com/marekq/amplify-blog">GitHub</a>. The code used by the backend can be found <a href = "https://github.com/marekq/rss-lambda">here</a>. 
           </p>
         </center>
     </div>

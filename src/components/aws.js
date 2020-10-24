@@ -74,6 +74,9 @@ class App extends React.Component {
 						// get the current time
 						var now = new Date().getTime();
 
+						// get the url value
+						var tmpurl = this.state.url1;
+
 						// convert the unix timestamp of every blog to a timediff string
 						data.map(function(blog, index){
 							
@@ -84,12 +87,8 @@ class App extends React.Component {
 							var timediff = prettyMilliseconds(timestamp, {compact: true});
 							blog.datestr = timediff;
 							
-							// strip dashes from blog source
-							blog.blogsource = blog.blogsource.toString().replace("-", " ")
-
-							if (!mql) {
-								blog.title = blog.datestr.toString() + ' - ' + blog.title.toString();
-							}
+							// strip dashes from blog source and add link
+							blog.blogsource = <Link to = {`/app/${blog.blogsource}`}>{blog.blogsource.toString().replace("-", " ")}</Link>
 
 							return '';
 
@@ -98,8 +97,6 @@ class App extends React.Component {
 						// set the table fields of the aws blog post table and the viewswitch option
 						const fields = [];
 						
-						// get the url value
-						var tmpurl = this.state.url1;
 
 						// if fullmode is true, add description and datestr field if the compact view state is false
 						if (mql) {
@@ -146,13 +143,13 @@ class App extends React.Component {
 						return (
 
 							<Sidebar
-								sidebar={sidebar}
-								open={this.state.sidebarOpen}
-								onSetOpen={this.onSetSidebarOpen}
-								onSetSidebarOpen={this.onSetSidebarOpen}
-								styles={{ sidebar: { background: "white", textAlign: "left", padding: "20px"}}}
-								transitions={true}
-								shadow={false}
+								sidebar = {sidebar}
+								open = {this.state.sidebarOpen}
+								onSetOpen = {this.onSetSidebarOpen}
+								onSetSidebarOpen = {this.onSetSidebarOpen}
+								styles = {{ sidebar: { background: "white", textAlign: "left", padding: "20px"}}}
+								transitions = {true}
+								shadow = {false}
 							>
 							<View title = "">  
 								<Header />
@@ -163,18 +160,18 @@ class App extends React.Component {
 
 								<MaterialTable
 									title = {<Link to = "." onClick={() => this.onSetSidebarOpen(true) }><Menu /><br /></Link>}
-									style={{position: "sticky", padding: "0px" }}
-									options={{
+									style = {{position: "sticky", padding: "0px" }}
+									options = {{
 											search: true,
 											sorting: true,
 											pageSize: 50,
 											pageSizeOptions: [50, 100, 1000]
 										}}
-										filtering={true}
-										data={data}
-										icons={tableIcons}
-										columns={fields}
-										detailPanel={[
+										filtering = {true}
+										data = {data}
+										icons = {tableIcons}
+										columns = {fields}
+										detailPanel = {[
 											{
 												tooltip: 'Show blogpost details',
 												icon: KeyboardArrowRight,
@@ -188,7 +185,7 @@ class App extends React.Component {
 															color: 'black'
 														}}>
 															<center>
-																<u>Posted {data.datestr} ago by {data.author} in {data.blogsource}</u>
+																<i>Posted {data.datestr} ago by {data.author} in {data.blogsource}</i>
 																<br /><br />
 																{data.description}<br /><br />
 																<a href = {data.link} target = "_blank" rel = "noreferrer"><b>Visit blog here</b></a>
