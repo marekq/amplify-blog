@@ -17,7 +17,7 @@ const Index = () => (
         <br />
         <center>
           <h2>
-            Welcome to my serverless blog!
+            Welcome to marek.rocks
           </h2>
           <br />
           <p>
@@ -25,17 +25,13 @@ const Index = () => (
           </p>
           <table>
             <tr>
-              <td><Link to = "/app/all">All Blogs</Link>{' ◦ '}</td>
-              <td><Link to = "/app/compute">Compute</Link>{' ◦ '}</td>
-              <td><Link to = "/app/whats-new">What's New</Link>{' ◦ '}</td>
-              <td><Link to = "/app/ml">ML</Link>{' ◦ '}</td>
+              <td><Link to = "/app/all"> All Blogs </Link>{' ◦ '}</td>
+              <td><Link to = "/app/compute"> Compute </Link>{' ◦ '}</td>
+              <td><Link to = "/app/whats-new"> What's New </Link>{' ◦ '}</td>
+              <td><Link to = "/app/ml" >ML </Link>{' ◦ '}</td>
               <td><Link to = "/app/developer">Deverlopers</Link></td>
             </tr>
-          </table>
-          <br /><br />
-          <p>
-            This page is hosted by AWS Amplify and you can find the full sourcecode for the page on <a href = "https://github.com/marekq/amplify-blog">GitHub</a>. The code used by the backend can be found <a href = "https://github.com/marekq/rss-lambda">here</a>. 
-          </p>
+          </table>      
         </center>
     </div>
   </View>

@@ -36,8 +36,6 @@
   margin-left: -0.25rem;
 }
 
-.header__link:hover,
-.header__link:active,
 .header__link:focus {
   color: red;
 }
