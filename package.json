@@ -4,6 +4,9 @@
   "version": "0.0.1",
   "author": "Marek Kuczynski <marek.kuczynski@gmail.com>",
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "amplify-react-router": "^2.0.0-alpha.2",
     "aws-amplify": "^3.3.4",
     "aws-amplify-react": "^4.2.8",
     "gatsby": "^2.24.85",
