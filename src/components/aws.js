@@ -96,7 +96,6 @@ class App extends React.Component {
 
 						// set the table fields of the aws blog post table and the viewswitch option
 						const fields = [];
-						const returnlink = [];
 						
 						// if fullmode is true, add description and datestr field if the compact view state is false
 						if (mql) {
@@ -106,11 +105,7 @@ class App extends React.Component {
 							// add the blogsource if the 'all' category is selected
 							if (tmpurl.endsWith("all.json")) {
 								fields.push({ title: 'Blog', field: 'bloglink', width: 20, searchable: true })
-
-							} else {
-								returnlink.push(<center><Link to = "/app/all/">Go to all blogs</Link><br /><br /></center>)
-
-							}
+							};
 
 							fields.push({ title: 'Title', field: 'title', minwidth: 1000, searchable: true });
 
@@ -123,8 +118,6 @@ class App extends React.Component {
 
 							} else {
 								fields.push({ title: 'Age', field: 'datestr', width: 10, searchable: true});
-								returnlink.push(<center><Link to = "/app/all/">Go to all blogs</Link><br /><br /></center>)
-
 							}
 
 							fields.push({ title: 'Title', field: 'title', searchable: true });
@@ -161,10 +154,8 @@ class App extends React.Component {
 								<Header />
 								<br />								
 								<center>
-									<h3><i>{this.state.path1.replace('-', ' ')} blogs</i></h3><br />
+									<h1>{this.state.path1.replace('-', ' ')} blogs</h1><br />
 								</center>
-
-								{returnlink}
 
 								<MaterialTable
 									title = {<Link to = "." onClick={() => this.onSetSidebarOpen(true) }><Menu /><br /></Link>}
