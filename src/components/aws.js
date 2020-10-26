@@ -67,10 +67,12 @@ class App extends React.Component {
 			blog.datestr = timediff;
 			
 			// strip dashes from blog source and add link
-			blog.bloglink = <Link to = {`/app/${blog.blogsource}`}>{blog.blogsource.toString().replace("-", " ")}</Link>
-
-			return '';
-
+			blog.bloglink = <Link to = {`/app/${blog.blogsource}`}>{blog.blogsource.toString().replace("-", " ")}</Link>;
+			const bsource = blog.blogsource.toString().replace('-', ' ');
+			const btitle = blog.title.toString();
+			blog.sourcetitle = <p><b>{bsource}</b><br />{btitle}</p>;
+				
+			return ''
 		});
 
 		this.setState({
@@ -91,36 +93,27 @@ class App extends React.Component {
 		const tmpurl = this.state.url1;
 		const returnlink = [];
 
-		if (mql) {
-			fields.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false});
+		// if fullmode is true
+		if (mql.matches) {
+
+			fields.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
 			fields.push({ title: 'Age', field: 'datestr', width: 10, searchable: true });
-
-			// add the blogsource if the 'all' category is selected
-			if (tmpurl.endsWith("all.json")) {
-				fields.push({ title: 'Blog', field: 'bloglink', width: 10, searchable: true })
-			} else {
-				returnlink.push(<center><Link to = "/app/all/">Go to all blogs</Link><br /><br /></center>)
-			}
-
-			fields.push({ title: 'Title', field: 'title', minwidth: 1000, searchable: true });
-
-		// if fullmode is false, do NOT add description and datestr field if the compact view state is true
-		} else {
-			fields.push({ title: 'Timest', field: 'timest', width: 10, defaultSort: 'desc', hidden: true, searchable: false});
-
-			if (tmpurl === "all") {
-				fields.push({ title: 'Blog', field: 'bloglink', width: 10, searchable: true })
-
-			} else {
-				fields.push({ title: 'Age', field: 'datestr', width: 10, searchable: true});
-				returnlink.push(<center><Link to = "/app/all/">Go to all blogs</Link><br /><br /></center>);
-			}
-
+			fields.push({ title: 'Blog', field: 'bloglink', width: 10, searchable: false });
 			fields.push({ title: 'Title', field: 'title', searchable: true });
-		}
 
-		// add the description as non visible to allow search 
-		fields.push({ title: 'Description', field: 'description', hidden: true, searchable: true});
+		// if fullmode is false
+		} else {
+
+			fields.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
+			fields.push({ title: 'Age', field: 'datestr', width: 10, searchable: true });
+			fields.push({ title: 'Title', field: 'sourcetitle', minwidth:1000, searchable: true });
+
+		}
+		
+		// add the blogsource if the 'all' category is selected
+		if (!tmpurl.endsWith("all.json")) {
+			returnlink.push(<center><Link to = "/app/all/">Go to all blogs</Link><br /><br /></center>)
+		}
 
 		// create sidebar menu
 		const sidebar = [];
@@ -158,7 +151,6 @@ class App extends React.Component {
 						title = {<Link to = "." onClick={() => this.onSetSidebarOpen(true) }><Menu /><br /></Link>}
 						style = {{position: "sticky", padding: "0%" }}
 						isLoading = {false}
-						padding = 'dense'
 						options = {{
 							search: true,
 							sorting: true,

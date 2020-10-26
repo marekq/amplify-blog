@@ -21,7 +21,10 @@ const Index = () => (
           </h2>
           <br />
           <p>
-            You can find a few of the AWS blogs below; 
+            This is the personal page of Marek Kuczynski, a Serverless Solutions Architect at AWS.
+          </p>
+          <p>
+            On this page, you can read the most recent AWS blogs; 
           </p>
           <table>
             <tr>
