@@ -70,7 +70,7 @@ class App extends React.Component {
 			blog.bloglink = <Link key = {blog.link} to = {`/app/${blog.blogsource.toString()}`}>{blog.blogsource.toString().replace("-", " ")}</Link>;
 			const bsource = blog.blogsource.toString().replace('-', ' ');
 			const btitle = blog.title.toString();
-			blog.sourcetitle = <b key = {blog.link}>{bsource}<br />{btitle}</b>;
+			blog.sourcetitle = <div key = {blog.link}><b key = {blog.link}>{bsource}<br /></b>{btitle}</div>;
 			blog.key = blog.blogsource.toString() + blog.timest.toString()
 
 			return ''
