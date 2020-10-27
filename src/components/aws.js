@@ -68,9 +68,9 @@ class App extends React.Component {
 			
 			// strip dashes from blog source and add link
 			blog.bloglink = <Link key = {blog.link} to = {`/app/${blog.blogsource.toString()}`}>{blog.blogsource.toString().replace("-", " ")}</Link>;
-			const bsource = blog.blogsource.toString().replace('-', ' ');
 			const btitle = blog.title.toString();
-			blog.sourcetitle = <div key = {blog.link}><b key = {blog.link}>{bsource}<br /></b>{btitle}</div>;
+			
+			blog.sourcetitle = <div key = {blog.link}><b key = {blog.link}>{blog.bloglink}<br /></b>{btitle}</div>;
 			blog.key = blog.blogsource.toString() + blog.timest.toString()
 
 			return ''
@@ -98,16 +98,19 @@ class App extends React.Component {
 		if (mql.matches) {
 
 			columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
-			columns.push({ title: 'Age', field: 'datestr', width: 10, searchable: true });
-			columns.push({ title: 'Blog', field: 'bloglink', width: 10, searchable: false });
-			columns.push({ title: 'Title', field: 'title', searchable: true });
+			columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
+			columns.push({ title: 'Blog', field: 'bloglink', width: 0, searchable: true });
+			columns.push({ title: 'Title', field: 'title', minwidth:1000, searchable: true });
+			columns.push({ title: 'Description', field: 'description', searchable: true, hidden: true });
+
 
 		// if fullmode is false
 		} else {
 
 			columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
-			columns.push({ title: 'Age', field: 'datestr', width: 10, searchable: true });
+			columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
 			columns.push({ title: 'Title', field: 'sourcetitle', minwidth:1000, searchable: true });
+			columns.push({ title: 'Description', field: 'description', searchable: true, hidden: true });
 
 		}
 		
