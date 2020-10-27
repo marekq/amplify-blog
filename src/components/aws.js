@@ -67,11 +67,12 @@ class App extends React.Component {
 			blog.datestr = timediff;
 			
 			// strip dashes from blog source and add link
-			blog.bloglink = <Link to = {`/app/${blog.blogsource}`}>{blog.blogsource.toString().replace("-", " ")}</Link>;
+			blog.bloglink = <Link key = {blog.link} to = {`/app/${blog.blogsource.toString()}`}>{blog.blogsource.toString().replace("-", " ")}</Link>;
 			const bsource = blog.blogsource.toString().replace('-', ' ');
 			const btitle = blog.title.toString();
-			blog.sourcetitle = <p><b>{bsource}</b><br />{btitle}</p>;
-				
+			blog.sourcetitle = <b key = {blog.link}>{bsource}<br />{btitle}</b>;
+			blog.key = blog.blogsource.toString() + blog.timest.toString()
+
 			return ''
 		});
 
@@ -89,30 +90,30 @@ class App extends React.Component {
 	}
 
 	render() {
-		const fields = [];
+		const columns = [];
 		const tmpurl = this.state.url1;
 		const returnlink = [];
 
 		// if fullmode is true
 		if (mql.matches) {
 
-			fields.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
-			fields.push({ title: 'Age', field: 'datestr', width: 10, searchable: true });
-			fields.push({ title: 'Blog', field: 'bloglink', width: 10, searchable: false });
-			fields.push({ title: 'Title', field: 'title', searchable: true });
+			columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
+			columns.push({ title: 'Age', field: 'datestr', width: 10, searchable: true });
+			columns.push({ title: 'Blog', field: 'bloglink', width: 10, searchable: false });
+			columns.push({ title: 'Title', field: 'title', searchable: true });
 
 		// if fullmode is false
 		} else {
 
-			fields.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
-			fields.push({ title: 'Age', field: 'datestr', width: 10, searchable: true });
-			fields.push({ title: 'Title', field: 'sourcetitle', minwidth:1000, searchable: true });
+			columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
+			columns.push({ title: 'Age', field: 'datestr', width: 10, searchable: true });
+			columns.push({ title: 'Title', field: 'sourcetitle', minwidth:1000, searchable: true });
 
 		}
 		
 		// add the blogsource if the 'all' category is selected
 		if (!tmpurl.endsWith("all.json")) {
-			returnlink.push(<center><Link to = "/app/all/">Go to all blogs</Link><br /><br /></center>)
+			returnlink.push(<center><Link key = "returnlink" to = "/app/all/">Go to all blogs</Link><br /><br /></center>)
 		}
 
 		// create sidebar menu
@@ -124,11 +125,11 @@ class App extends React.Component {
 
 		for (const [index, value] of blogpaths.entries()) {
 
-			sidebar.push(<p key = {value}><Link to = {`/app/${value}`} size = "sm" variant = "secondary" key = {index}><i>{value}</i></Link></p>)
+			sidebar.push(<p key = {index}><Link key = {index} to = {`/app/${value}`} size = "sm" variant = "secondary"><i>{value}</i></Link></p>)
 		}
 
 		return (
-			<div className = "container">
+			<div className = "container" key = "main">
 				
 				<Sidebar
 					sidebar = {sidebar}
@@ -137,18 +138,17 @@ class App extends React.Component {
 					onSetSidebarOpen = {this.onSetSidebarOpen}
 					styles = {{ sidebar: { background: "white", textAlign: "left", padding: "10px", width: "150px"}}}
 					transitions = {true}
-					shadow = {false}
+					shadow = {true}
 				>
 				<View title = "">  
-					<Header />
-					<br />								
+					<Header key = "head" />
 					<center>
 						<h3>{this.state.path1.replace('-', ' ')} blogs</h3><br />
 						{returnlink}
 					</center>
 
 					<MaterialTable
-						title = {<Link to = "." onClick={() => this.onSetSidebarOpen(true) }><Menu /><br /></Link>}
+						title = {<Link key = "menu" to = "." onClick={() => this.onSetSidebarOpen(true) }><Menu /><br /></Link>}
 						style = {{position: "sticky", padding: "0%" }}
 						isLoading = {false}
 						options = {{
@@ -160,7 +160,7 @@ class App extends React.Component {
 						filtering = {true}
 						data = {this.state.data}
 						icons = {tableIcons}
-						columns = {fields}
+						columns = {columns}
 						detailPanel = {[
 							{
 								tooltip: 'Show blogpost details',
