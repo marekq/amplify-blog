@@ -2,7 +2,6 @@ import React from "react";
 import View from "../components/view";
 import Header from "../components/header";
 import Helmet from 'react-helmet';
-import { Link } from "gatsby";
 
 // set page title
 var pageTitle = 'Serverless Blog';
@@ -17,24 +16,23 @@ const Index = () => (
         <br />
         <center>
           <h2>
-            Welcome to marek.rocks
+            Hello!
           </h2>
           <br />
           <p>
-            This is the personal page of Marek Kuczynski, a Serverless Solutions Architect at AWS.
+            Welcome the personal page of Marek Kuczynski, a Serverless Solutions Architect at AWS.
           </p>
+          <br />
           <p>
-            On this page, you can read the most recent AWS blogs; 
+            <img src = './amplify.png' alt = "Architecture" width = "100%" />
           </p>
-          <table>
-            <tr>
-              <td><Link to = "/app/all"> All Blogs </Link>{' ◦ '}</td>
-              <td><Link to = "/app/compute"> Compute </Link>{' ◦ '}</td>
-              <td><Link to = "/app/whats-new"> What's New </Link>{' ◦ '}</td>
-              <td><Link to = "/app/ml" >ML </Link>{' ◦ '}</td>
-              <td><Link to = "/app/developer">Deverlopers</Link></td>
-            </tr>
-          </table>      
+          <br />
+          <p>
+            This page is hosted on AWS Amplify and retrieves blog posts from JSON objects stored on S3. On the backend, a Step Function retieves AWS blogs every few minutes and stores the output on S3 and in DynamoDB.
+          </p>    
+          <p>
+            Take a look at the "blog" category above to see all recent AWS blog posts. You can also read more about Marek Kuczynski or about how this page was built. 
+          </p>
         </center>
     </div>
   </View>
