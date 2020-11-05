@@ -8,7 +8,7 @@ import styles from "../components/css/header.module.css"
 var pageTitle = 'Serverless Blog';
 
 const Index = () => (
-    <View>
+    <View title = ''>
       <Header />
       <Helmet>
           <title>{pageTitle}</title>

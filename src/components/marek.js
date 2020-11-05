@@ -2,49 +2,55 @@ import React from "react"
 import View from "./view.js"
 import Header from "../components/header"
 import CV from 'react-cv'
-import { Analytics } from 'aws-amplify';
 
 const Marek = () => {
-  Analytics.record({ name: 'marek' });
 
   return (
     <View title = "">  
       <Header /> 
-      <div className = "container"> 
+      <div className = "container" key = "div"> 
         <CV
           personalData = {{
+            key: 'data',
             name: 'Marek Kuczynski',
             title: 'Serverless SA @ AWS',
             image: 'http://marek.rocks/mk.jpg',
             contacts: [
-              { type: 'location', value: 'The Netherlands' },
-              { type: 'linkedin', value: 'linkedin.com/in/marekq' },
-              { type: 'twitter', value: 'twitter.com/marekq' },
-              { type: 'github', value: 'github.com/marekq' }
+              { type: 'location', key: 'location', value: 'The Netherlands' },
+              { type: 'linkedin', key: 'linkedin', value: 'linkedin.com/in/marekq' },
+              { type: 'twitter', key: 'twitter', value: 'twitter.com/marekq' },
+              { type: 'github', key: 'github', value: 'github.com/marekq' }
           ]}}
-          sections= {[
+          key = "main"
+          sections = {
+            [
             {
               type: 'text',
               title: 'About Marek',
               content: 'Marek Kuczynski is a Senior Serverless Solutions Architect at Amazon Web Services in The Netherlands. He has been with the company since late 2016 and worked with enterprise and startup customers before working fulltime on serverless.',
-              icon: 'rocket'
+              icon: 'rocket',
+              key: 'about'
             },
             {
               type: 'common-list',
               title: 'Languages',
               icon: 'language',
+              key: 'language',
               items: [
                 {
                   authority: 'Dutch',
-                  authorityMeta: 'Native'
+                  authorityMeta: 'Native',
+                  key: "dutch"
                 },
                 {
                   authority: 'Polish',
-                  authorityMeta: 'Native'
+                  authorityMeta: 'Native',
+                  key: "polish"
                 },
                 {
                   authority: 'English',
-                  authorityMeta: 'Professional'
+                  authorityMeta: 'Professional',
+                  key: "english"
                 }
               ]
             }

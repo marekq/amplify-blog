@@ -5,8 +5,25 @@ import Marek from "../components/marek"
 import Table from "../components/aws"
 import FourZeroFour from "./404.js"
 import Amplify from 'aws-amplify';
+import { Analytics } from 'aws-amplify';
 import awsconfig from '../../aws-exports';
+
 Amplify.configure(awsconfig);
+
+Analytics.autoTrack('session', {
+  enable: true,
+  provider: 'AWSPinpoint'
+});
+
+Analytics.autoTrack('pageView', {
+  enable: true,
+  eventName: 'pageView',
+  type: 'SPA',
+  provider: 'AWSPinpoint',
+  getUrl: () => {
+      return window.location.origin + window.location.pathname;
+  }
+});
 
 const App = () => (
     <Router>
