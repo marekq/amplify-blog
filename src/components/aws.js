@@ -7,6 +7,7 @@ import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search, Menu, Ke
 import Sidebar from "react-sidebar";
 import Header from "../components/header"
 import View from "./view.js"
+import styles from "../components/css/header.module.css"
 
 // set the blogfeed
 const url = 'https://feed.marek.rocks/'
@@ -100,7 +101,7 @@ class App extends React.Component {
 			columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
 			columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
 			columns.push({ title: 'Blog', field: 'bloglink', width: 0, searchable: true });
-			columns.push({ title: 'Title', field: 'title', minwidth:1000, searchable: true });
+			columns.push({ title: 'Title', field: 'title', minwidth: 1000, searchable: true });
 			columns.push({ title: 'Description', field: 'description', searchable: true, hidden: true });
 
 
@@ -109,14 +110,14 @@ class App extends React.Component {
 
 			columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
 			columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
-			columns.push({ title: 'Title', field: 'sourcetitle', minwidth:1000, searchable: true });
+			columns.push({ title: 'Title', field: 'sourcetitle', minwidth: 1000, searchable: true });
 			columns.push({ title: 'Description', field: 'description', searchable: true, hidden: true });
 
 		}
 		
 		// add the blogsource if the 'all' category is selected
 		if (!tmpurl.endsWith("all.json")) {
-			returnlink.push(<center><Link key = "returnlink" to = "/app/all/">Go to all blogs</Link><br /><br /></center>)
+			returnlink.push(<center><br /><Link key = "returnlink" to = "/app/all/">go back to all blogs</Link><br /><br /></center>)
 		}
 
 		// create sidebar menu
@@ -145,10 +146,12 @@ class App extends React.Component {
 				>
 				<View title = "">  
 					<Header key = "head" />
+					<div className = {styles[`text__div`]}>
 					<center>
-						<h3>{this.state.path1.replace('-', ' ')} blogs</h3><br />
+						<b>{this.state.path1.replace('-', ' ')} blogs</b><br />
 						{returnlink}
 					</center>
+					</div>
 
 					<MaterialTable
 						title = {<Link key = "menu" to = "." onClick={() => this.onSetSidebarOpen(true) }><Menu /><br /></Link>}
@@ -174,7 +177,6 @@ class App extends React.Component {
 										<div id = "container" style = {{
 											fontSize: 16,
 											margin: 20,
-											fontFamily: "-apple-system,BlinkMacSystemFont,Roboto,Arial",
 											color: 'black'
 										}}>
 											<center>

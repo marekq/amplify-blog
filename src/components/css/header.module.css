@@ -2,18 +2,26 @@
   align-items: center;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  margin: 0 auto;
-  max-width: 300px;
-  padding: 1rem 0;
+  max-width: 375px;
+  padding: 1rem 1rem 1rem 1rem;
+  text-align: center;
 }
 
 .header__heading {
-  margin: 0;
+  margin: 1rem;
   font-size: 2rem;
+  text-align: center;
+}
+
+.text__div {
+  font-size: 1.25rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  text-align: center;
 }
 
 .header__nav {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -25,11 +33,7 @@
   margin-top: 0;
   padding: 0.25rem;
   text-decoration: none;
-}
-
-.header__link--home {
-  font-size: 2rem;
-  margin-left: -0.25rem;
+  text-align: center;
 }
 
 .header__link:focus {

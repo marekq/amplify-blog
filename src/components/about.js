@@ -1,16 +1,17 @@
 import React from "react"
 import View from "./view.js"
 import Header from "../components/header"
+import styles from "../components/css/header.module.css"
 
 const About = () => {
 
   return (
     <View title = "">
       <Header />
-      <div className = "container">
+      <div className = {styles[`text__div`]}>
       <center>
-        <h1>About this page</h1>
-          <br />
+        <b>About this page</b>
+          <br /><br />
             This page was built using AWS Amplify, which is a serverless web development platform created by AWS. The frontend code was created with Gatsby and is deployed to a managed web distribution by Amplify. You can find the sourcecode for the webpage on <a href = "https://github.com/marekq/amplify-blog">GitHub</a>.
           <br /><br />
             <img src = {'/architecture.png'} width = "100%" alt = "X-Ray overview" />
