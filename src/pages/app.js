@@ -4,6 +4,9 @@ import About from "../components/about"
 import Marek from "../components/marek"
 import Table from "../components/aws"
 import FourZeroFour from "./404.js"
+import Amplify from 'aws-amplify';
+import awsconfig from '../../aws-exports';
+Amplify.configure(awsconfig);
 
 const App = () => (
     <Router>

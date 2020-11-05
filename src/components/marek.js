@@ -2,8 +2,10 @@ import React from "react"
 import View from "./view.js"
 import Header from "../components/header"
 import CV from 'react-cv'
+import { Analytics } from 'aws-amplify';
 
 const Marek = () => {
+  Analytics.record({ name: 'marek' });
 
   return (
     <View title = "">  

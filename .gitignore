@@ -5,7 +5,6 @@ package-lock.json
 yarn.lock
 
 #amplify
-amplify/team-provider-info.json
 amplify/\#current-cloud-backend
 amplify/.config/local-*
 amplify/mock-data

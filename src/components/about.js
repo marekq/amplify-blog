@@ -2,8 +2,11 @@ import React from "react"
 import View from "./view.js"
 import Header from "../components/header"
 import styles from "../components/css/header.module.css"
+import { Analytics } from 'aws-amplify';
 
 const About = () => {
+  
+  Analytics.record({ name: 'about' });
 
   return (
     <View title = "">

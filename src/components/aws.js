@@ -8,6 +8,8 @@ import Sidebar from "react-sidebar";
 import Header from "../components/header"
 import View from "./view.js"
 import styles from "../components/css/header.module.css"
+import { Analytics } from 'aws-amplify';
+
 
 // set the blogfeed
 const url = 'https://feed.marek.rocks/'
@@ -43,6 +45,9 @@ class App extends React.Component {
 
 		this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
 		this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
+
+		Analytics.record({ name: 'awsblog' });
+
 	}
 
 	componentWillMount() {
