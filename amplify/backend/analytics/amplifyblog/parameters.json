@@ -1,12 +1,21 @@
 {
-  "kinesisStreamName": "amplifyblog",
-  "kinesisStreamShardCount": 1,
-  "authRoleName": {
-    "Ref": "AuthRoleName"
-  },
-  "unauthRoleName": {
-    "Ref": "UnauthRoleName"
-  },
-  "authPolicyName": "kinesis_amplify_2fb5efd1",
-  "unauthPolicyName": "kinesis_amplify_2fb5efd1"
+    "appName": "amplifyblog",
+    "roleName": "pinpointLambdaRoleb3a1e9e5",
+    "cloudformationPolicyName": "cloudformationPolicyb3a1e9e5",
+    "cloudWatchPolicyName": "cloudWatchPolicyb3a1e9e5",
+    "pinpointPolicyName": "pinpointPolicyb3a1e9e5",
+    "authPolicyName": "pinpoint_amplify_b3a1e9e5",
+    "unauthPolicyName": "pinpoint_amplify_b3a1e9e5",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    }
 }

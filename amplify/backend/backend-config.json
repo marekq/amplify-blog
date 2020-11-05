@@ -10,7 +10,7 @@
   "storage": {},
   "analytics": {
     "amplifyblog": {
-      "service": "Kinesis",
+      "service": "Pinpoint",
       "providerPlugin": "awscloudformation"
     }
   }
