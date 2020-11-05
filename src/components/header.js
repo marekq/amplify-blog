@@ -5,7 +5,7 @@ import "./css/bootstrap.min.css"
 
 const Header = () => (
   <header className = {styles.header}>
-    <div className={styles[`header__wrap`]}>
+    <div className = {styles[`header__wrap`]}>
       <nav role="main" className={styles[`header__nav`]}>
         <Link to="/" key = "home" className={styles[`header__link`]}>
           HOME

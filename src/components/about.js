@@ -1,5 +1,5 @@
 import React from "react"
-import View from "./view"
+import View from "./view.js"
 import Header from "../components/header"
 
 const About = () => {
