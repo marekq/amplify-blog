@@ -7,7 +7,7 @@ import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search, Menu, Ke
 import Sidebar from "react-sidebar";
 import Header from "../components/header"
 import View from "./view.js"
-import styles from "../components/css/header.module.css"
+import { Button, Container } from 'react-bulma-components'
 
 // set the blogfeed
 const url = 'https://feed.marek.rocks/'
@@ -118,7 +118,7 @@ class App extends React.Component {
 		
 		// add the blogsource if the 'all' category is selected
 		if (!tmpurl.endsWith("all.json")) {
-			returnlink.push(<center><br /><Link key = "returnlink" to = "/app/all/">go back to all blogs</Link><br /><br /></center>)
+			returnlink.push(<center><br /><Link className = "button" key = "returnlink" to = "/app/all/"><Button class = "button is-outlined">go back to all blogs</Button></Link><br /><br /></center>)
 		}
 
 		// create sidebar menu
@@ -147,12 +147,13 @@ class App extends React.Component {
 				>
 				<View title = "">  
 					<Header key = "head" />
-					<div className = {styles[`text__div`]}>
-					<center>
-						<b>{this.state.path1.replace('-', ' ')} blogs</b><br />
-						{returnlink}
-					</center>
-					</div>
+					<Container>
+						<center>
+							<br />
+							<section class="hero"><h2 class="title">{this.state.path1.replace('-', ' ')} blogs</h2></section>
+							{returnlink}
+						</center>
+					</Container>
 
 					<MaterialTable
 						title = {<Link key = "menu" to = "." onClick={() => this.onSetSidebarOpen(true) }><Menu /><br /></Link>}
