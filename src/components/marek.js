@@ -14,7 +14,7 @@ const Marek = () => {
             key: 'data',
             name: 'Marek Kuczynski',
             title: 'Serverless SA @ AWS',
-            image: 'http://marek.rocks/mk.jpg',
+            image: 'https://marek.rocks/mk.jpg',
             contacts: [
               { type: 'location', key: 'location', value: 'The Netherlands' },
               { type: 'linkedin', key: 'linkedin', value: 'linkedin.com/in/marekq' },
