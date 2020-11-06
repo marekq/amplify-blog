@@ -3,10 +3,7 @@ import View from "../components/view";
 import Header from "../components/header";
 import Helmet from 'react-helmet';
 import styles from "../components/css/header.module.css"
-import Amplify, { Analytics } from 'aws-amplify';
-import awsconfig from '../../aws-exports';
-
-Amplify.configure(awsconfig);
+import { Analytics } from 'aws-amplify';
 
 const analyticsConfig = {
   AWSPinpoint: {
