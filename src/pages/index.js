@@ -3,6 +3,42 @@ import View from "../components/view";
 import Header from "../components/header";
 import Helmet from 'react-helmet';
 import styles from "../components/css/header.module.css"
+import Amplify, { Analytics } from 'aws-amplify';
+import awsconfig from '../../aws-exports';
+
+Amplify.configure(awsconfig);
+
+const analyticsConfig = {
+  AWSPinpoint: {
+        appId: 'c8bfb013fe0a462eb86a502b471a0b30',
+        region: 'eu-west-1',
+        mandatorySignIn: false,
+  }
+}
+
+Analytics.configure(analyticsConfig)
+
+Analytics.autoTrack('session', {
+  enable: true,
+  provider: 'AWSPinpoint'
+});
+
+Analytics.autoTrack('pageView', {
+  enable: true,
+  eventName: 'pageView',
+  type: 'SPA',
+  provider: 'AWSPinpoint',
+  getUrl: () => {
+      return window.location.origin + window.location.pathname;
+  }
+});
+
+Analytics.autoTrack('event', {
+  enable: true,
+  events: ['click'],
+  selectorPrefix: 'data-amplify-analytics-',
+  provider: 'AWSPinpoint'
+});
 
 // set page title
 var pageTitle = 'Serverless Blog';
