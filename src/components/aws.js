@@ -5,7 +5,6 @@ import { Link } from "gatsby";
 import MaterialTable from 'material-table';
 import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search, Menu, KeyboardArrowDown, KeyboardArrowRight } from "@material-ui/icons";
 import Sidebar from "react-sidebar";
-import Header from "../components/header"
 import View from "./view.js"
 import { Button, Container } from 'react-bulma-components'
 
@@ -118,7 +117,7 @@ class App extends React.Component {
 		
 		// add the blogsource if the 'all' category is selected
 		if (!tmpurl.endsWith("all.json")) {
-			returnlink.push(<center><br /><Link className = "button" key = "returnlink" to = "/app/all/"><Button class = "button is-outlined">go back to all blogs</Button></Link><br /><br /></center>)
+			returnlink.push(<center><br /><Link key = "returnlink" to = "/app/all/"><Button className = "button is-outlined">go back to all blogs</Button></Link><br /><br /></center>)
 		}
 
 		// create sidebar menu
@@ -146,11 +145,10 @@ class App extends React.Component {
 					shadow = {true}
 				>
 				<View title = "">  
-					<Header key = "head" />
 					<Container>
 						<center>
 							<br />
-							<section class="hero"><h2 class="title">{this.state.path1.replace('-', ' ')} blogs</h2></section>
+							<section className = "hero"><h2 class="title">{this.state.path1.replace('-', ' ')} blogs</h2></section>
 							{returnlink}
 						</center>
 					</Container>

@@ -1,18 +1,15 @@
 import React from "react"
 import View from "./view.js"
-import Header from "../components/header"
-import { Card, Container } from 'react-bulma-components'
+import { Card } from 'react-bulma-components'
 
 const About = () => {
   
   return (
     <View title = "">
-      <Header />
-
       <Card>
         <center>
           <br />
-          <section class="hero"><h2 class="title">About this page</h2></section>
+          <section className = "hero"><h1 className = "title">About this page</h1></section>
             <br /><br />
               This page was built using AWS Amplify, which is a serverless web development platform created by AWS. The frontend code was created with Gatsby and is deployed to a managed web distribution by Amplify. You can find the sourcecode for the webpage on <a href = "https://github.com/marekq/amplify-blog">GitHub</a>.
             <br /><br />

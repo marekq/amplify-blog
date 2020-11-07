@@ -1,13 +1,11 @@
 import React from "react"
 import View from "./view.js"
-import Header from "../components/header"
 import CV from 'react-cv'
 
 const Marek = () => {
 
   return (
     <View title = "">  
-      <Header /> 
       <div className = "container" key = "div"> 
         <CV
           personalData = {{

@@ -1,41 +1,18 @@
 import React from "react";
 import View from "../components/view";
-import Header from "../components/header";
 import Helmet from 'react-helmet';
 import styles from "../components/css/header.module.css"
-import { Card, Container } from 'react-bulma-components'
+import { Card } from 'react-bulma-components'
 import { Analytics } from 'aws-amplify';
-
-const analyticsConfig = {
-  AWSPinpoint: {
-        appId: 'c8bfb013fe0a462eb86a502b471a0b30',
-        region: 'eu-west-1',
-        mandatorySignIn: false,
-  }
-}
-
-Analytics.configure(analyticsConfig)
-
-Analytics.autoTrack('session', {
-  enable: true,
-  provider: 'AWSPinpoint'
-});
 
 Analytics.autoTrack('pageView', {
   enable: true,
   eventName: 'pageView',
   type: 'SPA',
-  provider: 'AWSPinpoint',
+  provider: 'AWSKinesis',
   getUrl: () => {
       return window.location.origin + window.location.pathname;
   }
-});
-
-Analytics.autoTrack('event', {
-  enable: true,
-  events: ['click'],
-  selectorPrefix: 'data-amplify-analytics-',
-  provider: 'AWSPinpoint'
 });
 
 // set page title
@@ -43,7 +20,6 @@ var pageTitle = 'Serverless Blog';
 
 const Index = () => (
     <View title = ''>
-      <Header />
       <Helmet>
           <title>{pageTitle}</title>
       </Helmet>
