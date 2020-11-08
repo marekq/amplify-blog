@@ -3,27 +3,29 @@ import "./css/bootstrap.min.css"
 import { Link } from "gatsby";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown"
-import { Container } from "@material-ui/core";
+
+// create a list of blog categories for the menu
+var menubar = [];
+const blogpaths = ['all', 'cloudguru', 'compute', 'corey', 'containers', 'database', 'devops', 'jeremy', 'ml', 'mobile', 'newsblog', 'open-source', 'security', 'serverless', 'whats-new', 'yan'];
+
+// add menu entry per blog
+for (const [index, value] of blogpaths.entries()) {
+
+  menubar.push(<NavDropdown.Item key = {index} href = {`/app/${value}`}>{value}</NavDropdown.Item>)
+}
 
 class Header extends Component {
   render() {
+    
     return (
-      <Container>
-        <Navbar sticky = "top" bg = "light" expand = "lg" key = "top">
-          <Navbar.Brand key = "home" href = "/">Home</Navbar.Brand>
-            <Link key = "about" to = "/app/about">About{' '}</Link>
-            <Link key = "marek" to = "/app/marek">Marek </Link>
-            <NavDropdown key = "aws" title="AWS Blogs" id="basic-nav-dropdown">
-              <NavDropdown.Item key = "all" href = "/app/all">All</NavDropdown.Item>
-              <NavDropdown.Item key = "whats-new" href = "/app/whats-new">What's New</NavDropdown.Item>
-              <NavDropdown.Item key = "newsblog" href = "/app/newsblog">Newsblog</NavDropdown.Item>
-              <NavDropdown.Item key = "compute" href = "/app/compute">Compute</NavDropdown.Item>
-              <NavDropdown.Item key = "devops" href = "/app/devops">DevOps</NavDropdown.Item>
-              <NavDropdown.Item key = "ml" href = "/app/ml">ML</NavDropdown.Item>
-              <NavDropdown.Item key = "database" href = "/app/database">Database</NavDropdown.Item>
-            </NavDropdown>
-        </Navbar>
-      </Container>
+      <Navbar sticky = "top" bg = "light" expand = "lg" key = "navbar">
+        <Navbar.Brand key = "home" href = "/">Home</Navbar.Brand>
+        <NavDropdown key = "aws" title = "Blogs" id = "basic-nav-dropdown">
+          {menubar}
+        </NavDropdown>
+        <Link key = "about" to = "/app/about">About</Link>
+        <Link key = "marek" to = "/app/marek">Marek </Link>
+      </Navbar>
     )
   }
 }

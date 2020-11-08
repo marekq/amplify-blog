@@ -1,17 +1,6 @@
 {
   "function": {},
-  "auth": {
-    "cognitofdd8bbff": {
-      "service": "Cognito",
-      "serviceType": "managed",
-      "providerPlugin": "awscloudformation"
-    }
-  },
+  "auth": {},
   "storage": {},
-  "analytics": {
-    "amplifyblog": {
-      "service": "Kinesis",
-      "providerPlugin": "awscloudformation"
-    }
-  }
+  "analytics": {}
 }

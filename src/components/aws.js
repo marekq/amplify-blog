@@ -3,10 +3,10 @@ import prettyMilliseconds from 'pretty-ms';
 import fetch from 'node-fetch';
 import { Link } from "gatsby";
 import MaterialTable from 'material-table';
-import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search, Menu, KeyboardArrowDown, KeyboardArrowRight } from "@material-ui/icons";
-import Sidebar from "react-sidebar";
+import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search, KeyboardArrowDown, KeyboardArrowRight } from "@material-ui/icons";
 import View from "./view.js"
-import { Button, Container } from 'react-bulma-components'
+import { Container } from 'react-bulma-components'
+import Button from '@material-ui/core/Button';
 
 // set the blogfeed
 const url = 'https://feed.marek.rocks/'
@@ -37,17 +37,10 @@ class App extends React.Component {
 		// to be improved - get the uri of the url by stripping /app from the url
 		var bloguri = props.path.slice(5, 999);
 
-		// set the state of url, path and sidebar status
-		this.state = { url1: url + bloguri + '.json', path1: String(bloguri), sidebarOpen: false, sidebarDocked: mql.matches };
-
-		this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
-		this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
-
+		// set the state of url and path
+		this.state = { url1: url + bloguri + '.json', path1: String(bloguri)};
 	}
 
-	componentWillMount() {
-		mql.addListener(this.mediaQueryChanged);
-	}
 
 	// load the blog from s3
 	async componentDidMount(){
@@ -82,17 +75,11 @@ class App extends React.Component {
 		})
 	  }
 
-	mediaQueryChanged() {
-		this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
-	}
-
-	onSetSidebarOpen(open) {
-		this.setState({ sidebarOpen: true });
-	}
-
 	render() {
 		const columns = [];
 		const tmpurl = this.state.url1;
+		const path1 = this.state.path1;
+		const materialtitle = path1 + ' blogs'
 		const returnlink = [];
 
 		// if fullmode is true
@@ -104,7 +91,6 @@ class App extends React.Component {
 			columns.push({ title: 'Title', field: 'title', minwidth: 1000, searchable: true });
 			columns.push({ title: 'Description', field: 'description', searchable: true, hidden: true });
 
-
 		// if fullmode is false
 		} else {
 
@@ -112,49 +98,25 @@ class App extends React.Component {
 			columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
 			columns.push({ title: 'Title', field: 'sourcetitle', minwidth: 1000, searchable: true });
 			columns.push({ title: 'Description', field: 'description', searchable: true, hidden: true });
-
-		}
+		};
 		
 		// add the blogsource if the 'all' category is selected
 		if (!tmpurl.endsWith("all.json")) {
-			returnlink.push(<center><br /><Link key = "returnlink" to = "/app/all/"><Button className = "button is-outlined">go back to all blogs</Button></Link><br /><br /></center>)
-		}
-
-		// create sidebar menu
-		const sidebar = [];
-		sidebar.push(<p key = "close"><br /><Link key = "menuClose" onClick = {() => {this.setState({ sidebarOpen: false })}} to = '.'><i><b>close menu</b></i></Link></p>);
-
-		// create a list of blog categories for the menu
-		const blogpaths = ['all', 'cloudguru', 'compute', 'corey', 'containers', 'database', 'devops', 'jeremy', 'ml', 'mobile', 'newsblog', 'open-source', 'security', 'serverless', 'whats-new', 'yan'];
-
-		for (const [index, value] of blogpaths.entries()) {
-
-			sidebar.push(<p key = {index}><Link key = {index} to = {`/app/${value}`} size = "sm" variant = "secondary"><i>{value}</i></Link></p>)
-		}
+			returnlink.push(<div><br /><Link key = "returnlink" to = "/app/all/"><Button color="primary">view all blogs</Button></Link><br /></div>)
+		};
 
 		return (
 			<div className = "container" key = "main">
-				
-				<Sidebar
-					sidebar = {sidebar}
-					open = {this.state.sidebarOpen}
-					onSetOpen = {this.onSetSidebarOpen}
-					onSetSidebarOpen = {this.onSetSidebarOpen}
-					styles = {{ sidebar: { background: "white", textAlign: "left", padding: "10px", width: "150px"}}}
-					transitions = {true}
-					shadow = {true}
-				>
 				<View title = "">  
 					<Container>
 						<center>
 							<br />
-							<section className = "hero"><h2 class="title">{this.state.path1.replace('-', ' ')} blogs</h2></section>
 							{returnlink}
 						</center>
 					</Container>
 
 					<MaterialTable
-						title = {<Link key = "menu" to = "." onClick={() => this.onSetSidebarOpen(true) }><Menu /><br /></Link>}
+						title = {materialtitle}
 						style = {{position: "sticky", padding: "0%" }}
 						isLoading = {false}
 						options = {{
@@ -192,9 +154,7 @@ class App extends React.Component {
 							}
 						]}
 					/>
-					</View>
-				</Sidebar>
-						
+				</View>		
 			</div>
 		);
 	}

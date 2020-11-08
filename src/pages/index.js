@@ -3,17 +3,6 @@ import View from "../components/view";
 import Helmet from 'react-helmet';
 import styles from "../components/css/header.module.css"
 import { Card } from 'react-bulma-components'
-import { Analytics } from 'aws-amplify';
-
-Analytics.autoTrack('pageView', {
-  enable: true,
-  eventName: 'pageView',
-  type: 'SPA',
-  provider: 'AWSKinesis',
-  getUrl: () => {
-      return window.location.origin + window.location.pathname;
-  }
-});
 
 // set page title
 var pageTitle = 'Serverless Blog';
@@ -41,7 +30,6 @@ const Index = () => (
             <p>
               Take a look at the "blog" category above to see all recent AWS blog posts. You can also read more about Marek Kuczynski or about how this page was built. 
             </p>
-            <br /><br /><br /><br /><br /><br /><br />
         </div>
       </Card>
     </View>
