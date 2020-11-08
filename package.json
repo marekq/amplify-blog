@@ -11,6 +11,7 @@
     "aws-amplify": "^3.3.7",
     "aws-amplify-react": "^4.2.11",
     "gatsby": "^2.25.3",
+    "gatsby-plugin-preact": "^4.0.16",
     "gatsby-plugin-preconnect": "^1.1.54",
     "gatsby-plugin-react-helmet": "^3.3.14",
     "material-table": "^1.69.1",
