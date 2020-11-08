@@ -18,12 +18,12 @@ class Header extends Component {
 
     return (
         <Navbar expand = "navbar-expand-xl" sticky = "top"  key = "navbar">
-          <Link key = "home" to = "/">Home</Link>
-          <NavDropdown key = "aws" title = "Blogs" id = "basic-nav-dropdown">
+          <b><Link key = "home" to = "/">Home</Link></b>
+          <b><NavDropdown key = "aws" title = "Blogs" id = "basic-nav-dropdown">
             {menubar}
-          </NavDropdown>
-          <Link key = "about" to = "/app/about">About</Link>
-          <Link key = "marek" to = "/app/marek">Marek </Link>
+          </NavDropdown></b>
+          <b><Link key = "about" to = "/app/about">About</Link></b>
+          <b><Link key = "marek" to = "/app/marek">Marek </Link></b>
         </Navbar>
     )
   }

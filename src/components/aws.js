@@ -51,6 +51,7 @@ class App extends React.Component {
 
 	// load the blog from s3
 	async componentDidMount(){
+
 		var res = await fetch(this.state.url1)
 		var data = await res.json()
 		
@@ -110,7 +111,7 @@ class App extends React.Component {
 		
 		// add the blogsource if the 'all' category is selected
 		if (!tmpurl.endsWith("all.json")) {
-			returnlink.push(<div><br /><Link key = "returnlink" to = "/app/all/"><Button color="primary">view all blogs</Button></Link><br /></div>)
+			returnlink.push(<div key = "div"><br /><Link key = "returnlink" to = "/app/all/"><Button color="primary">view all blogs</Button></Link><br /></div>)
 		};
 
 		return (
@@ -140,7 +141,7 @@ class App extends React.Component {
 							openIcon: KeyboardArrowDown,
 							render: data => {
 								return (
-									<div id = "container" style = {{
+									<div id = "container" key = "container" style = {{
 										fontSize: 16,
 										margin: 20,
 										color: 'black'
@@ -150,7 +151,7 @@ class App extends React.Component {
 											<br /><br />
 												{data.description}
 											<br /><br />
-											<a href = {data.link} target = "_blank" rel = "noreferrer"><b>Visit blog here</b></a>
+											<a href = {data.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
 										</center>
 									</div>
 								)
