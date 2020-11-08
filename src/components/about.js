@@ -8,8 +8,8 @@ const About = () => {
     <View title = "">
       <Card>
         <center>
-          <br />
-          <section className = "hero"><h1 className = "title">About this page</h1></section>
+          <br /><br />
+          <b className = "title">About this page</b>
             <br /><br />
               This page was built using AWS Amplify, which is a serverless web development platform created by AWS. The frontend code was created with Gatsby and is deployed to a managed web distribution by Amplify. You can find the sourcecode for the webpage on <a href = "https://github.com/marekq/amplify-blog">GitHub</a>.
             <br /><br />

@@ -3,6 +3,7 @@ import "./css/bootstrap.min.css"
 import { Link } from "gatsby";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown"
+import { Box } from 'react-bulma-components'
 
 // create a list of blog categories for the menu
 var menubar = [];
@@ -18,14 +19,14 @@ class Header extends Component {
   render() {
     
     return (
-      <Navbar sticky = "top" bg = "light" expand = "lg" key = "navbar">
-        <Navbar.Brand key = "home" href = "/">Home</Navbar.Brand>
-        <NavDropdown key = "aws" title = "Blogs" id = "basic-nav-dropdown">
-          {menubar}
-        </NavDropdown>
-        <Link key = "about" to = "/app/about">About</Link>
-        <Link key = "marek" to = "/app/marek">Marek </Link>
-      </Navbar>
+        <Navbar expand = "navbar-expand-xl" sticky = "top"  key = "navbar">
+          <Link key = "home" to = "/">Home</Link>
+          <NavDropdown key = "aws" title = "Blogs" id = "basic-nav-dropdown">
+            {menubar}
+          </NavDropdown>
+          <Link key = "about" to = "/app/about">About</Link>
+          <Link key = "marek" to = "/app/marek">Marek </Link>
+        </Navbar>
     )
   }
 }

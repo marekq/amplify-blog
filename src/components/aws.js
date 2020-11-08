@@ -109,10 +109,7 @@ class App extends React.Component {
 			<div className = "container" key = "main">
 				<View title = "">  
 					<Container>
-						<center>
-							<br />
-							{returnlink}
-						</center>
+						{returnlink}
 					</Container>
 
 					<MaterialTable
@@ -122,8 +119,8 @@ class App extends React.Component {
 						options = {{
 							search: true,
 							sorting: true,
-							pageSize: 50,
-							pageSizeOptions: [50, 100, 1000]
+							pageSize: 25,
+							pageSizeOptions: [10, 25, 50, 100, 1000]
 						}}
 						filtering = {true}
 						data = {this.state.data}
