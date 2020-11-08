@@ -30,8 +30,9 @@ const Index = () => (
             <p>
               Take a look at the "blog" category above to see all recent AWS blog posts. You can also read more about Marek Kuczynski or about how this page was built. 
             </p>
-        </div>
+        </div>      
       </Card>
+      <br /><br /><br /><br /><br /><br />
     </View>
 )
 

@@ -1,15 +1,18 @@
 import React from "react"
 import View from "./view.js"
 import { Card } from 'react-bulma-components'
+import styles from "../components/css/header.module.css"
 
 const About = () => {
   
   return (
     <View title = "">
       <Card>
-        <center>
-          <br /><br />
-          <b className = "title">About this page</b>
+          <div className = {styles[`text__div`]}>
+
+          <center>
+            <br /><br />
+            <b className = "title">About this page</b>
             <br /><br />
               This page was built using AWS Amplify, which is a serverless web development platform created by AWS. The frontend code was created with Gatsby and is deployed to a managed web distribution by Amplify. You can find the sourcecode for the webpage on <a href = "https://github.com/marekq/amplify-blog">GitHub</a>.
             <br /><br />
@@ -20,7 +23,8 @@ const About = () => {
               <img src = {'/statemachine.png'} height = "50%" alt = "State Machine overview" />
             <br /><br />
               The code of the backend can be found <a href = "https://github.com/marekq/rss-lambda">here</a>. 
-        </center>
+          </center>
+        </div>
       </Card>
     </View>
   )

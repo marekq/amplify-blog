@@ -3,19 +3,20 @@ import prettyMilliseconds from 'pretty-ms';
 import fetch from 'node-fetch';
 import { Link } from "gatsby";
 import MaterialTable from 'material-table';
-import { Clear, FirstPage, LastPage, ChevronRight, ChevronLeft, Search, KeyboardArrowDown, KeyboardArrowRight } from "@material-ui/icons";
+import Clear from "@material-ui/icons/Clear";
+import FirstPage from "@material-ui/icons/FirstPage";
+import LastPage from "@material-ui/icons/LastPage";
+import ChevronRight from "@material-ui/icons/ChevronRight";
+import ChevronLeft from "@material-ui/icons/ChevronLeft";
+import Search from "@material-ui/icons/Search";
+import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import View from "./view.js"
 import { Container } from 'react-bulma-components'
 import Button from '@material-ui/core/Button';
 
 // set the blogfeed
 const url = 'https://feed.marek.rocks/'
-
-// disable mql during server build
-var mql = ''
-if (typeof window !== `undefined`) {
-	mql = window.matchMedia(`(min-width: 800px)`);
-} 
 
 // set table icons
 const tableIcons = {
@@ -37,8 +38,14 @@ class App extends React.Component {
 		// to be improved - get the uri of the url by stripping /app from the url
 		var bloguri = props.path.slice(5, 999);
 
+		// disable mql during server build
+		var mql1 = ''
+		if (typeof window !== `undefined`) {
+			mql1 = window.matchMedia(`(min-width: 800px)`);
+		} 
+
 		// set the state of url and path
-		this.state = { url1: url + bloguri + '.json', path1: String(bloguri)};
+		this.state = { url1: url + bloguri + '.json', path1: String(bloguri), mql1: mql1};
 	}
 
 
@@ -81,6 +88,7 @@ class App extends React.Component {
 		const path1 = this.state.path1;
 		const materialtitle = path1 + ' blogs'
 		const returnlink = [];
+		const mql = this.state.mql1
 
 		// if fullmode is true
 		if (mql.matches) {
@@ -106,53 +114,51 @@ class App extends React.Component {
 		};
 
 		return (
-			<div className = "container" key = "main">
-				<View title = "">  
-					<Container>
-						{returnlink}
-					</Container>
+			<View title = "">  
+				<Container>
+					{returnlink}
+				</Container>
 
-					<MaterialTable
-						title = {materialtitle}
-						style = {{position: "sticky", padding: "0%" }}
-						isLoading = {false}
-						options = {{
-							search: true,
-							sorting: true,
-							pageSize: 25,
-							pageSizeOptions: [10, 25, 50, 100, 1000]
-						}}
-						filtering = {true}
-						data = {this.state.data}
-						icons = {tableIcons}
-						columns = {columns}
-						detailPanel = {[
-							{
-								tooltip: 'Show blogpost details',
-								icon: KeyboardArrowRight,
-								openIcon: KeyboardArrowDown,
-								render: data => {
-									return (
-										<div id = "container" style = {{
-											fontSize: 16,
-											margin: 20,
-											color: 'black'
-										}}>
-											<center>
-												<i>Posted {data.datestr} ago by {data.author} in {data.bloglink}</i>
-												<br /><br />
-													{data.description}
-												<br /><br />
-												<a href = {data.link} target = "_blank" rel = "noreferrer"><b>Visit blog here</b></a>
-											</center>
-										</div>
-									)
-								},
-							}
-						]}
-					/>
-				</View>		
-			</div>
+				<MaterialTable
+					title = {materialtitle}
+					style = {{position: "sticky", padding: "0%" }}
+					isLoading = {false}
+					options = {{
+						search: true,
+						sorting: true,
+						pageSize: 25,
+						pageSizeOptions: [10, 25, 50, 100, 1000]
+					}}
+					filtering = {true}
+					data = {this.state.data}
+					icons = {tableIcons}
+					columns = {columns}
+					detailPanel = {[
+						{
+							tooltip: 'Show blogpost details',
+							icon: KeyboardArrowRight,
+							openIcon: KeyboardArrowDown,
+							render: data => {
+								return (
+									<div id = "container" style = {{
+										fontSize: 16,
+										margin: 20,
+										color: 'black'
+									}}>
+										<center>
+											<i>Posted {data.datestr} ago by {data.author} in {data.bloglink}</i>
+											<br /><br />
+												{data.description}
+											<br /><br />
+											<a href = {data.link} target = "_blank" rel = "noreferrer"><b>Visit blog here</b></a>
+										</center>
+									</div>
+								)
+							},
+						}
+					]}
+				/>
+			</View>		
 		);
 	}
 }

@@ -1,23 +1,21 @@
 import React, {Component} from "react"
-import "./css/bootstrap.min.css"
 import { Link } from "gatsby";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown"
-import { Box } from 'react-bulma-components'
-
-// create a list of blog categories for the menu
-var menubar = [];
-const blogpaths = ['all', 'cloudguru', 'compute', 'corey', 'containers', 'database', 'devops', 'jeremy', 'ml', 'mobile', 'newsblog', 'open-source', 'security', 'serverless', 'whats-new', 'yan'];
-
-// add menu entry per blog
-for (const [index, value] of blogpaths.entries()) {
-
-  menubar.push(<NavDropdown.Item key = {index} href = {`/app/${value}`}>{value}</NavDropdown.Item>)
-}
+import "./css/bootstrap.min.css"
 
 class Header extends Component {
   render() {
-    
+
+    // create a list of blog categories for the menu
+    var menubar = [];
+    const blogpaths = ['all', 'cloudguru', 'compute', 'corey', 'containers', 'database', 'devops', 'jeremy', 'ml', 'mobile', 'newsblog', 'open-source', 'security', 'serverless', 'whats-new', 'yan'];
+
+    // add menu entry per blog
+    for (const [index, value] of blogpaths.entries()) {
+      menubar.push(<NavDropdown.Item key = {index} href = {`/app/${value}`}>{value}</NavDropdown.Item>)
+    }
+
     return (
         <Navbar expand = "navbar-expand-xl" sticky = "top"  key = "navbar">
           <Link key = "home" to = "/">Home</Link>
