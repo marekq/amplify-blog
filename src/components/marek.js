@@ -63,6 +63,7 @@ const Marek = () => {
                   companyWebSite: 'http://aws.amazon.com.com',
                   companyMeta: 'AWS',
                   datesBetween: '2016.10 - Present',
+                  key: 'serverless',
                   descriptionTags: ['AWS', 'Serverless', 'Architecture']
                 }
               ]
@@ -71,6 +72,7 @@ const Marek = () => {
               type: 'tag-list',
               title: 'Skills Proficiency',
               icon: 'tasks',
+              key: 'skills',
               items: ['Python', 'Go', 'React', 'NodeJS', 'Bash']
             },
           ]

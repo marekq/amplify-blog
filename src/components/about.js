@@ -7,6 +7,7 @@ const About = () => {
   
   return (
     <View title = "">
+      <br />
       <Card>
           <div className = {styles[`text__div`]}>
 
