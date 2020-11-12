@@ -32,7 +32,7 @@ const Index = () => (
         </div>
         <br /><br />      
       </Card>
-      <br /><br /><br /><br /><br /><br />
+      <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
     </View>
 )
 

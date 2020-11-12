@@ -89,7 +89,7 @@ class App extends React.Component {
 		const path1 = this.state.path1;
 		const materialtitle = path1 + ' blogs'
 		const returnlink = [];
-		const mql = this.state.mql1
+		const mql = this.state.mql1;
 
 		// if fullmode is true
 		if (mql.matches) {
@@ -111,8 +111,11 @@ class App extends React.Component {
 		
 		// add the blogsource if the 'all' category is selected
 		if (!tmpurl.endsWith("all.json")) {
-			returnlink.push(<div key = "div"><br /><Link key = "returnlink" to = "/app/all/"><Button color="primary">view all blogs</Button></Link><br /></div>)
-		};
+			returnlink.push(<div key = "div"><Link key = "returnlink" to = "/app/all/"><Button color="primary">view all blogs</Button></Link><br /></div>)
+		
+		} else {
+			returnlink.push(<br key = "br" />)
+		}
 
 		return (
 			<View title = "">  
