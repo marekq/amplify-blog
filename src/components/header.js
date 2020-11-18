@@ -1,8 +1,11 @@
 import React, {Component} from "react"
 import { Link } from "gatsby";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown"
-import "./css/bootstrap.min.css"
+import NavDropdown from "react-bootstrap/NavDropdown";
+import "./css/bootstrap.min.css";
+
+// set page title
+var pageTitle = 'Serverless Blog';
 
 class Header extends Component {
   render() {
@@ -18,6 +21,7 @@ class Header extends Component {
 
     return (
         <Navbar expand = "navbar-expand-xl" sticky = "top" key = "navbar" bg = "light">
+          <title>{pageTitle}</title>
           <b><Link key = "home" to = "/">Home</Link></b>
           <b><NavDropdown key = "aws" title = "Blogs" id = "basic-nav-dropdown">
             {menubar}

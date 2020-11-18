@@ -97,7 +97,7 @@ class App extends React.Component {
 			columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
 			columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
 			columns.push({ title: 'Blog', field: 'bloglink', width: 0, searchable: true });
-			columns.push({ title: 'Title', field: 'title', minwidth: 1000, searchable: true });
+			columns.push({ title: 'Title', field: 'title', width: 1000, searchable: true });
 			columns.push({ title: 'Description', field: 'description', searchable: true, hidden: true });
 
 		// if fullmode is false
@@ -105,7 +105,7 @@ class App extends React.Component {
 
 			columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
 			columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
-			columns.push({ title: 'Title', field: 'sourcetitle', minwidth: 1000, searchable: true });
+			columns.push({ title: 'Title', field: 'sourcetitle', width: 1000, searchable: true });
 			columns.push({ title: 'Description', field: 'description', searchable: true, hidden: true });
 		};
 		

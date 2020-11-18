@@ -1,17 +1,10 @@
 import React from "react";
 import View from "../components/view";
-import Helmet from 'react-helmet';
 import styles from "../components/css/header.module.css"
 import { Card } from 'react-bulma-components'
 
-// set page title
-var pageTitle = 'Serverless Blog';
-
 const Index = () => (
     <View title = ''>
-      <Helmet>
-          <title>{pageTitle}</title>
-      </Helmet>
       <br />
       <Card>
         <div className = {styles[`text__div`]}>
