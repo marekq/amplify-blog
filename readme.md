@@ -10,9 +10,10 @@ This is the backend of the blog hosted on [marek.rocks](https://marek.rocks). It
 Roadmap
 -------
 
+- [ ] Reduce build time to under three minutes using a custom build container (WIP).
 - [X] Add better search options and add more flexible blog table layout.
 - [X] Add AWS blog filtering and searching.
-- [X] Reduce build time to under three minutes using AL2 or using a custom build container.
+- [X] Add About page and resume.
 - [X] Optimize website loading performance.
 
 
