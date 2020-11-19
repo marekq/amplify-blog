@@ -1,13 +1,11 @@
-import React from "react"
-import View from "./view.js"
-import { Card } from 'react-bulma-components'
-import styles from "../components/css/header.module.css"
+import React from "react";
+import { Card } from 'react-bulma-components';
+import styles from "../components/css/header.module.css";
 
 const About = () => {
   
   return (
-    <View title = "">
-      <br />
+    
       <Card>
           <div className = {styles[`text__div`]}>
 
@@ -27,7 +25,6 @@ const About = () => {
           </center>
         </div>
       </Card>
-    </View>
   )
 }
 

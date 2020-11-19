@@ -26,8 +26,8 @@ class Header extends Component {
           <b><NavDropdown key = "aws" title = "Blogs" id = "basic-nav-dropdown">
             {menubar}
           </NavDropdown></b>
-          <b><Link key = "about" to = "/app/about">About</Link></b>
-          <b><Link key = "marek" to = "/app/marek">Marek </Link></b>
+          <b><Link key = "about" to = "/about">About</Link></b>
+          <b><Link key = "marek" to = "/marek">Marek </Link></b>
         </Navbar>
     )
   }

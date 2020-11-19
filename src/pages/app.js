@@ -8,8 +8,8 @@ import FourZeroFour from "./404.js"
 const App = () => (
     <Router>
       <FourZeroFour default />
-      <About path="/app/about" />
-      <Marek path="/app/marek" />
+      <About path="/about" />
+      <Marek path="/marek" />
       <Table path="/app/table" />
       <Table path="/app/all" />
       <Table path="/app/apn" />
