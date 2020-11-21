@@ -118,7 +118,7 @@ class App extends React.Component {
 		}
 
 		return (
-			<View title = "">  
+			<div>  
 				<Container>
 					{returnlink}
 				</Container>
@@ -162,7 +162,7 @@ class App extends React.Component {
 						}
 					]}
 				/>
-			</View>		
+			</div>		
 		);
 	}
 }

@@ -4,7 +4,6 @@ exports.onCreatePage = async ({ page, actions }) => {
   if (page.path.match(/^\/app/)) {
     page.matchPath = `/app/*`
 
-    // Update the page.
     createPage(page)
   }
 }
