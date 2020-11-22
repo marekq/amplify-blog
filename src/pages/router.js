@@ -9,7 +9,6 @@ const RouterPage = () => (
   <View title = "">
     <Router>
       <FourZeroFour default />
-      <Home path="/" />
       <Table path="/app/all" />
       <Table path="/app/apn" />
       <Table path="/app/architecture" />
@@ -58,6 +57,7 @@ const RouterPage = () => (
       <Table path="/app/werner" />
       <Table path="/app/whats-new" />
       <Table path="/app/yan" />
+      <Home path="/" />
     </Router>
   </View>
 )

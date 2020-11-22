@@ -1,15 +1,16 @@
-import React from "react"
-import View from "../components/view"
-import Header from "../components/header"
+import { Link } from "@reach/router";
+import React from "react";
 
 const NotFound = () => (
-    <View title="">
-      <Header />
-      <center>
-        <h1>404</h1>
-        <p>You just hit a route that doesn&#39;t exist... </p>
-      </center>
-    </View>
+  <center>
+      <br />
+      <b>404</b>
+      <br />
+      <p>You just hit a route that doesn&#39;t exist... </p>
+      <br />
+      <p>Return <Link to = "/">home</Link></p>
+      <br />
+  </center>
 )
 
 export default NotFound

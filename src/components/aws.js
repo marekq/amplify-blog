@@ -11,7 +11,6 @@ import ChevronLeft from "@material-ui/icons/ChevronLeft";
 import Search from "@material-ui/icons/Search";
 import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import View from "./view.js"
 import { Container } from 'react-bulma-components'
 import Button from '@material-ui/core/Button';
 
