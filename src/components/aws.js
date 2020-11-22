@@ -34,8 +34,8 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 
-		// to be improved - get the uri of the url by stripping /app from the url
-		var bloguri = props.path.slice(5, 999);
+		// to be improved - get the uri of the url by stripping /blog from the url
+		var bloguri = props.path.slice(6, 999);
 
 		// disable mql during server build
 		var mql1 = ''
@@ -68,7 +68,7 @@ class App extends React.Component {
 			blog.datestr = timediff;
 			
 			// strip dashes from blog source and add link
-			blog.bloglink = <Link key = {blog.link} to = {`/app/${blog.blogsource.toString()}`}>{blog.blogsource.toString().replace("-", " ")}</Link>;
+			blog.bloglink = <Link key = {blog.link} to = {`/blog/${blog.blogsource.toString()}`}>{blog.blogsource.toString().replace("-", " ")}</Link>;
 			const btitle = blog.title.toString();
 			
 			blog.sourcetitle = <div key = {blog.link}><b key = {blog.link}>{blog.bloglink}<br /></b>{btitle}</div>;
@@ -110,7 +110,7 @@ class App extends React.Component {
 		
 		// add the blogsource if the 'all' category is selected
 		if (!tmpurl.endsWith("all.json")) {
-			returnlink.push(<div key = "div"><Link key = "returnlink" to = "/app/all/"><Button color="primary">view all blogs</Button></Link><br /></div>)
+			returnlink.push(<div key = "div"><Link key = "returnlink" to = "/blog/all/"><Button color="primary">view all blogs</Button></Link><br /></div>)
 		
 		} else {
 			returnlink.push(<br key = "br" />)
