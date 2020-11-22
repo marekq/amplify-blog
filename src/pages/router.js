@@ -9,7 +9,7 @@ import About from "../components/about";
 
 const RouterPage = () => (
   <View title = "">
-    <Router primary={false}>
+    <Router>
       <Home path="/" />
       <Marek path="/marek" />
       <About path="/about" />
