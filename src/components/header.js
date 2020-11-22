@@ -16,7 +16,7 @@ class Header extends Component {
 
     // add menu entry per blog
     for (const [index, value] of blogpaths.entries()) {
-      menubar.push(<NavDropdown.Item key = {index} href = {`/app/${value}`}>{value}</NavDropdown.Item>)
+      menubar.push(<Link key = {index} style = {{margin: "1em"}} href = {`/app/${value}`}>{value}<br /></Link>)
     }
 
     return (
@@ -27,7 +27,7 @@ class Header extends Component {
             {menubar}
           </NavDropdown></b>
           <b><Link key = "about" to = "/about">About</Link></b>
-          <b><Link key = "marek" to = "/marek">Marek </Link></b>
+          <b><Link key = "marek" to = "/marek">Marek</Link></b>
         </Navbar>
     )
   }
