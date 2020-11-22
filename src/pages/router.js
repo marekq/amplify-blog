@@ -57,7 +57,8 @@ const RouterPage = () => (
       <Table path="/app/werner" />
       <Table path="/app/whats-new" />
       <Table path="/app/yan" />
-      <Home path="/" />
+      <Home path="/" exact />
+      <Home path="/home" />
     </Router>
   </View>
 )

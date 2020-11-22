@@ -23,7 +23,7 @@ const Index = () => (
         </div>
         <br /><br />      
       </Card>
-      <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+      <div style = {{height: "250px"}}><br /></div>
     </div>
 )
 

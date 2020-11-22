@@ -1,15 +1,18 @@
 import { Link } from "@reach/router";
 import React from "react";
+import { Card } from 'react-bulma-components';
 
 const NotFound = () => (
   <center>
+    <Card>
       <br />
-      <b>404</b>
+      <b className = "title">404 - Page Not Found</b>
+      <br /><br />
+      <p>This page does not exist, return <Link to = "/">home</Link>.</p>
       <br />
-      <p>You just hit a route that doesn&#39;t exist... </p>
-      <br />
-      <p>Return <Link to = "/">home</Link></p>
-      <br />
+      <div style = {{height: "100px"}}><br /></div>
+    </Card>
+    <div style = {{height: "600px"}}><br /></div>
   </center>
 )
 
