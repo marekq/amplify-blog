@@ -11,9 +11,10 @@ const RouterPage = () => (
   <View title = "">
     <Router>
       <Home path="/" />
+      <Home path="/home" default />
       <Marek path="/marek" />
       <About path="/about" />
-      <FourZeroFour path="/*" />
+      <FourZeroFour default />
       <Blog path="/blog/all" />
       <Blog path="/blog/apn" />
       <Blog path="/blog/architecture" />
@@ -62,7 +63,6 @@ const RouterPage = () => (
       <Blog path="/blog/werner" />
       <Blog path="/blog/whats-new" />
       <Blog path="/blog/yan" />
-      <Home path="/home" />
     </Router>
   </View>
 )
