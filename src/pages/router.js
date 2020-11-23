@@ -10,11 +10,10 @@ import About from "../components/about";
 const RouterPage = () => (
   <View title = "">
     <Router>
-      <Home path="/" />
-      <Home path="/home" default />
+      <Home path="/" default />
       <Marek path="/marek" />
       <About path="/about" />
-      <FourZeroFour default />
+      <FourZeroFour path="/app/*" />
       <Blog path="/blog/all" />
       <Blog path="/blog/apn" />
       <Blog path="/blog/architecture" />
