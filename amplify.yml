@@ -4,9 +4,9 @@ backend:
     build:
       commands:
         # install packages with yarn
-        - yarn add @aws-amplify/cli
-        - yarn add gatsby-cli
-        - yarn add bundler
+        - yarn install @aws-amplify/cli
+        - yarn install gatsby-cli
+        - yarn install bundler
 
         # push the stack to amplify
         - amplifyPush --simple
