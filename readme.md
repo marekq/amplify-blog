@@ -13,7 +13,7 @@ Roadmap
 - [X] Reduce build time to under three minutes using a custom build container (WIP).
 - [X] Add better search options and add more flexible blog table layout.
 - [X] Add AWS blog filtering and searching.
-- [X] Add About page and Resume.
+- [X] Add About and Resume pages.
 - [X] Optimize website loading performance by reducing page load sizes.
 
 

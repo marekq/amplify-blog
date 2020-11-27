@@ -12,7 +12,9 @@ class Header extends Component {
 
     // create a list of blog categories for the menu
     var menubar = [];
-    const blogpaths = ['all', 'cloudguru', 'compute', 'corey', 'containers', 'database', 'devops', 'jeremy', 'ml', 'mobile', 'newsblog', 'open-source', 'security', 'serverless', 'whats-new', 'yan'];
+    const blogpaths = ['cloudguru', 'compute', 'corey', 'containers', 'database', 'devops', 'jeremy', 'ml', 'mobile', 'newsblog', 'open-source', 'security', 'whats-new', 'yan'];
+    menubar.push(<Link key = 'all' style = {{margin: "1em"}} href = {'/blog/'}>all<br /></Link>)
+
 
     // add menu entry per blog
     for (const [index, value] of blogpaths.entries()) {
@@ -22,8 +24,7 @@ class Header extends Component {
     return (
       <Navbar expand = "navbar-expand-xl" sticky = "top" key = "navbar" bg = "light">
         <title>{pageTitle}</title>
-        <b><Link key = "home" to = "/home">Home</Link></b>
-        <b><NavDropdown key = "aws" title = "Blogs" id = "basic-nav-dropdown">
+        <b><NavDropdown key = "aws" title = "AWS Blogs" id = "basic-nav-dropdown" to = "/blog">
           {menubar}
         </NavDropdown></b>
         <b><Link key = "about" to = "/about">About</Link></b>

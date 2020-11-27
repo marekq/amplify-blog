@@ -35,7 +35,12 @@ class App extends React.Component {
 		super(props);
 
 		// to be improved - get the uri of the url by stripping /blog from the url
-		var bloguri = props.path.slice(6, 999);
+		var bloguri = props.location.pathname.slice(6, 999);
+		console.log(bloguri);
+
+		if (bloguri === '') {
+			bloguri = 'all'
+		}
 
 		// disable mql during server build
 		var mql1 = ''
@@ -50,6 +55,8 @@ class App extends React.Component {
 
 	// load the blog from s3
 	async componentDidMount(){
+
+		console.log(this.state.url1)
 
 		var res = await fetch(this.state.url1)
 		var data = await res.json()
@@ -110,7 +117,7 @@ class App extends React.Component {
 		
 		// add the blogsource if the 'all' category is selected
 		if (!tmpurl.endsWith("all.json")) {
-			returnlink.push(<div key = "div"><Link key = "returnlink" to = "/blog/all/"><Button color="primary">view all blogs</Button></Link><br /></div>)
+			returnlink.push(<div key = "div"><Link key = "returnlink" href = "/blog/all"><Button color="primary">view all blogs</Button></Link><br /></div>)
 		
 		} else {
 			returnlink.push(<br key = "br" />)
