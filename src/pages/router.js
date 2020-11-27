@@ -6,12 +6,11 @@ import FourZeroFour from "./404.js";
 import View from "../components/view";
 import Marek from "../components/marek";
 import About from "../components/about";
-import Blank from "../components/blank";
 
 const RouterPage = () => (
   <View title = "">
     <Router>
-      <Blank path="/" default />
+      <Home path="/" default />
       <Home path="/home" />
       <Marek path="/marek" />
       <About path="/about" />
