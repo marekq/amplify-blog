@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "../components/css/header.module.css"
-import { Card } from 'react-bulma-components'
+import styles from "./css/header.module.css";
+import { Card } from 'react-bulma-components';
 
 const Index = () => (
     <div className = {styles[`text__div`]}>

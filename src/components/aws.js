@@ -13,7 +13,6 @@ import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import { Container } from 'react-bulma-components'
 import Button from '@material-ui/core/Button';
-import { Card } from 'react-bulma-components';
 
 // set the blogfeed
 const url = 'https://feed.marek.rocks/'
@@ -118,7 +117,7 @@ class App extends React.Component {
 		}
 
 		return (
-			<Card>  
+			<center> 
 				<Container>
 					{returnlink}
 				</Container>
@@ -162,7 +161,7 @@ class App extends React.Component {
 						}
 					]}
 				/>
-			</Card>		
+			</center>		
 		);
 	}
 }
