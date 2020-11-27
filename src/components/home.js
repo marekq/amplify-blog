@@ -3,7 +3,7 @@ import styles from "../components/css/header.module.css"
 import { Card } from 'react-bulma-components'
 
 const Index = () => (
-    <div>
+    <div className = {styles[`text__div`]}>
       <Card>
         <div className = {styles[`text__div`]}>
           <p>
