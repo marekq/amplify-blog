@@ -75,7 +75,7 @@ class App extends React.Component {
 			blog.datestr = timediff;
 			
 			// strip dashes from blog source and add link
-			blog.bloglink = <Link key = {blog.link} to = {`/blog/${blog.blogsource.toString()}`}>{blog.blogsource.toString().replace("-", " ")}</Link>;
+			blog.bloglink = <a key = {blog.link} href = {`/blog/${blog.blogsource.toString()}`}>{blog.blogsource.toString().replace("-", " ")}</a>;
 			const btitle = blog.title.toString();
 			
 			blog.sourcetitle = <div key = {blog.link}><b key = {blog.link}>{blog.bloglink}<br /></b>{btitle}</div>;
@@ -117,7 +117,7 @@ class App extends React.Component {
 		
 		// add the blogsource if the 'all' category is selected
 		if (!tmpurl.endsWith("all.json")) {
-			returnlink.push(<div key = "div"><Link key = "returnlink" href = "/blog/all"><Button color="primary">view all blogs</Button></Link><br /></div>)
+			returnlink.push(<Link key = "homelink" href = "/blog"><Button color="primary">view all blogs</Button><br /></Link>)
 		
 		} else {
 			returnlink.push(<br key = "br" />)

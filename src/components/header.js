@@ -24,6 +24,7 @@ class Header extends Component {
     return (
       <Navbar expand = "navbar-expand-xl" sticky = "top" key = "navbar" bg = "light">
         <title>{pageTitle}</title>
+        <b><Link key = "home" to = "/">Home</Link></b>
         <b><NavDropdown key = "aws" title = "AWS Blogs" id = "basic-nav-dropdown" to = "/blog">
           {menubar}
         </NavDropdown></b>
