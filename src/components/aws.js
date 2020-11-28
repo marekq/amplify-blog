@@ -36,7 +36,6 @@ class App extends React.Component {
 
 		// to be improved - get the uri of the url by stripping /blog from the url
 		var bloguri = props.location.pathname.slice(6, 999);
-		console.log(bloguri);
 
 		if (bloguri === '') {
 			bloguri = 'all'
@@ -138,7 +137,7 @@ class App extends React.Component {
 						sorting: true,
 						pageSize: 25,
 						pageSizeOptions: [10, 25, 50, 100, 1000],
-						loadingType: 'linear'
+						loadingType: 'overlay'
 					}}
 					components={{				
 						OverlayLoading: props => (<div></div>)
