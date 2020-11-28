@@ -137,7 +137,8 @@ class App extends React.Component {
 						search: true,
 						sorting: true,
 						pageSize: 25,
-						pageSizeOptions: [10, 25, 50, 100, 1000]
+						pageSizeOptions: [10, 25, 50, 100, 1000],
+						loadingType: 'linear'
 					}}
 					filtering = {true}
 					data = {this.state.data}
