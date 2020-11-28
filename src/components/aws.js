@@ -13,6 +13,7 @@ import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import { Container } from 'react-bulma-components'
 import Button from '@material-ui/core/Button';
+import Header from "./header";
 
 // set the blogfeed
 const url = 'https://feed.marek.rocks/'
@@ -140,6 +141,9 @@ class App extends React.Component {
 						pageSizeOptions: [10, 25, 50, 100, 1000],
 						loadingType: 'linear'
 					}}
+					components={{				
+						OverlayLoading: () => <Header />
+					  }}
 					filtering = {true}
 					data = {this.state.data}
 					icons = {tableIcons}
