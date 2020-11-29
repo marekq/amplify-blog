@@ -48,7 +48,7 @@ class App extends React.Component {
 		} 
 
 		// set the state of url and path
-		this.state = { url1: url + bloguri + '.json', path1: String(bloguri), mql1: mql1};
+		this.state = { url1: url + bloguri + '.json', path1: String(bloguri), mql1: mql1, loading1: true};
 	}
 
 
@@ -84,7 +84,8 @@ class App extends React.Component {
 		});
 
 		this.setState({
-			data: data
+			data: data,
+			loading1: false
 		})
 	  }
 
@@ -139,9 +140,7 @@ class App extends React.Component {
 						pageSizeOptions: [10, 25, 50, 100, 1000],
 						loadingType: 'overlay'
 					}}
-					components={{				
-						OverlayLoading: props => (<div></div>)
-					}}
+					isLoading = {this.state.loading1}
 					filtering = {true}
 					data = {this.state.data}
 					icons = {tableIcons}
