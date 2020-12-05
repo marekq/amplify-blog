@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react'
 import prettyMilliseconds from 'pretty-ms';
 import fetch from 'node-fetch';
-import { Link } from "gatsby";
 import MaterialTable from 'material-table';
 import Clear from "@material-ui/icons/Clear";
 import FirstPage from "@material-ui/icons/FirstPage";
@@ -35,7 +34,7 @@ class App extends React.Component {
 		super(props);
 
 		// to be improved - get the uri of the url by stripping /blog from the url
-		var bloguri = props.location.pathname.slice(6, 999);
+		var bloguri = props.location.pathname.slice(6, -1);
 
 		if (bloguri === '') {
 			bloguri = 'all'
@@ -74,7 +73,7 @@ class App extends React.Component {
 			blog.datestr = timediff;
 			
 			// strip dashes from blog source and add link
-			blog.bloglink = <a key = {blog.link} href = {`/blog/${blog.blogsource.toString()}`}>{blog.blogsource.toString().replace("-", " ")}</a>;
+			blog.bloglink = <a key = {blog.link} to = {`/blog/${blog.blogsource.toString()}/`} href = {`/blog/${blog.blogsource.toString()}/`}>{blog.blogsource.toString().replace("-", " ")}</a>;
 			const btitle = blog.title.toString();
 			
 			blog.sourcetitle = <div key = {blog.link}><b key = {blog.link}>{blog.bloglink}<br /></b>{btitle}</div>;
@@ -117,7 +116,7 @@ class App extends React.Component {
 		
 		// add the blogsource if the 'all' category is selected
 		if (!tmpurl.endsWith("all.json")) {
-			returnlink.push(<Link key = "homelink" href = "/blog"><Button color="primary">view all blogs</Button><br /></Link>)
+			returnlink.push(<a key = "homelink" href = "/blog/"><Button color="primary">view all blogs</Button><br /></a>)
 		
 		} else {
 			returnlink.push(<br key = "br" />)
