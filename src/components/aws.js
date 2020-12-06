@@ -54,8 +54,10 @@ class App extends React.Component {
 	// load the blog from s3
 	async componentDidMount(){
 
+		// print the datafeed url
 		console.log(this.state.url1)
 
+		// fetch the data url
 		var res = await fetch(this.state.url1)
 		var data = await res.json()
 		
@@ -86,7 +88,7 @@ class App extends React.Component {
 			data: data,
 			loading1: false
 		})
-	  }
+	}
 
 	render() {
 		const columns = [];
@@ -114,7 +116,7 @@ class App extends React.Component {
 			columns.push({ title: 'Description', field: 'description', searchable: true, hidden: true });
 		};
 		
-		// add the blogsource if the 'all' category is selected
+		// add the return button on top
 		if (!tmpurl.endsWith("all.json")) {
 			returnlink.push(<a key = "homelink" href = "/blog/"><Button color="primary">view all blogs</Button><br /></a>)
 		
@@ -131,7 +133,6 @@ class App extends React.Component {
 				<MaterialTable
 					title = {materialtitle}
 					style = {{position: "sticky", padding: "0%" }}
-					isLoading = {false}
 					options = {{
 						search: true,
 						sorting: true,
