@@ -23,7 +23,7 @@ const Marek = () => {
             type: 'text',
             title: 'About Marek',
             content: 'Marek Kuczynski is a Senior Serverless Solutions Architect at Amazon Web Services in The Netherlands. He has been with the company since late 2016 and worked with enterprise and startup customers before working fulltime on serverless. Before AWS, Marek spent several years as a security consultant and ethical hacker, with a focus on cloud, mobile and backend systems.',
-            icon: 'rocket',
+            icon: 'usertie',
             key: 'about'
           },
           {
@@ -87,6 +87,25 @@ const Marek = () => {
                   key: 'kpmg'
                 }
               ]
+          },
+          {
+            type: 'common-list',
+            title: 'Education',
+            icon: 'graduation',
+            items: [
+              {
+                title: 'Masters degree - System and Network Engineering',
+                authority: 'University of Amsterdam',
+                authorityWebSite: 'https://os3.nl',
+                rightSide: '2010 - 2011'
+              },
+              {
+                title: 'Bachelor degree - Network Infrastructure Design',
+                authority: 'Hogeschool Zuyd Heerlen',
+                authorityWebSite: 'https://www.zuyd.nl/',
+                rightSide: '2006 - 2010'
+              }
+            ]
           },
           {
             type: 'common-list',
