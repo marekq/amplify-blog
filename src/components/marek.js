@@ -38,7 +38,7 @@ const Marek = () => {
                   description: 'As a Specialist SA for serverless, I help customers across EMEA to build and improve their serverless architectures on AWS. I also work on internal enablement of our internal teams and work with the service teams on further improvement of their services. Finally, I\'m a regular speaker at internal and external events, including several meetups in the Benelux.',
                   companyWebSite: 'https://aws.amazon.com',
                   companyMeta: 'AWS',
-                  datesBetween: '2019.10 - now',
+                  datesBetween: '2019 - now',
                   key: 'serverless'
                 },
                 {
@@ -47,7 +47,7 @@ const Marek = () => {
                   description: 'As a Startup SA, I worked with startups in The Benelux on building their business on AWS. I worked mostly on container, ML and serverless projects during this time.',
                   companyWebSite: 'https://aws.amazon.com',
                   companyMeta: 'AWS',
-                  datesBetween: '2019.01 - 2019.10',
+                  datesBetween: '2019 - 2019',
                   key: 'startup'
                 },
                 {
@@ -56,7 +56,7 @@ const Marek = () => {
                   description: 'As an enterprise SA, I worked with some of the largest AWS customers in The Benelux. I gained experience with mass migrations, building cloud native architectures and serverless during this period.',
                   companyWebSite: 'https://aws.amazon.com',
                   companyMeta: 'AWS',
-                  datesBetween: '2018.12 - 2016.10',
+                  datesBetween: '2016 - 2018',
                   key: 'enterprise'
                 },
                 {
@@ -65,7 +65,7 @@ const Marek = () => {
                   description: 'At Shell, I was part of the CyberDefence Team which is responsible for digital security at the company. I worked on vulnerability assessment, penetration testing and red teaming across the company. During my last two years at Shell, I took a special interest in AWS Cloud Security.',
                   companyWebSite: 'https://shell.com',
                   companyMeta: 'Shell',
-                  datesBetween: '2014.01 - 2016.10',
+                  datesBetween: '2015 - 2016',
                   key: 'vulnerability'
                 },
                 {
@@ -74,7 +74,7 @@ const Marek = () => {
                   description: 'At Shell, I was part of the CyberDefence Team which is responsible for digital security at the company. Working as a Threat Analyst, I would implement preventive security controls and triage for (external) cyber security threats that could impact the company.',
                   companyWebSite: 'https://shell.com',
                   companyMeta: 'Shell',
-                  datesBetween: '2014.01 - 2016.10',
+                  datesBetween: '2014 - 2015',
                   key: 'threat'
                 },
                 {
@@ -83,7 +83,7 @@ const Marek = () => {
                   description: 'While working for the Information Protection Services department, I was involved in penetration testing for various companies in the finance, energy and government sector. I developed skills for mobile device pen testing and did several security assessments of mobile solutions for customers in Europe.',
                   companyWebSite: 'https://kpmg.nl',
                   companyMeta: '',
-                  datesBetween: '2011.12 - 2013.12',
+                  datesBetween: '2011 - 2013',
                   key: 'kpmg'
                 }
               ]
