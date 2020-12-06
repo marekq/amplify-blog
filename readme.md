@@ -4,7 +4,7 @@ amplify-blog
 This is the backend of the blog hosted on [marek.rocks](https://marek.rocks). It's deployed using AWS Amplify and uses the Gatsby Starter Theme as a base. The blog content is retrieved from a JSON file hosted on a S3 bucket.
 
 
-![alt text](./docs/main.png)
+<img src = "./docs/main.png" height = "500px">
 
 
 Roadmap
