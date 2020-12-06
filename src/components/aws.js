@@ -10,7 +10,8 @@ import ChevronLeft from "@material-ui/icons/ChevronLeft";
 import Search from "@material-ui/icons/Search";
 import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import { Container } from 'react-bulma-components'
+import ViewColumn from "@material-ui/icons/ListAltRounded";
+import { Container } from 'react-bulma-components';
 import Button from '@material-ui/core/Button';
 import { Link } from "gatsby";
 
@@ -25,7 +26,8 @@ const tableIcons = {
 	NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
 	PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
 	ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-	Search: forwardRef((props, ref) => <Search {...props} ref={ref} />)
+	Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+	ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
 // main react class
@@ -48,19 +50,16 @@ class App extends React.Component {
 		} 
 
 		// set the state of url and path
-		this.state = { url1: url + bloguri + '.json', path1: String(bloguri), mql1: mql1, loading1: true};
+		this.state = { url1: url + bloguri + '.json', path1: String(bloguri), mql1: mql1, loading1: true };
 	}
 
 
 	// load the blog from s3
 	async componentDidMount(){
 
-		// print the datafeed url
-		console.log(this.state.url1)
-
 		// fetch the data url
-		var res = await fetch(this.state.url1)
-		var data = await res.json()
+		var res = await fetch(this.state.url1);
+		var data = await res.json();
 		
 		// get the current timestamp
 		var now = new Date().getTime();
@@ -93,7 +92,6 @@ class App extends React.Component {
 
 	render() {
 		const columns = [];
-		const tmpurl = this.state.url1;
 		const path1 = this.state.path1;
 		const materialtitle = path1 + ' blogs'
 		const returnlink = [];
@@ -102,8 +100,6 @@ class App extends React.Component {
 		// add timest and age columns
 		columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
 		columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
-
-		console.log(path1)
 
 		// if fullmode is true, add blog and title column
 		if (mql.matches) {
@@ -151,12 +147,16 @@ class App extends React.Component {
 					options = {{
 						search: true,
 						emptyRowsWhenPaging: false,
-						pageSize: 50,
-						pageSizeOptions: [10, 50, 100],
+						pageSize: 25,
+						pageSizeOptions: [10, 25, 50, 100],
 						detailPanelType: "single",
 						loadingType: "linear",
 						showEmptyDataSourceMessage: false,
-						padding: "default"
+						padding: "default",
+						draggable: false,
+						sorting: false,
+						editable: false,
+						doubleHorizontalScroll: true
 					}}
 					isLoading = {this.state.loading1}
 					data = {this.state.data}
