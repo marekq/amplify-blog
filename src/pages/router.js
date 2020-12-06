@@ -9,10 +9,11 @@ import About from "../components/about";
 const RouterPage = () => (
   <View title = "">
     <Router>
-      <Blog path="/" default>
-        <Marek path="marek" />
-        <About path="about" />
-        <Blog path="blog" />
+      <Blog path = "/" default>
+        <Marek path = "marek/" />
+        <About path = "about/" />
+        <Blog path = "blog/" />
+        <Blog path = "blog/*" />
       </Blog>
     </Router>
   </View>

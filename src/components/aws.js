@@ -12,6 +12,7 @@ import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import { Container } from 'react-bulma-components'
 import Button from '@material-ui/core/Button';
+import {Link} from "gatsby";
 
 // set the blogfeed
 const url = 'https://feed.marek.rocks/'
@@ -75,7 +76,7 @@ class App extends React.Component {
 			blog.datestr = timediff;
 			
 			// strip dashes from blog source and add link
-			blog.bloglink = <a key = {blog.link} to = {`/blog/${blog.blogsource.toString()}/`} href = {`/blog/${blog.blogsource.toString()}/`}>{blog.blogsource.toString().replace("-", " ")}</a>;
+			blog.bloglink = <Link key = {blog.link} to = {`/blog/${blog.blogsource.toString()}/`}>{blog.blogsource.toString().replace("-", " ")}</Link>;
 			const btitle = blog.title.toString();
 			
 			blog.sourcetitle = <div key = {blog.link}><b key = {blog.link}>{blog.bloglink}<br /></b>{btitle}</div>;
@@ -118,7 +119,7 @@ class App extends React.Component {
 		
 		// add the return button on top
 		if (!tmpurl.endsWith("all.json")) {
-			returnlink.push(<a key = "homelink" href = "/blog/"><Button color="primary">view all blogs</Button><br /></a>)
+			returnlink.push(<Link key = "homelink" to = "/"><Button color="primary">view all blogs</Button><br /></Link>)
 		
 		} else {
 			returnlink.push(<br key = "br" />)
@@ -135,13 +136,13 @@ class App extends React.Component {
 					style = {{position: "sticky", padding: "0%" }}
 					options = {{
 						search: true,
-						sorting: true,
 						pageSize: 25,
 						pageSizeOptions: [10, 25, 50, 100, 1000],
-						loadingType: 'overlay'
+						loadingType: 'overlay',
+						align: 'inherit',
+						export: true
 					}}
 					isLoading = {this.state.loading1}
-					filtering = {true}
 					data = {this.state.data}
 					icons = {tableIcons}
 					columns = {columns}

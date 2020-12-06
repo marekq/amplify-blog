@@ -13,22 +13,21 @@ class Header extends Component {
     // create a list of blog categories for the menu
     var menubar = [];
     const blogpaths = ['cloudguru', 'compute', 'corey', 'containers', 'database', 'devops', 'jeremy', 'ml', 'mobile', 'newsblog', 'open-source', 'security', 'whats-new', 'yan'];
-    menubar.push(<a key = 'all' style = {{margin: "1em"}} href = {'/blog/'}>all<br /></a>)
 
     // add menu entry per blog
     for (const [index, value] of blogpaths.entries()) {
-      menubar.push(<a key = {index} style = {{margin: "1em"}} href = {`/blog/${value}/`}>{value}<br /></a>)
+      menubar.push(<Link key = {value} style = {{margin: "1em"}} to = {`/blog/${value}/`}>{value}<br /></Link>)
     }
 
     return (
-      <Navbar expand = "navbar-expand-xl" sticky = "top" key = "navbar" bg = "light">
+      <Navbar expand = "navbar-expand-xl" sticky = "top" key = "navbar" style = {{backgroundColor: "#f4f4f4 "}}>
         <title>{pageTitle}</title>
-        <b><Link key = "home" href = "/">All Blogs</Link></b>
-        <b><NavDropdown key = "aws" title = "Other Blogs" id = "basic-nav-dropdown" to = "/blog/">
+        <b><Link key = "home" to = "/">New Blogs</Link></b>
+        <b><NavDropdown key = "aws" title = "All Blogs" id = "basic-nav-dropdown" to = "/blog/">
           {menubar}
         </NavDropdown></b>
-        <b><Link key = "about" href = "/about/">About</Link></b>
-        <b><Link key = "marek" href = "/marek/">Marek</Link></b>
+        <b><Link key = "about" to = "/about/">About</Link></b>
+        <b><Link key = "marek" to = "/marek/">Marek</Link></b>
       </Navbar>
     )
   }
