@@ -12,7 +12,7 @@ import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import { Container } from 'react-bulma-components'
 import Button from '@material-ui/core/Button';
-import {Link} from "gatsby";
+import { Link } from "gatsby";
 
 // set the blogfeed
 const url = 'https://feed.marek.rocks/'
@@ -99,28 +99,42 @@ class App extends React.Component {
 		const returnlink = [];
 		const mql = this.state.mql1;
 
-		// if fullmode is true
+		// add timest and age columns
+		columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
+		columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
+
+		console.log(path1)
+
+		// if fullmode is true, add blog and title column
 		if (mql.matches) {
 
-			columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
-			columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
-			columns.push({ title: 'Blog', field: 'bloglink', width: 0, searchable: true });
-			columns.push({ title: 'Title', field: 'title', width: 1000, searchable: true });
-			columns.push({ title: 'Description', field: 'description', searchable: true, hidden: true });
+			if (path1 === "all") {
+				columns.push({ title: 'Blog', field: 'bloglink', width: 0, searchable: true });
 
-		// if fullmode is false
+			}
+
+			columns.push({ title: 'Title', field: 'title', width: 1000, searchable: true });
+
+		// if fullmode is false, add shortened title column and no blog source column
 		} else {
 
-			columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
-			columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
-			columns.push({ title: 'Title', field: 'sourcetitle', width: 1000, searchable: true });
-			columns.push({ title: 'Description', field: 'description', searchable: true, hidden: true });
+			// show source and title for all category
+			if (path1 === "all") {
+				columns.push({ title: 'Title', field: 'sourcetitle', width: 1000, searchable: true });
+
+			} else {
+				columns.push({ title: 'Title', field: 'title', width: 1000, searchable: true });
+
+			}
 		};
 		
+		// add hidden decsription column for search function
+		columns.push({ title: 'Description', field: 'description', searchable: true, hidden: true });
+
 		// add the return button on top
-		if (!tmpurl.endsWith("all.json")) {
+		if (path1 !== "all") {
 			returnlink.push(<Link key = "homelink" to = "/"><Button color="primary">view all blogs</Button><br /></Link>)
-		
+
 		} else {
 			returnlink.push(<br key = "br" />)
 		}
@@ -136,11 +150,13 @@ class App extends React.Component {
 					style = {{position: "sticky", padding: "0%" }}
 					options = {{
 						search: true,
-						pageSize: 25,
-						pageSizeOptions: [10, 25, 50, 100, 1000],
-						loadingType: 'overlay',
-						align: 'inherit',
-						export: true
+						emptyRowsWhenPaging: false,
+						pageSize: 50,
+						pageSizeOptions: [10, 50, 100],
+						detailPanelType: "single",
+						loadingType: "linear",
+						showEmptyDataSourceMessage: false,
+						padding: "default"
 					}}
 					isLoading = {this.state.loading1}
 					data = {this.state.data}

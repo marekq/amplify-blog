@@ -9,12 +9,13 @@ import About from "../components/about";
 const RouterPage = () => (
   <View title = "">
     <Router>
-      <Blog path = "/" default>
+      <Blog path = "/">
         <Marek path = "marek/" />
         <About path = "about/" />
         <Blog path = "blog/" />
         <Blog path = "blog/*" />
       </Blog>
+      <FourZeroFour default />
     </Router>
   </View>
 )
