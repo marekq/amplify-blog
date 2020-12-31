@@ -69,7 +69,10 @@ class App extends React.Component {
 		
 			// return all blogs if path is 'all'
 			await gqlclient.query({
-				query: gql(QueryDdbByVisibleAndTimest)
+				query: gql(QueryDdbByVisibleAndTimest),
+				variables: {
+					'timest': 123
+				}
 
 			}).then(({ data }) => {
 				res = data.QueryDdbByVisibleAndTimest.items;
@@ -87,13 +90,13 @@ class App extends React.Component {
 				}
 		
 			}).then(({ data }) => {
-				res = data.QueryDdbByBlogsourceAndTimest.items;
+				res = data.QueryDdbByBlogsourceAndTimest.items.reverse();
 
 			});
 
 		}
 
-		return res.reverse()
+		return res
 
 	}
 

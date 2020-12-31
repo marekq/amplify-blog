@@ -1,9 +1,10 @@
 export const QueryDdbByVisibleAndTimest = /* GraphQL */ `
   query QueryDdbByVisibleAndTimest(
-    $nextToken: String
+    $nextToken: String,
+	$timest: Int!
   ) 
   {
-    QueryDdbByVisibleAndTimest(timest: 123, visible: "y", nextToken: $nextToken) {
+    QueryDdbByVisibleAndTimest(timest: $timest, visible: "y", nextToken: $nextToken) {
       items {
         timest
 		blogsource
@@ -17,10 +18,11 @@ export const QueryDdbByVisibleAndTimest = /* GraphQL */ `
 export const QueryDdbByBlogsourceAndTimest = /* GraphQL */ `
   query QueryDdbByBlogsourceAndTimest(
     $nextToken: String,
-	$blogsource: String!
+	$blogsource: String!,
+	$timest: Int!
   ) 
   {
-    QueryDdbByBlogsourceAndTimest(timest: 123, blogsource: $blogsource, nextToken: $nextToken) {
+    QueryDdbByBlogsourceAndTimest(blogsource: $blogsource, timest: $timest, nextToken: $nextToken) {
 	  items {
 	    timest
 	    blogsource
