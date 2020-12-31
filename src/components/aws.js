@@ -1,6 +1,5 @@
 import React, { forwardRef } from 'react'
 import prettyMilliseconds from 'pretty-ms';
-import fetch from 'node-fetch';
 import MaterialTable from 'material-table';
 import Clear from "@material-ui/icons/Clear";
 import FirstPage from "@material-ui/icons/FirstPage";
@@ -14,9 +13,9 @@ import ViewColumn from "@material-ui/icons/ListAltRounded";
 import { Container } from 'react-bulma-components';
 import Button from '@material-ui/core/Button';
 import { Link } from "gatsby";
-
-// set the blogfeed
-const url = 'https://feed.marek.rocks/'
+import AWSAppSyncClient, { AUTH_TYPE } from 'aws-appsync';
+import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest } from './graphql/queries';
+import gql from 'graphql-tag';
 
 // set table icons
 const tableIcons = {
@@ -29,6 +28,15 @@ const tableIcons = {
 	Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
 	ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
+
+const gqlclient = new AWSAppSyncClient({
+	url: 'https://ux25dr2sk5aypkzbvsgysa2ev4.appsync-api.eu-west-1.amazonaws.com/graphql',
+	region: 'eu-west-1',
+	auth: {
+		type: AUTH_TYPE.API_KEY,
+		apiKey: 'da2-62no3ev3jnd6ngf46yxk7co6sm'
+	}
+});
 
 // main react class
 class App extends React.Component {
@@ -50,17 +58,53 @@ class App extends React.Component {
 		} 
 
 		// set the state of url and path
-		this.state = { url1: url + bloguri + '.json', path1: String(bloguri), mql1: mql1, loading1: true };
+		this.state = { path1: String(bloguri), mql1: mql1, loading1: true };
+	};
+
+	async getGQLPerBlog(){
+
+		let res;
+
+		if (this.state.path1 === 'all') {
+		
+			// return all blogs if path is 'all'
+			await gqlclient.query({
+				query: gql(QueryDdbByVisibleAndTimest)
+
+			}).then(({ data }) => {
+				res = data.QueryDdbByVisibleAndTimest.items;
+
+			});
+
+		} else {
+
+			// return specific blog category 
+			await gqlclient.query({
+				query: gql(QueryDdbByBlogsourceAndTimest),
+				variables: {
+					'blogsource': this.state.path1,
+					'timest': 123
+				}
+		
+			}).then(({ data }) => {
+				res = data.QueryDdbByBlogsourceAndTimest.items;
+
+			});
+
+		}
+
+		return res.reverse()
+
 	}
 
+	before
 
 	// load the blog from s3
 	async componentDidMount(){
 
-		// fetch the data url
-		var res = await fetch(this.state.url1);
-		var data = await res.json();
-		
+		var data = await this.getGQLPerBlog();
+		console.log(data);
+
 		// get the current timestamp
 		var now = new Date().getTime();
 
