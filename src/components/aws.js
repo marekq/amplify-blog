@@ -63,65 +63,72 @@ class App extends React.Component {
 
 	async getGQLPerBlog(){
 
-		let res;
+		let result;
+		let nexttoken;
 
 		// set timestamp for 90 days ago
 		var timest = Math.floor(Date.now() / 1000) - (86400 * 90);
-		console.log('timest perblog ', timest);
+		console.log('timest per blog ', timest);
 
 		// return specific blog category 
 		await API.graphql(graphqlOperation(QueryDdbByBlogsourceAndTimest,
 			{
 				'blogsource': this.state.path1,
-				'timest': timest
+				'timest': timest,
+				'nextToken': null
 			}
 	
 		)).then(({ data }) => {
-			res = data.QueryDdbByBlogsourceAndTimest.items;
-
+			result = data.QueryDdbByBlogsourceAndTimest.items;
+			nexttoken = data.QueryDdbByBlogsourceAndTimest.nextToken;
 		});
 
-		return res.reverse()
+		return [result.reverse(), nexttoken];
 
 	}
 
 	async getGQLAllBlogs(){
 
-		let res;
+		let result;
+		let nexttoken;
 
-		// set timestamp for 5 days ago
-		var timest = Math.floor(Date.now() / 1000) - (86400 * 5);
+		// set timestamp for 14 days ago
+		var timest = Math.floor(Date.now() / 1000) - (86400 * 14);
 		console.log('timest allblogs ', timest);
 
 		// return all blogs if path is 'all'
 		await API.graphql(graphqlOperation(QueryDdbByVisibleAndTimest, 
 			{
-				'timest': timest
+				'timest': timest,
+				'nextToken': null
 			}
 
 		)).then(({ data }) => {
-			res = data.QueryDdbByVisibleAndTimest.items;
+			result = data.QueryDdbByVisibleAndTimest.items;
+			nexttoken = data.QueryDdbByVisibleAndTimest.nextToken;
 
 		});
 
-		return res.reverse()
+		return [result.reverse(), nexttoken]
 	}
 
 	// load the blog from graphql
 	async componentDidMount(){
 
 		let data;
+		let nexttoken;
 
 		if (this.state.path1 === 'all') {
 
-			data = await this.getGQLAllBlogs();
+			[data, nexttoken] = await this.getGQLAllBlogs();
 
 		} else {
-			data = await this.getGQLPerBlog();
+			[data, nexttoken] = await this.getGQLPerBlog();
 
 		}
 
-		console.log(data);
+		console.log('data', data);
+		console.log('token', nexttoken);
 
 		// get the current timestamp
 		var now = new Date().getTime();
