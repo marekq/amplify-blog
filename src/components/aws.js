@@ -65,11 +65,15 @@ class App extends React.Component {
 
 		let res;
 
+		// set timestamp for 90 days ago
+		var timest = Math.floor(Date.now() / 1000) - (86400 * 90);
+		console.log('timest perblog ', timest);
+
 		// return specific blog category 
 		await API.graphql(graphqlOperation(QueryDdbByBlogsourceAndTimest,
 			{
 				'blogsource': this.state.path1,
-				'timest': 1609286400
+				'timest': timest
 			}
 	
 		)).then(({ data }) => {
@@ -85,10 +89,14 @@ class App extends React.Component {
 
 		let res;
 
+		// set timestamp for 5 days ago
+		var timest = Math.floor(Date.now() / 1000) - (86400 * 5);
+		console.log('timest allblogs ', timest);
+
 		// return all blogs if path is 'all'
 		await API.graphql(graphqlOperation(QueryDdbByVisibleAndTimest, 
 			{
-				'timest': 1609286400
+				'timest': timest
 			}
 
 		)).then(({ data }) => {
@@ -200,7 +208,7 @@ class App extends React.Component {
 					style = {{position: "sticky", padding: "0%" }}
 					options = {{
 						search: true,
-						emptyRowsWhenPaging: false,
+						emptyRowsWhenPaging: true,
 						pageSize: 25,
 						pageSizeOptions: [10, 25, 50, 100],
 						detailPanelType: "single",
