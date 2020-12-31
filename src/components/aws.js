@@ -13,9 +13,8 @@ import ViewColumn from "@material-ui/icons/ListAltRounded";
 import { Container } from 'react-bulma-components';
 import Button from '@material-ui/core/Button';
 import { Link } from "gatsby";
-import AWSAppSyncClient, { AUTH_TYPE } from 'aws-appsync';
+import Amplify, { API, graphqlOperation } from 'aws-amplify';
 import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest } from './graphql/queries';
-import gql from 'graphql-tag';
 
 // set table icons
 const tableIcons = {
@@ -29,14 +28,14 @@ const tableIcons = {
 	ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-const gqlclient = new AWSAppSyncClient({
-	url: 'https://ux25dr2sk5aypkzbvsgysa2ev4.appsync-api.eu-west-1.amazonaws.com/graphql',
-	region: 'eu-west-1',
-	auth: {
-		type: AUTH_TYPE.API_KEY,
-		apiKey: 'da2-62no3ev3jnd6ngf46yxk7co6sm'
-	}
-});
+const AppConfig = {
+    'aws_appsync_graphqlEndpoint': 'https://ux25dr2sk5aypkzbvsgysa2ev4.appsync-api.eu-west-1.amazonaws.com/graphql',
+    'aws_appsync_region': 'eu-west-1',
+    'aws_appsync_authenticationType': 'API_KEY',
+    'aws_appsync_apiKey': 'da2-62no3ev3jnd6ngf46yxk7co6sm'
+}
+
+Amplify.configure(AppConfig);
 
 // main react class
 class App extends React.Component {
@@ -59,53 +58,61 @@ class App extends React.Component {
 
 		// set the state of url and path
 		this.state = { path1: String(bloguri), mql1: mql1, loading1: true };
-	};
+
+	}
 
 	async getGQLPerBlog(){
 
 		let res;
 
-		if (this.state.path1 === 'all') {
-		
-			// return all blogs if path is 'all'
-			await gqlclient.query({
-				query: gql(QueryDdbByVisibleAndTimest),
-				variables: {
-					'timest': 123
-				}
+		// return specific blog category 
+		await API.graphql(graphqlOperation(QueryDdbByBlogsourceAndTimest,
+			{
+				'blogsource': this.state.path1,
+				'timest': 1609286400
+			}
+	
+		)).then(({ data }) => {
+			res = data.QueryDdbByBlogsourceAndTimest.items;
 
-			}).then(({ data }) => {
-				res = data.QueryDdbByVisibleAndTimest.items;
+		});
 
-			});
-
-		} else {
-
-			// return specific blog category 
-			await gqlclient.query({
-				query: gql(QueryDdbByBlogsourceAndTimest),
-				variables: {
-					'blogsource': this.state.path1,
-					'timest': 123
-				}
-		
-			}).then(({ data }) => {
-				res = data.QueryDdbByBlogsourceAndTimest.items.reverse();
-
-			});
-
-		}
-
-		return res
+		return res.reverse()
 
 	}
 
-	before
+	async getGQLAllBlogs(){
 
-	// load the blog from s3
+		let res;
+
+		// return all blogs if path is 'all'
+		await API.graphql(graphqlOperation(QueryDdbByVisibleAndTimest, 
+			{
+				'timest': 1609286400
+			}
+
+		)).then(({ data }) => {
+			res = data.QueryDdbByVisibleAndTimest.items;
+
+		});
+
+		return res.reverse()
+	}
+
+	// load the blog from graphql
 	async componentDidMount(){
 
-		var data = await this.getGQLPerBlog();
+		let data;
+
+		if (this.state.path1 === 'all') {
+
+			data = await this.getGQLAllBlogs();
+
+		} else {
+			data = await this.getGQLPerBlog();
+
+		}
+
 		console.log(data);
 
 		// get the current timestamp
