@@ -84,7 +84,7 @@ class App extends React.Component {
 			nexttoken = data.QueryDdbByBlogsourceAndTimest.nextToken;
 		});
 
-		return [result, nexttoken];
+		return [result.sort(), nexttoken];
 
 	}
 
@@ -109,7 +109,7 @@ class App extends React.Component {
 
 		});
 
-		return [result, nexttoken]
+		return [result.sort(), nexttoken]
 	}
 
 	async loadBlogArticle(guid){
