@@ -70,7 +70,6 @@ class App extends React.Component {
 
 		// set timestamp for 90 days ago
 		var timest = Math.floor(Date.now() / 1000) - (86400 * 90);
-		console.log('timest per blog ', timest);
 
 		// return specific blog category 
 		await API.graphql(graphqlOperation(QueryDdbByBlogsourceAndTimest,
@@ -94,9 +93,8 @@ class App extends React.Component {
 		let result;
 		let nexttoken;
 
-		// set timestamp for 14 days ago
-		var timest = Math.floor(Date.now() / 1000) - (86400 * 14);
-		console.log('timest allblogs ', timest);
+		// set timestamp for 30 days ago
+		var timest = Math.floor(Date.now() / 1000) - (86400 * 30);
 
 		// return all blogs if path is 'all'
 		await API.graphql(graphqlOperation(QueryDdbByVisibleAndTimest, 
@@ -157,8 +155,6 @@ class App extends React.Component {
 
 		}
 
-		console.log('nexttoken', nexttoken);
-
 		// get the current timestamp
 		var now = new Date().getTime();
 
@@ -195,8 +191,7 @@ class App extends React.Component {
 		const returnlink = [];
 		const mql = this.state.mql1;
 
-		// add timest and age columns
-		columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
+		// add age column
 		columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
 
 		// if fullmode is true, add blog and title column
@@ -222,9 +217,6 @@ class App extends React.Component {
 			}
 		};
 		
-		// add hidden decsription column for search function
-		columns.push({ title: 'Description', field: 'description', searchable: true, hidden: true });
-
 		// add the return button on top
 		if (path1 !== "all") {
 			returnlink.push(<Link key = "homelink" to = "/"><Button color="primary">view all blogs</Button><br /></Link>)
@@ -259,9 +251,10 @@ class App extends React.Component {
 					style = {{position: "sticky", padding: "0%" }}
 					options = {{
 						search: true,
+						showFirstLastPageButtons: false,
 						emptyRowsWhenPaging: false,
 						pageSize: 25,
-						pageSizeOptions: [10, 25, 50, 100],
+						pageSizeOptions: [25],
 						detailPanelType: "single",
 						loadingType: "linear",
 						showEmptyDataSourceMessage: false,
