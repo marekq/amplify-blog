@@ -59,7 +59,7 @@ class App extends React.Component {
 		} 
 
 		// set the state of url and path
-		this.state = { path1: String(bloguri), mql1: mql1, loading1: true, description: '', guid: '' };
+		this.state = { path1: String(bloguri), mql1: mql1, loading1: true, description: '', guid: '', author: '', link: '' };
 
 	}
 
@@ -85,7 +85,7 @@ class App extends React.Component {
 			nexttoken = data.QueryDdbByBlogsourceAndTimest.nextToken;
 		});
 
-		return [result.reverse(), nexttoken];
+		return [result, nexttoken];
 
 	}
 
@@ -94,8 +94,8 @@ class App extends React.Component {
 		let result;
 		let nexttoken;
 
-		// set timestamp for 7 days ago
-		var timest = Math.floor(Date.now() / 1000) - (86400 * 7);
+		// set timestamp for 14 days ago
+		var timest = Math.floor(Date.now() / 1000) - (86400 * 14);
 		console.log('timest allblogs ', timest);
 
 		// return all blogs if path is 'all'
@@ -111,12 +111,17 @@ class App extends React.Component {
 
 		});
 
-		return [result.reverse(), nexttoken]
+		return [result, nexttoken]
 	}
 
 	async loadBlogArticle(guid){
 
 		let result;
+
+		// set temporary values during load
+		this.description = 'Loading...';
+		this.author = '';
+		this.link = '';
 
 		await API.graphql(graphqlOperation(QueryDdbGetDetailText, 
 			{
@@ -124,11 +129,15 @@ class App extends React.Component {
 			}
 
 		)).then(({ data }) => {
-			result = data.QueryDdbGetDetailText.items[0].description;
-			this.description = result;
+			result = data.QueryDdbGetDetailText;
+
+			this.description = result.items[0].description;
+			this.author = result.items[0].author;
+			this.link = result.items[0].link;
 			
 		});
 		
+		this.guid = guid;
 
 		return result
 	}
@@ -224,20 +233,18 @@ class App extends React.Component {
 			returnlink.push(<br key = "br" />)
 		}
 
+		// async get the blog detailed content
 		var getblog = async (guid) => {
-			//this.forceUpdate()
 
+			// if guid is not locally set
 			if (guid !== this.guid) {
 
-				this.description = 'Loading...';
-				this.guid = guid;
+				// get the blog article details
+				await this.loadBlogArticle(guid);
 
-				const description = await this.loadBlogArticle(guid);
-				console.log('getblog ', description);
+				// force page update
+				this.forceUpdate();
 
-				this.description = description;
-
-				this.forceUpdate()
 			}
 		};
 
@@ -252,7 +259,7 @@ class App extends React.Component {
 					style = {{position: "sticky", padding: "0%" }}
 					options = {{
 						search: true,
-						emptyRowsWhenPaging: true,
+						emptyRowsWhenPaging: false,
 						pageSize: 25,
 						pageSizeOptions: [10, 25, 50, 100],
 						detailPanelType: "single",
@@ -275,7 +282,7 @@ class App extends React.Component {
 							openIcon: KeyboardArrowDown,
 							render: data => {
 								
-								// get blog details
+								// get blog details from appsync
 								getblog(data.guid);
 
 								return (
@@ -285,11 +292,11 @@ class App extends React.Component {
 										color: 'black'
 									}}>
 										<center>
-											<i>Posted {data.datestr} ago by {data.author} in {data.bloglink}</i>
+											<i>Posted {data.datestr} ago by {this.author} in {data.bloglink}</i>
 											<br /><br />
 												{this.description}
 											<br /><br />
-											<a href = {data.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
+											<a href = {this.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
 										</center>
 									</div>
 								)

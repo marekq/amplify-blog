@@ -46,6 +46,8 @@ export const QueryDdbGetDetailText = /* GraphQL */ `
 	    timest
 	    blogsource
 		guid
+		author
+		link
 	  }
     }
   }
