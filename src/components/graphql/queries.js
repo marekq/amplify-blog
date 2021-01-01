@@ -9,6 +9,7 @@ export const QueryDdbByVisibleAndTimest = /* GraphQL */ `
         timest
 		blogsource
 		title
+		guid
       }
       nextToken
     }
@@ -27,8 +28,25 @@ export const QueryDdbByBlogsourceAndTimest = /* GraphQL */ `
 	    timest
 	    blogsource
 	    title
+		guid
 	  }
 	  nextToken
+    }
+  }
+`;
+
+export const QueryDdbGetDetailText = /* GraphQL */ `
+  query QueryDdbGetDetailText(
+	$guid: String!
+  ) 
+  {
+    QueryDdbGetDetailText(guid: $guid) {
+	  items {
+		description
+	    timest
+	    blogsource
+		guid
+	  }
     }
   }
 `;

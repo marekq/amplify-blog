@@ -1,6 +1,12 @@
 import React, { forwardRef } from 'react'
 import prettyMilliseconds from 'pretty-ms';
 import MaterialTable from 'material-table';
+import { Container } from 'react-bulma-components';
+import { Link } from "gatsby";
+import Amplify, { API, graphqlOperation } from 'aws-amplify';
+import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest, QueryDdbGetDetailText } from './graphql/queries';
+
+// material ui
 import Clear from "@material-ui/icons/Clear";
 import FirstPage from "@material-ui/icons/FirstPage";
 import LastPage from "@material-ui/icons/LastPage";
@@ -10,11 +16,7 @@ import Search from "@material-ui/icons/Search";
 import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import ViewColumn from "@material-ui/icons/ListAltRounded";
-import { Container } from 'react-bulma-components';
 import Button from '@material-ui/core/Button';
-import { Link } from "gatsby";
-import Amplify, { API, graphqlOperation } from 'aws-amplify';
-import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest } from './graphql/queries';
 
 // set table icons
 const tableIcons = {
@@ -57,7 +59,7 @@ class App extends React.Component {
 		} 
 
 		// set the state of url and path
-		this.state = { path1: String(bloguri), mql1: mql1, loading1: true };
+		this.state = { path1: String(bloguri), mql1: mql1, loading1: true, description: '', guid: '' };
 
 	}
 
@@ -92,8 +94,8 @@ class App extends React.Component {
 		let result;
 		let nexttoken;
 
-		// set timestamp for 14 days ago
-		var timest = Math.floor(Date.now() / 1000) - (86400 * 14);
+		// set timestamp for 7 days ago
+		var timest = Math.floor(Date.now() / 1000) - (86400 * 7);
 		console.log('timest allblogs ', timest);
 
 		// return all blogs if path is 'all'
@@ -112,6 +114,25 @@ class App extends React.Component {
 		return [result.reverse(), nexttoken]
 	}
 
+	async loadBlogArticle(guid){
+
+		let result;
+
+		await API.graphql(graphqlOperation(QueryDdbGetDetailText, 
+			{
+				'guid': guid
+			}
+
+		)).then(({ data }) => {
+			result = data.QueryDdbGetDetailText.items[0].description;
+			this.description = result;
+			
+		});
+		
+
+		return result
+	}
+
 	// load the blog from graphql
 	async componentDidMount(){
 
@@ -127,8 +148,7 @@ class App extends React.Component {
 
 		}
 
-		console.log('data', data);
-		console.log('token', nexttoken);
+		console.log('nexttoken', nexttoken);
 
 		// get the current timestamp
 		var now = new Date().getTime();
@@ -204,6 +224,23 @@ class App extends React.Component {
 			returnlink.push(<br key = "br" />)
 		}
 
+		var getblog = async (guid) => {
+			//this.forceUpdate()
+
+			if (guid !== this.guid) {
+
+				this.description = 'Loading...';
+				this.guid = guid;
+
+				const description = await this.loadBlogArticle(guid);
+				console.log('getblog ', description);
+
+				this.description = description;
+
+				this.forceUpdate()
+			}
+		};
+
 		return (
 			<center> 
 				<Container>
@@ -237,6 +274,10 @@ class App extends React.Component {
 							icon: KeyboardArrowRight,
 							openIcon: KeyboardArrowDown,
 							render: data => {
+								
+								// get blog details
+								getblog(data.guid);
+
 								return (
 									<div id = "container" key = "container" style = {{
 										fontSize: 16,
@@ -246,7 +287,7 @@ class App extends React.Component {
 										<center>
 											<i>Posted {data.datestr} ago by {data.author} in {data.bloglink}</i>
 											<br /><br />
-												{data.description}
+												{this.description}
 											<br /><br />
 											<a href = {data.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
 										</center>
