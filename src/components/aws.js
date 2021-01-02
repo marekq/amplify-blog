@@ -2,8 +2,9 @@ import React, { forwardRef } from 'react'
 import prettyMilliseconds from 'pretty-ms';
 import MaterialTable from 'material-table';
 import { Container } from 'react-bulma-components';
-import { Link } from "gatsby";
+import { Link } from 'gatsby';
 import Amplify, { API, graphqlOperation } from 'aws-amplify';
+import AppSyncConfig from "../AppSyncConfig.js";
 import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest, QueryDdbGetDetailText } from './graphql/queries';
 
 // material ui
@@ -18,6 +19,8 @@ import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import ViewColumn from "@material-ui/icons/ListAltRounded";
 import Button from '@material-ui/core/Button';
 
+Amplify.configure(AppSyncConfig);
+
 // set table icons
 const tableIcons = {
 	Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
@@ -29,15 +32,6 @@ const tableIcons = {
 	Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
 	ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
-
-const AppConfig = {
-    'aws_appsync_graphqlEndpoint': 'https://ux25dr2sk5aypkzbvsgysa2ev4.appsync-api.eu-west-1.amazonaws.com/graphql',
-    'aws_appsync_region': 'eu-west-1',
-    'aws_appsync_authenticationType': 'API_KEY',
-    'aws_appsync_apiKey': 'da2-62no3ev3jnd6ngf46yxk7co6sm'
-}
-
-Amplify.configure(AppConfig);
 
 // main react class
 class App extends React.Component {
@@ -63,6 +57,25 @@ class App extends React.Component {
 
 	}
 
+	// sort blog posts by descending timestamp
+	sortResult(result) {
+
+		var tmpresult = result;
+
+		tmpresult.sort(function(a, b) {
+			var keyA = a.timest;
+			var keyB = b.timest;
+
+			// compare the two timestamps
+			if (keyA < keyB) return -1;
+			if (keyA > keyB) return 1;
+			return 0;
+
+		});
+
+		return tmpresult
+	}
+
 	// get specific blog category pages from appsync
 	async getGQLPerBlog(){
 
@@ -85,9 +98,11 @@ class App extends React.Component {
 			nexttoken = data.QueryDdbByBlogsourceAndTimest.nextToken;
 		});
 
-		return [result, nexttoken];
+		return [this.sortResult(result), nexttoken];
 
 	}
+
+	
 
 	// get all blog articles from appsync
 	async getGQLAllBlogs(){
@@ -111,7 +126,7 @@ class App extends React.Component {
 
 		});
 
-		return [result, nexttoken]
+		return [this.sortResult(result), nexttoken]
 	}
 
 	// load blog post article details
@@ -140,7 +155,7 @@ class App extends React.Component {
 		
 		this.guid = guid;
 
-		return result
+		return this.sortResult(result)
 	}
 
 	// load the blog from graphql
@@ -225,7 +240,7 @@ class App extends React.Component {
 			}
 		};
 		
-		// add the return button on top
+		// add the return button on top for specific blog pages
 		if (path1 !== "all") {
 			returnlink.push(<Link key = "homelink" to = "/"><Button color="primary">view all blogs</Button><br /></Link>)
 
@@ -268,7 +283,7 @@ class App extends React.Component {
 						showEmptyDataSourceMessage: false,
 						padding: "default",
 						draggable: false,
-						sorting: false,
+						sorting: true,
 						editable: false,
 						doubleHorizontalScroll: true
 					}}
