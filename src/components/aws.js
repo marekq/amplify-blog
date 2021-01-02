@@ -18,7 +18,9 @@ import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import ViewColumn from "@material-ui/icons/ListAltRounded";
 import Button from '@material-ui/core/Button';
+import TablePagination from "@material-ui/core/TablePagination";
 
+// configure appsync with config stored in 'AppSyncConfig.js'
 Amplify.configure(AppSyncConfig);
 
 // set table icons
@@ -52,35 +54,29 @@ class App extends React.Component {
 			mql1 = window.matchMedia(`(min-width: 800px)`);
 		} 
 
-		// set the state of url, path and current open article in detailpane
-		this.state = { path1: String(bloguri), mql1: mql1, loading1: true, description: '', guid: '', author: '', link: '' };
+		// set the state of url, path and current open article in detailpanel
+		this.state = { 
+			path1: String(bloguri), 
+			mql1: mql1, 
+			loading1: true, 
+			description: '', 
+			guid: '', 
+			author: '', 
+			link: '',
+			nexttoken: null,
+			prevtoken: '',
+			totalRow: 25,
+			page: 0,
+			rowsPerPage: 25,
+			tableRef: React.createRef()
+		};
 
-	}
-
-	// sort blog posts by descending timestamp
-	sortResult(result) {
-
-		var tmpresult = result;
-
-		tmpresult.sort(function(a, b) {
-			var keyA = a.timest;
-			var keyB = b.timest;
-
-			// compare the two timestamps
-			if (keyA < keyB) return -1;
-			if (keyA > keyB) return 1;
-			return 0;
-
-		});
-
-		return tmpresult
 	}
 
 	// get specific blog category pages from appsync
-	async getGQLPerBlog(){
+	async getGQLPerBlog() {
 
-		let result;
-		let nexttoken;
+		var nexttoken = this.state.nexttoken;
 
 		// set timestamp for 90 days ago
 		var timest = Math.floor(Date.now() / 1000) - (86400 * 90);
@@ -90,25 +86,25 @@ class App extends React.Component {
 			{
 				'blogsource': this.state.path1,
 				'timest': timest,
-				'nextToken': null
+				'nextToken': nexttoken
 			}
 	
 		)).then(({ data }) => {
-			result = data.QueryDdbByBlogsourceAndTimest.items;
-			nexttoken = data.QueryDdbByBlogsourceAndTimest.nextToken;
+			
+			// set next token and result
+			this.state.data = data.QueryDdbByBlogsourceAndTimest.items;
+			this.state.nexttoken = data.QueryDdbByBlogsourceAndTimest.nextToken;
 		});
 
-		return [this.sortResult(result), nexttoken];
+		// update page
+		this.forceUpdate();
 
 	}
-
-	
 
 	// get all blog articles from appsync
 	async getGQLAllBlogs(){
 
-		let result;
-		let nexttoken;
+		var nexttoken = this.state.nexttoken;
 
 		// set timestamp for 30 days ago
 		var timest = Math.floor(Date.now() / 1000) - (86400 * 30);
@@ -117,16 +113,20 @@ class App extends React.Component {
 		await API.graphql(graphqlOperation(QueryDdbByVisibleAndTimest, 
 			{
 				'timest': timest,
-				'nextToken': null
+				'nextToken': nexttoken
 			}
 
 		)).then(({ data }) => {
-			result = data.QueryDdbByVisibleAndTimest.items;
-			nexttoken = data.QueryDdbByVisibleAndTimest.nextToken;
+
+			// set next token and result
+			this.state.data = data.QueryDdbByVisibleAndTimest.items;
+			this.state.nexttoken = data.QueryDdbByVisibleAndTimest.nextToken;
 
 		});
 
-		return [this.sortResult(result), nexttoken]
+		// update page
+		this.forceUpdate();
+
 	}
 
 	// load blog post article details
@@ -155,21 +155,32 @@ class App extends React.Component {
 		
 		this.guid = guid;
 
-		return this.sortResult(result)
+		return result
 	}
-
+	
 	// load the blog from graphql
 	async componentDidMount(){
+		await this.getBlogsData();
+	}
 
-		let data;
-		let nexttoken;
-
+	async getBlogsData() {
 		if (this.state.path1 === 'all') {
-
-			[data, nexttoken] = await this.getGQLAllBlogs();
+			await this.getGQLAllBlogs();
 
 		} else {
-			[data, nexttoken] = await this.getGQLPerBlog();
+			await this.getGQLPerBlog();
+		}
+
+		var data = this.state.data;
+
+		if (this.state.nexttoken != null) {
+
+			// if nexttoken is present, increase totalRow count
+			this.state.totalRow = this.state.totalRow + 25;
+
+		} else {
+			// if no token found, set total rows to retrieved amount
+			this.state.totalRow = data.length;
 
 		}
 
@@ -203,6 +214,14 @@ class App extends React.Component {
 		})
 	}
 
+	// handle page change in table
+	handleChangePage = async (page) => {
+		
+		this.state.page = page
+		await this.getBlogsData();
+		
+	};
+
 	// render the page output
 	render() {
 		const columns = [];
@@ -220,24 +239,14 @@ class App extends React.Component {
 		// if fullmode is true, add blog and title column
 		if (mql.matches) {
 
-			if (path1 === "all") {
-				columns.push({ title: 'Blog', field: 'bloglink', width: 0, searchable: true });
-
-			}
-
+			columns.push({ title: 'Blog', field: 'bloglink', width: 0, searchable: true });
 			columns.push({ title: 'Title', field: 'title', width: 1000, searchable: true });
 
 		// if fullmode is false, add shortened title column and no blog source column
 		} else {
 
-			// show source and title for all category
-			if (path1 === "all") {
-				columns.push({ title: 'Title', field: 'sourcetitle', width: 1000, searchable: true });
+			columns.push({ title: 'Title', field: 'sourcetitle', width: 1000, searchable: true });
 
-			} else {
-				columns.push({ title: 'Title', field: 'title', width: 1000, searchable: true });
-
-			}
 		};
 		
 		// add the return button on top for specific blog pages
@@ -257,8 +266,9 @@ class App extends React.Component {
 				// get the blog article details
 				await this.loadBlogArticle(guid);
 
-				// force page update
+				// update page
 				this.forceUpdate();
+
 
 			}
 		};
@@ -273,7 +283,7 @@ class App extends React.Component {
 					title = {materialtitle}
 					style = {{position: "sticky", padding: "0%" }}
 					options = {{
-						search: true,
+						search: false,
 						showFirstLastPageButtons: false,
 						emptyRowsWhenPaging: false,
 						pageSize: 25,
@@ -286,6 +296,19 @@ class App extends React.Component {
 						sorting: true,
 						editable: false,
 						doubleHorizontalScroll: true
+					}}
+					components = {{
+						OverlayLoading: () => <div />,
+						Pagination: (props) => (
+						  <TablePagination
+							component = "td"
+							labelRowsPerPage = ""
+							rowsPerPage = {this.state.rowsPerPage}
+							count = {this.state.totalRow}
+							page = {this.state.page}
+							onChangePage = {(e, page) => {this.handleChangePage(page)}}
+						  />
+						)
 					}}
 					isLoading = {this.state.loading1}
 					data = {this.state.data}
