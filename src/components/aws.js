@@ -52,17 +52,18 @@ class App extends React.Component {
 			bloguri = 'all'
 		}
 
-		// disable mql during server build
+		// disable mql during 'yarn build'
 		var mql1 = ''
 		if (typeof window !== `undefined`) {
 			mql1 = window.matchMedia(`(min-width: 800px)`);
 		} 
 
-		// set the state of url and path
+		// set the state of url, path and current open article in detailpane
 		this.state = { path1: String(bloguri), mql1: mql1, loading1: true, description: '', guid: '', author: '', link: '' };
 
 	}
 
+	// get specific blog category pages from appsync
 	async getGQLPerBlog(){
 
 		let result;
@@ -84,10 +85,11 @@ class App extends React.Component {
 			nexttoken = data.QueryDdbByBlogsourceAndTimest.nextToken;
 		});
 
-		return [result.sort(), nexttoken];
+		return [result, nexttoken];
 
 	}
 
+	// get all blog articles from appsync
 	async getGQLAllBlogs(){
 
 		let result;
@@ -109,9 +111,10 @@ class App extends React.Component {
 
 		});
 
-		return [result.sort(), nexttoken]
+		return [result, nexttoken]
 	}
 
+	// load blog post article details
 	async loadBlogArticle(guid){
 
 		let result;
@@ -178,18 +181,23 @@ class App extends React.Component {
 			return ''
 		});
 
+		// set data and loading state
 		this.setState({
 			data: data,
 			loading1: false
 		})
 	}
 
+	// render the page output
 	render() {
 		const columns = [];
 		const path1 = this.state.path1;
 		const materialtitle = path1 + ' blogs'
 		const returnlink = [];
 		const mql = this.state.mql1;
+
+		// add hidden timest column for article sorting 
+		columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
 
 		// add age column
 		columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
