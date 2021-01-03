@@ -8,13 +8,5 @@ module.exports = {
         reportFilename: "report.html"
       },
     },
-    {
-      resolve: 'gatsby-plugin-preconnect',
-      options: {
-        domains: [
-          { domain: 'https://feed.marek.rocks', crossOrigin: true }
-        ]
-      },
-    },
   ],
 }

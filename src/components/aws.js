@@ -1,7 +1,13 @@
 import React, { forwardRef } from 'react'
 import prettyMilliseconds from 'pretty-ms';
-import fetch from 'node-fetch';
 import MaterialTable from 'material-table';
+import { Container } from 'react-bulma-components';
+import { Link } from 'gatsby';
+import Amplify, { API, graphqlOperation } from 'aws-amplify';
+import AppSyncConfig from "../AppSyncConfig.js";
+import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest, QueryDdbGetDetailText, QueryDdbItemCountPerBlog } from './graphql/queries';
+
+// material ui
 import Clear from "@material-ui/icons/Clear";
 import FirstPage from "@material-ui/icons/FirstPage";
 import LastPage from "@material-ui/icons/LastPage";
@@ -11,12 +17,11 @@ import Search from "@material-ui/icons/Search";
 import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import ViewColumn from "@material-ui/icons/ListAltRounded";
-import { Container } from 'react-bulma-components';
 import Button from '@material-ui/core/Button';
-import { Link } from "gatsby";
+import TablePagination from "@material-ui/core/TablePagination";
 
-// set the blogfeed
-const url = 'https://feed.marek.rocks/'
+// configure appsync with config stored in 'AppSyncConfig.js'
+Amplify.configure(AppSyncConfig);
 
 // set table icons
 const tableIcons = {
@@ -29,6 +34,9 @@ const tableIcons = {
 	Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
 	ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
+
+// set timestamp for 90 days ago
+var timest = Math.floor(Date.now() / 1000) - (86400 * 90);
 
 // main react class
 class App extends React.Component {
@@ -43,24 +51,156 @@ class App extends React.Component {
 			bloguri = 'all'
 		}
 
-		// disable mql during server build
+		// disable mql during 'yarn build'
 		var mql1 = ''
 		if (typeof window !== `undefined`) {
 			mql1 = window.matchMedia(`(min-width: 800px)`);
 		} 
 
-		// set the state of url and path
-		this.state = { url1: url + bloguri + '.json', path1: String(bloguri), mql1: mql1, loading1: true };
+		// set the state of url, path and current open article in detailpanel
+		this.state = { 
+			path1: String(bloguri), 
+			mql1: mql1, 
+			loading1: true, 
+			description: '', 
+			guid: '', 
+			author: '', 
+			link: '',
+			totalRow: 0,
+			page: 0,
+			rowsPerPage: 25,
+			tableRef: React.createRef(),
+			tokens: {
+				pages: {
+					0: null
+				}
+			}
+		};
+
 	}
 
+	// get specific blog category pages from appsync
+	async getGQLPerBlog() {
 
-	// load the blog from s3
+		var token = this.state.tokens.pages[this.state.page];
+
+		// return specific blog category 
+		await API.graphql(graphqlOperation(QueryDdbByBlogsourceAndTimest,
+			{
+				'blogsource': this.state.path1,
+				'timest': timest,
+				'nextToken': token
+			}
+	
+		)).then(({ data }) => {
+			
+			this.state.data = data.QueryDdbByBlogsourceAndTimest.items;
+
+			var newPages = { ...this.state.tokens.pages };
+			var respToken = data.QueryDdbByBlogsourceAndTimest.nextToken;
+			newPages[this.state.page + 1] = respToken;
+
+			const newToken = { ...this.state.tokens, pages : newPages };
+			this.setState({ tokens : newToken });
+
+		});
+
+	}
+
+	// get all blog articles from appsync
+	async getGQLAllBlogs(){
+
+		var token = this.state.tokens.pages[this.state.page];
+
+		// return all blogs if path is 'all'
+		await API.graphql(graphqlOperation(QueryDdbByVisibleAndTimest, 
+			{
+				'timest': timest,
+				'nextToken': token
+			}
+
+		)).then(({ data }) => {
+
+			this.state.data = data.QueryDdbByVisibleAndTimest.items;
+
+		});
+
+
+	}
+
+	// load blog post article details
+	async loadBlogArticle(guid){
+
+		let result;
+
+		// set temporary values during load
+		this.state.description = 'Loading...';
+		this.state.author = '';
+		this.state.link = '';
+
+		await API.graphql(graphqlOperation(QueryDdbGetDetailText, 
+			{
+				'guid': guid
+			}
+
+		)).then(({ data }) => {
+			result = data.QueryDdbGetDetailText;
+
+			this.state.description = result.items[0].description;
+			this.state.author = result.items[0].author;
+			this.state.link = result.items[0].link;
+			
+		});
+		
+		this.state.guid = guid;
+
+		return result
+	}
+
+	// get item count per blog category
+	async getItemCount(blogsource){
+
+		if (this.state.totalRow === 0) {
+
+			await API.graphql(graphqlOperation(QueryDdbItemCountPerBlog,
+				{
+					'blogsource': blogsource
+				}
+
+			)).then(({ data }) => {
+				
+				// set totalrow state
+				this.state.totalRow = data.QueryDdbItemCountPerBlog.items[0].articlecount;
+				
+			});
+		}	
+	}
+
+	// load the blog from graphql on initial load
 	async componentDidMount(){
 
-		// fetch the data url
-		var res = await fetch(this.state.url1);
-		var data = await res.json();
-		
+		await this.getBlogsData();
+	}
+
+	// get blog content and item count
+	async getBlogsData(token) {
+		if (this.state.path1 === 'all') {
+
+			// get all blog content
+			await this.getGQLAllBlogs();
+			await this.getItemCount('all');
+
+		} else {
+
+			// get per blog content based on path
+			await this.getGQLPerBlog();
+			await this.getItemCount(this.state.path1);
+
+		}
+
+		// set data var
+		var data = this.state.data;
+
 		// get the current timestamp
 		var now = new Date().getTime();
 
@@ -82,14 +222,40 @@ class App extends React.Component {
 			blog.key = blog.blogsource.toString() + blog.timest.toString()
 
 			return ''
+
 		});
 
+		// set data and loading state
 		this.setState({
 			data: data,
 			loading1: false
 		})
+
+		this.forceUpdate();
 	}
 
+	// handle page change in table
+	handleChangePage = async (page) => {
+		
+		console.log('going from ', this.state.page + ' to ' + page);		
+		var token = this.state.token;
+
+		// if new page is higher
+		if (page > this.state.page) {
+			token = this.state.nexttoken;
+
+		// if new page is lower
+		} else if (page < this.state.page) {
+			token = this.state.prevtoken;
+
+		}
+
+		this.state.page = page;
+		await this.getBlogsData(token);
+
+	};
+
+	// render the page output
 	render() {
 		const columns = [];
 		const path1 = this.state.path1;
@@ -97,43 +263,48 @@ class App extends React.Component {
 		const returnlink = [];
 		const mql = this.state.mql1;
 
-		// add timest and age columns
+		// add hidden timest column for article sorting 
 		columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
+
+		// add age column
 		columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
 
 		// if fullmode is true, add blog and title column
 		if (mql.matches) {
 
-			if (path1 === "all") {
-				columns.push({ title: 'Blog', field: 'bloglink', width: 0, searchable: true });
-
-			}
-
+			columns.push({ title: 'Blog', field: 'bloglink', width: 0, searchable: true });
 			columns.push({ title: 'Title', field: 'title', width: 1000, searchable: true });
 
 		// if fullmode is false, add shortened title column and no blog source column
 		} else {
 
-			// show source and title for all category
-			if (path1 === "all") {
-				columns.push({ title: 'Title', field: 'sourcetitle', width: 1000, searchable: true });
+			columns.push({ title: 'Title', field: 'sourcetitle', width: 1000, searchable: true });
 
-			} else {
-				columns.push({ title: 'Title', field: 'title', width: 1000, searchable: true });
-
-			}
 		};
 		
-		// add hidden decsription column for search function
-		columns.push({ title: 'Description', field: 'description', searchable: true, hidden: true });
-
-		// add the return button on top
+		// add the return button on top for specific blog pages
 		if (path1 !== "all") {
 			returnlink.push(<Link key = "homelink" to = "/"><Button color="primary">view all blogs</Button><br /></Link>)
 
 		} else {
 			returnlink.push(<br key = "br" />)
 		}
+
+		// async get the blog detailed content
+		var getblog = async (guid) => {
+
+			// if guid is not locally set
+			if (guid !== this.guid) {
+
+				// get the blog article details
+				await this.loadBlogArticle(guid);
+
+				// update page
+				this.forceUpdate();
+
+
+			}
+		};
 
 		return (
 			<center> 
@@ -145,18 +316,32 @@ class App extends React.Component {
 					title = {materialtitle}
 					style = {{position: "sticky", padding: "0%" }}
 					options = {{
-						search: true,
+						search: false,
+						showFirstLastPageButtons: false,
 						emptyRowsWhenPaging: false,
 						pageSize: 25,
-						pageSizeOptions: [10, 25, 50, 100],
+						pageSizeOptions: [25],
 						detailPanelType: "single",
 						loadingType: "linear",
 						showEmptyDataSourceMessage: false,
 						padding: "default",
 						draggable: false,
-						sorting: false,
+						sorting: true,
 						editable: false,
 						doubleHorizontalScroll: true
+					}}
+					components = {{
+						OverlayLoading: () => <div />,
+						Pagination: (props) => (
+						  <TablePagination
+							component = "td"
+							labelRowsPerPage = ""
+							rowsPerPage = {this.state.rowsPerPage}
+							count = {this.state.totalRow}
+							page = {this.state.page}
+							onChangePage = {(e, page) => {this.handleChangePage(page)}}
+						  />
+						)
 					}}
 					isLoading = {this.state.loading1}
 					data = {this.state.data}
@@ -168,6 +353,10 @@ class App extends React.Component {
 							icon: KeyboardArrowRight,
 							openIcon: KeyboardArrowDown,
 							render: data => {
+								
+								// get blog details from appsync
+								getblog(data.guid);
+
 								return (
 									<div id = "container" key = "container" style = {{
 										fontSize: 16,
@@ -175,11 +364,11 @@ class App extends React.Component {
 										color: 'black'
 									}}>
 										<center>
-											<i>Posted {data.datestr} ago by {data.author} in {data.bloglink}</i>
+											<i>Posted {data.datestr} ago by {this.author} in {data.bloglink}</i>
 											<br /><br />
-												{data.description}
+												{this.description}
 											<br /><br />
-											<a href = {data.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
+											<a href = {this.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
 										</center>
 									</div>
 								)

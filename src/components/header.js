@@ -22,7 +22,7 @@ class Header extends Component {
     return (
       <Navbar expand = "navbar-expand-xl" sticky = "top" key = "navbar" style = {{backgroundColor: "#f4f4f4 "}}>
         <title>{pageTitle}</title>
-        <b><Link key = "home" to = "/">New Blogs</Link></b>
+        <b><Link key = "home" to = "/" onClick = {this.forceUpdate} >New Blogs</Link></b>
         <b><NavDropdown key = "aws" title = "All Blogs" id = "basic-nav-dropdown" to = "/blog/">
           {menubar}
         </NavDropdown></b>
