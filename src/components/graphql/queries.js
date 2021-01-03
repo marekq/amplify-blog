@@ -42,8 +42,10 @@ export const QueryDdbGetDetailText = /* GraphQL */ `
   {
     QueryDdbGetDetailText(guid: $guid) {
       items {
-        articlecount
+        description
         blogsource
+        link
+        author
 	    }
     }
   }
@@ -57,6 +59,22 @@ export const QueryDdbItemCountPerBlog = /* GraphQL */ `
     QueryDdbItemCountPerBlog(blogsource: $blogsource) {
       items {
         articlecount
+        blogsource
+        timest
+      }
+    }
+  }
+`;
+
+export const QueryDdbItemCountAll = /* GraphQL */ `
+  query QueryDdbItemCountAll(
+    $timest: String
+  ) 
+  {
+    QueryDdbItemCountAll() {
+      items {
+        articlecount
+        blogsource
         timest
       }
     }
