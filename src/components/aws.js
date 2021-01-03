@@ -5,7 +5,7 @@ import { Container } from 'react-bulma-components';
 import { Link } from 'gatsby';
 import Amplify, { API, graphqlOperation } from 'aws-amplify';
 import AppSyncConfig from "../AppSyncConfig.js";
-import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest, QueryDdbGetDetailText } from './graphql/queries';
+import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest, QueryDdbGetDetailText, QueryDdbItemCountPerBlog } from './graphql/queries';
 
 // material ui
 import Clear from "@material-ui/icons/Clear";
@@ -34,6 +34,9 @@ const tableIcons = {
 	Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
 	ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
+
+// set timestamp for 90 days ago
+var timest = Math.floor(Date.now() / 1000) - (86400 * 90);
 
 // main react class
 class App extends React.Component {
@@ -64,8 +67,8 @@ class App extends React.Component {
 			author: '', 
 			link: '',
 			nexttoken: null,
-			prevtoken: '',
-			totalRow: 25,
+			prevtoken: null,
+			totalRow: 0,
 			page: 0,
 			rowsPerPage: 25,
 			tableRef: React.createRef()
@@ -74,59 +77,45 @@ class App extends React.Component {
 	}
 
 	// get specific blog category pages from appsync
-	async getGQLPerBlog() {
-
-		var nexttoken = this.state.nexttoken;
-
-		// set timestamp for 90 days ago
-		var timest = Math.floor(Date.now() / 1000) - (86400 * 90);
+	async getGQLPerBlog(token) {
 
 		// return specific blog category 
 		await API.graphql(graphqlOperation(QueryDdbByBlogsourceAndTimest,
 			{
 				'blogsource': this.state.path1,
 				'timest': timest,
-				'nextToken': nexttoken
+				'nextToken': token
 			}
 	
 		)).then(({ data }) => {
 			
-			// set next token and result
+			// set previous, next token and result
 			this.state.data = data.QueryDdbByBlogsourceAndTimest.items;
 			this.state.nexttoken = data.QueryDdbByBlogsourceAndTimest.nextToken;
+			this.state.prevtoken = token;
+
 		});
-
-		// update page
-		this.forceUpdate();
-
 	}
 
 	// get all blog articles from appsync
-	async getGQLAllBlogs(){
+	async getGQLAllBlogs(token){
 
-		var nexttoken = this.state.nexttoken;
-
-		// set timestamp for 30 days ago
-		var timest = Math.floor(Date.now() / 1000) - (86400 * 30);
+		this.state.prevtoken = token;
 
 		// return all blogs if path is 'all'
 		await API.graphql(graphqlOperation(QueryDdbByVisibleAndTimest, 
 			{
 				'timest': timest,
-				'nextToken': nexttoken
+				'nextToken': token
 			}
 
 		)).then(({ data }) => {
 
-			// set next token and result
+			// set previous, next token and result
 			this.state.data = data.QueryDdbByVisibleAndTimest.items;
 			this.state.nexttoken = data.QueryDdbByVisibleAndTimest.nextToken;
 
 		});
-
-		// update page
-		this.forceUpdate();
-
 	}
 
 	// load blog post article details
@@ -157,32 +146,48 @@ class App extends React.Component {
 
 		return result
 	}
+
+	// get item count per blog category
+	async getItemCount(blogsource){
+
+		if (this.state.totalRow === 0) {
+
+			await API.graphql(graphqlOperation(QueryDdbItemCountPerBlog,
+				{
+					'blogsource': blogsource
+				}
+
+			)).then(({ data }) => {
+				
+				console.log(data);
+				// set totalrow state
+				this.state.totalRow = data.QueryDdbItemCountPerBlog.items[0].articlecount;
+				
+			});
+		}
+
+		//console.log(totalRow)
 	
-	// load the blog from graphql
-	async componentDidMount(){
-		await this.getBlogsData();
 	}
 
-	async getBlogsData() {
+	// load the blog from graphql without nexttoken
+	async componentDidMount(){
+
+		await this.getBlogsData(null);
+	}
+
+	async getBlogsData(token) {
 		if (this.state.path1 === 'all') {
-			await this.getGQLAllBlogs();
+
+			await this.getGQLAllBlogs(token);
 
 		} else {
-			await this.getGQLPerBlog();
+			await this.getGQLPerBlog(token);
+			await this.getItemCount(this.state.path1);
 		}
 
+		// set data var
 		var data = this.state.data;
-
-		if (this.state.nexttoken != null) {
-
-			// if nexttoken is present, increase totalRow count
-			this.state.totalRow = this.state.totalRow + 25;
-
-		} else {
-			// if no token found, set total rows to retrieved amount
-			this.state.totalRow = data.length;
-
-		}
 
 		// get the current timestamp
 		var now = new Date().getTime();
@@ -205,6 +210,7 @@ class App extends React.Component {
 			blog.key = blog.blogsource.toString() + blog.timest.toString()
 
 			return ''
+
 		});
 
 		// set data and loading state
@@ -212,14 +218,32 @@ class App extends React.Component {
 			data: data,
 			loading1: false
 		})
+
+		this.forceUpdate();
 	}
 
 	// handle page change in table
 	handleChangePage = async (page) => {
 		
-		this.state.page = page
-		await this.getBlogsData();
-		
+		console.log('current page ', this.state.page);
+		console.log('new page', page);		
+		var token = this.state.token;
+
+		// if new page is higher
+		if (page > this.state.page) {
+			token = this.state.nexttoken;
+			console.log('setting new token')
+
+		// if new page is lower
+		} else if (page < this.state.page) {
+			token = this.state.prevtoken;
+			console.log('setting previous token')
+
+		}
+
+		this.state.page = page;
+		await this.getBlogsData(token);
+
 	};
 
 	// render the page output

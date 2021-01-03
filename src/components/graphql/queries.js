@@ -1,7 +1,7 @@
 export const QueryDdbByVisibleAndTimest = /* GraphQL */ `
   query QueryDdbByVisibleAndTimest(
     $nextToken: String,
-	$timest: Int!
+	  $timest: Int!
   ) 
   {
     QueryDdbByVisibleAndTimest(timest: $timest, visible: "y", nextToken: $nextToken) {
@@ -19,8 +19,8 @@ export const QueryDdbByVisibleAndTimest = /* GraphQL */ `
 export const QueryDdbByBlogsourceAndTimest = /* GraphQL */ `
   query QueryDdbByBlogsourceAndTimest(
     $nextToken: String,
-	$blogsource: String!,
-	$timest: Int!
+    $blogsource: String!,
+    $timest: Int!
   ) 
   {
     QueryDdbByBlogsourceAndTimest(blogsource: $blogsource, timest: $timest, nextToken: $nextToken) {
@@ -37,18 +37,28 @@ export const QueryDdbByBlogsourceAndTimest = /* GraphQL */ `
 
 export const QueryDdbGetDetailText = /* GraphQL */ `
   query QueryDdbGetDetailText(
-	$guid: String!
+	  $guid: String!
   ) 
   {
     QueryDdbGetDetailText(guid: $guid) {
-	  items {
-		description
-	    timest
-	    blogsource
-		guid
-		author
-		link
-	  }
+      items {
+        articlecount
+        blogsource
+	    }
+    }
+  }
+`;
+
+export const QueryDdbItemCountPerBlog = /* GraphQL */ `
+  query QueryDdbItemCountPerBlog(
+    $blogsource: String!
+  ) 
+  {
+    QueryDdbItemCountPerBlog(blogsource: $blogsource) {
+      items {
+        articlecount
+        timest
+      }
     }
   }
 `;
