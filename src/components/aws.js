@@ -66,18 +66,23 @@ class App extends React.Component {
 			guid: '', 
 			author: '', 
 			link: '',
-			nexttoken: null,
-			prevtoken: null,
 			totalRow: 0,
 			page: 0,
 			rowsPerPage: 25,
-			tableRef: React.createRef()
+			tableRef: React.createRef(),
+			tokens: {
+				pages: {
+					0: null
+				}
+			}
 		};
 
 	}
 
 	// get specific blog category pages from appsync
-	async getGQLPerBlog(token) {
+	async getGQLPerBlog() {
+
+		var token = this.state.tokens.pages[this.state.page];
 
 		// return specific blog category 
 		await API.graphql(graphqlOperation(QueryDdbByBlogsourceAndTimest,
@@ -89,18 +94,23 @@ class App extends React.Component {
 	
 		)).then(({ data }) => {
 			
-			// set previous, next token and result
 			this.state.data = data.QueryDdbByBlogsourceAndTimest.items;
-			this.state.nexttoken = data.QueryDdbByBlogsourceAndTimest.nextToken;
-			this.state.prevtoken = token;
+
+			var newPages = { ...this.state.tokens.pages };
+			var respToken = data.QueryDdbByBlogsourceAndTimest.nextToken;
+			newPages[this.state.page + 1] = respToken;
+
+			const newToken = { ...this.state.tokens, pages : newPages };
+			this.setState({ tokens : newToken });
 
 		});
+
 	}
 
 	// get all blog articles from appsync
-	async getGQLAllBlogs(token){
+	async getGQLAllBlogs(){
 
-		this.state.prevtoken = token;
+		var token = this.state.tokens.pages[this.state.page];
 
 		// return all blogs if path is 'all'
 		await API.graphql(graphqlOperation(QueryDdbByVisibleAndTimest, 
@@ -111,11 +121,11 @@ class App extends React.Component {
 
 		)).then(({ data }) => {
 
-			// set previous, next token and result
 			this.state.data = data.QueryDdbByVisibleAndTimest.items;
-			this.state.nexttoken = data.QueryDdbByVisibleAndTimest.nextToken;
 
 		});
+
+
 	}
 
 	// load blog post article details
@@ -124,9 +134,9 @@ class App extends React.Component {
 		let result;
 
 		// set temporary values during load
-		this.description = 'Loading...';
-		this.author = '';
-		this.link = '';
+		this.state.description = 'Loading...';
+		this.state.author = '';
+		this.state.link = '';
 
 		await API.graphql(graphqlOperation(QueryDdbGetDetailText, 
 			{
@@ -136,13 +146,13 @@ class App extends React.Component {
 		)).then(({ data }) => {
 			result = data.QueryDdbGetDetailText;
 
-			this.description = result.items[0].description;
-			this.author = result.items[0].author;
-			this.link = result.items[0].link;
+			this.state.description = result.items[0].description;
+			this.state.author = result.items[0].author;
+			this.state.link = result.items[0].link;
 			
 		});
 		
-		this.guid = guid;
+		this.state.guid = guid;
 
 		return result
 	}
@@ -159,31 +169,33 @@ class App extends React.Component {
 
 			)).then(({ data }) => {
 				
-				console.log(data);
 				// set totalrow state
 				this.state.totalRow = data.QueryDdbItemCountPerBlog.items[0].articlecount;
 				
 			});
-		}
-
-		//console.log(totalRow)
-	
+		}	
 	}
 
-	// load the blog from graphql without nexttoken
+	// load the blog from graphql on initial load
 	async componentDidMount(){
 
-		await this.getBlogsData(null);
+		await this.getBlogsData();
 	}
 
+	// get blog content and item count
 	async getBlogsData(token) {
 		if (this.state.path1 === 'all') {
 
-			await this.getGQLAllBlogs(token);
+			// get all blog content
+			await this.getGQLAllBlogs();
+			await this.getItemCount('all');
 
 		} else {
-			await this.getGQLPerBlog(token);
+
+			// get per blog content based on path
+			await this.getGQLPerBlog();
 			await this.getItemCount(this.state.path1);
+
 		}
 
 		// set data var
@@ -225,19 +237,16 @@ class App extends React.Component {
 	// handle page change in table
 	handleChangePage = async (page) => {
 		
-		console.log('current page ', this.state.page);
-		console.log('new page', page);		
+		console.log('going from ', this.state.page + ' to ' + page);		
 		var token = this.state.token;
 
 		// if new page is higher
 		if (page > this.state.page) {
 			token = this.state.nexttoken;
-			console.log('setting new token')
 
 		// if new page is lower
 		} else if (page < this.state.page) {
 			token = this.state.prevtoken;
-			console.log('setting previous token')
 
 		}
 
