@@ -5,7 +5,7 @@ import { Container } from 'react-bulma-components';
 import { Link } from 'gatsby';
 import Amplify, { API, graphqlOperation } from 'aws-amplify';
 import AppSyncConfig from "../AppSyncConfig.js";
-import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest, QueryDdbGetDetailText, QueryDdbItemCountPerBlog } from './graphql/queries';
+import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest, QueryDdbGetDetailText, QueryDdbItemCountPerBlog, QueryDdbItemCountAll } from './graphql/queries';
 
 // material ui
 import Clear from "@material-ui/icons/Clear";
@@ -93,13 +93,18 @@ class App extends React.Component {
 			}
 	
 		)).then(({ data }) => {
-			
+						
+			// set data
 			this.state.data = data.QueryDdbByBlogsourceAndTimest.items;
 
+			// create copy of page
 			var newPages = { ...this.state.tokens.pages };
+
+			// get resptoken for next page
 			var respToken = data.QueryDdbByBlogsourceAndTimest.nextToken;
 			newPages[this.state.page + 1] = respToken;
 
+			// set token in state
 			const newToken = { ...this.state.tokens, pages : newPages };
 			this.setState({ tokens : newToken });
 
@@ -121,7 +126,19 @@ class App extends React.Component {
 
 		)).then(({ data }) => {
 
+			// set data
 			this.state.data = data.QueryDdbByVisibleAndTimest.items;
+
+			// create copy of page
+			var newPages = { ...this.state.tokens.pages };
+
+			// get resptoken for next page
+			var respToken = data.QueryDdbByVisibleAndTimest.nextToken;
+			newPages[this.state.page + 1] = respToken;
+
+			// set token in state
+			const newToken = { ...this.state.tokens, pages : newPages };
+			this.setState({ tokens : newToken });
 
 		});
 
@@ -133,11 +150,6 @@ class App extends React.Component {
 
 		let result;
 
-		// set temporary values during load
-		this.state.description = 'Loading...';
-		this.state.author = '';
-		this.state.link = '';
-
 		await API.graphql(graphqlOperation(QueryDdbGetDetailText, 
 			{
 				'guid': guid
@@ -146,15 +158,13 @@ class App extends React.Component {
 		)).then(({ data }) => {
 			result = data.QueryDdbGetDetailText;
 
+			// store response values in state
 			this.state.description = result.items[0].description;
 			this.state.author = result.items[0].author;
 			this.state.link = result.items[0].link;
-			
-		});
-		
-		this.state.guid = guid;
+			this.state.guid = guid;
 
-		return result
+		});
 	}
 
 	// get item count per blog category
@@ -168,7 +178,7 @@ class App extends React.Component {
 				}
 
 			)).then(({ data }) => {
-				
+
 				// set totalrow state
 				this.state.totalRow = data.QueryDdbItemCountPerBlog.items[0].articlecount;
 				
@@ -184,21 +194,22 @@ class App extends React.Component {
 
 	// get blog content and item count
 	async getBlogsData(token) {
+
 		if (this.state.path1 === 'all') {
 
-			// get all blog content
-			await this.getGQLAllBlogs();
+			// get all item count and blog content
 			await this.getItemCount('all');
+			await this.getGQLAllBlogs();
 
 		} else {
 
 			// get per blog content based on path
-			await this.getGQLPerBlog();
 			await this.getItemCount(this.state.path1);
+			await this.getGQLPerBlog();
 
 		}
 
-		// set data var
+		// set data variable
 		var data = this.state.data;
 
 		// get the current timestamp
@@ -237,7 +248,7 @@ class App extends React.Component {
 	// handle page change in table
 	handleChangePage = async (page) => {
 		
-		console.log('going from ', this.state.page + ' to ' + page);		
+		console.log('going from ', this.state.page + ' to ' + page + ' on ' + this.state.path1);		
 		var token = this.state.token;
 
 		// if new page is higher
@@ -259,7 +270,8 @@ class App extends React.Component {
 	render() {
 		const columns = [];
 		const path1 = this.state.path1;
-		const materialtitle = path1 + ' blogs'
+		const totalpagecount = (this.state.totalRow / 25);
+		const materialtitle = path1 + ' blogs (showing page ' + (this.state.page + 1 ) + '/' +  Math.floor(totalpagecount + 1 ) + ')'
 		const returnlink = [];
 		const mql = this.state.mql1;
 
@@ -294,7 +306,7 @@ class App extends React.Component {
 		var getblog = async (guid) => {
 
 			// if guid is not locally set
-			if (guid !== this.guid) {
+			if (guid !== this.state.guid) {
 
 				// get the blog article details
 				await this.loadBlogArticle(guid);
@@ -336,6 +348,7 @@ class App extends React.Component {
 						  <TablePagination
 							component = "td"
 							labelRowsPerPage = ""
+							rowsPerPageOptions = {[25]}
 							rowsPerPage = {this.state.rowsPerPage}
 							count = {this.state.totalRow}
 							page = {this.state.page}
@@ -364,11 +377,11 @@ class App extends React.Component {
 										color: 'black'
 									}}>
 										<center>
-											<i>Posted {data.datestr} ago by {this.author} in {data.bloglink}</i>
+											<i>Posted {data.datestr} ago by {this.state.author} in {data.bloglink}</i>
 											<br /><br />
-												{this.description}
+												{this.state.description}
 											<br /><br />
-											<a href = {this.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
+											<a href = {this.state.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
 										</center>
 									</div>
 								)
