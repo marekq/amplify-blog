@@ -1,7 +1,7 @@
 amplify-blog
 ============
 
-This is the backend of the blog hosted on [marek.rocks](https://marek.rocks). It's deployed using AWS Amplify and uses the Gatsby Starter Theme as a base. The blog content is retrieved from a JSON file hosted on a S3 bucket.
+This is the backend of the blog hosted on [marek.rocks](https://marek.rocks). It's deployed using AWS Amplify and uses the Gatsby Starter Theme as a base. The blog content is retrieved using GraphQL from an AppSync endpoint. 
 
 
 <img align = "center" src = "./docs/main.jpg" height = "500px">
@@ -10,7 +10,8 @@ This is the backend of the blog hosted on [marek.rocks](https://marek.rocks). It
 Roadmap
 -------
 
-- [X] Reduce build time to under three minutes using a custom build container.
+- [X] Add GraphQL support for data retrieval using AppSync.
+- [X] Reduce build time to under three minutes using a build container.
 - [X] Add better search options and add more flexible blog table layout.
 - [X] Add AWS blog filtering and searching.
 - [X] Add About and Resume pages.

@@ -69,6 +69,7 @@ class App extends React.Component {
 			totalRow: 0,
 			page: 0,
 			rowsPerPage: 25,
+			totalpagecount: 0,
 			tableRef: React.createRef(),
 			tokens: {
 				pages: {
@@ -77,6 +78,19 @@ class App extends React.Component {
 			}
 		};
 
+		// add keyboard navigation using left/right keys
+		document.addEventListener('keyup', (e) => {
+
+			// left arror if pagesize larger than 0
+			if(e.code === 'ArrowLeft' && this.state.page > 0) {
+				this.handleChangePage(this.state.page - 1)
+			}
+
+			// right arrow if page smaller than total page count
+			if(e.code === 'ArrowRight' && this.state.totalpagecount > this.state.page + 1) {
+				this.handleChangePage(this.state.page + 1)
+			}
+		})
 	}
 
 	// get specific blog category pages from appsync
@@ -248,7 +262,7 @@ class App extends React.Component {
 	// handle page change in table
 	handleChangePage = async (page) => {
 		
-		console.log('going from ', this.state.page + ' to ' + page + ' on ' + this.state.path1);		
+		console.log('going from page ', this.state.page + ' to page ' + page + ' on path ' + this.state.path1);		
 		var token = this.state.token;
 
 		// if new page is higher
@@ -261,25 +275,34 @@ class App extends React.Component {
 
 		}
 
+		// set page number
 		this.state.page = page;
+
+		// get blog data
 		await this.getBlogsData(token);
 
 	};
 
+
 	// render the page output
 	render() {
+
+		// set total page count value based on a page size of 25
+		this.state.totalpagecount = (this.state.totalRow / 25);
+
+		// set variables for table and table title
 		const columns = [];
-		const path1 = this.state.path1;
-		const totalpagecount = (this.state.totalRow / 25);
-		const materialtitle = path1 + ' blogs (showing page ' + (this.state.page + 1 ) + '/' +  Math.floor(totalpagecount + 1 ) + ')'
 		const returnlink = [];
-		const mql = this.state.mql1;
+		const materialtitle = this.state.path1 + ' blogs (showing page ' + (this.state.page + 1 ) + '/' +  Math.floor(this.state.totalpagecount + 1 ) + ')'
 
 		// add hidden timest column for article sorting 
 		columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
 
 		// add age column
 		columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
+
+		// get window status
+		const mql = this.state.mql1;
 
 		// if fullmode is true, add blog and title column
 		if (mql.matches) {
@@ -295,7 +318,7 @@ class App extends React.Component {
 		};
 		
 		// add the return button on top for specific blog pages
-		if (path1 !== "all") {
+		if (this.state.path1 !== "all") {
 			returnlink.push(<Link key = "homelink" to = "/"><Button color="primary">view all blogs</Button><br /></Link>)
 
 		} else {
@@ -313,7 +336,6 @@ class App extends React.Component {
 
 				// update page
 				this.forceUpdate();
-
 
 			}
 		};
