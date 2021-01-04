@@ -79,19 +79,22 @@ class App extends React.Component {
 			}
 		};
 
-		// add keyboard navigation using left/right keys
-		document.addEventListener('keyup', (e) => {
+		// add keyboard navigation using left/right keys if window available
+		if (typeof window !== `undefined`) {
 
-			// left arror if pagesize larger than 0
-			if(e.code === 'ArrowLeft' && this.state.page > 0) {
-				this.handleChangePage(this.state.page - 1)
-			}
+			document.addEventListener('keyup', (e) => {
 
-			// right arrow if page smaller than total page count
-			if(e.code === 'ArrowRight' && this.state.totalpagecount > this.state.page + 1) {
-				this.handleChangePage(this.state.page + 1)
-			}
-		})
+				// left arror if pagesize larger than 0
+				if(e.code === 'ArrowLeft' && this.state.page > 0) {
+					this.handleChangePage(this.state.page - 1)
+				}
+
+				// right arrow if page smaller than total page count
+				if(e.code === 'ArrowRight' && this.state.totalpagecount > this.state.page + 1) {
+					this.handleChangePage(this.state.page + 1)
+				}
+			})
+		};
 	}
 
 	// get specific blog category pages from appsync
