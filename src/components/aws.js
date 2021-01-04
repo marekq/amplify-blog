@@ -196,6 +196,9 @@ class App extends React.Component {
 				// set totalrow state
 				this.state.totalRow = data.QueryDdbItemCountPerBlog.items[0].articlecount;
 				
+				// set total page count value based on a page size of 25
+				this.state.totalpagecount = (this.state.totalRow / 25);
+
 			});
 		}	
 	}
@@ -256,13 +259,14 @@ class App extends React.Component {
 			loading1: false
 		})
 
+		// update page
 		this.forceUpdate();
 	}
 
 	// handle page change in table
 	handleChangePage = async (page) => {
 		
-		console.log('going from page ', this.state.page + ' to page ' + page + ' on path ' + this.state.path1);		
+		console.log('go from page ', this.state.page + ' --->' + page + ' on ' + this.state.path1);		
 		var token = this.state.token;
 
 		// if new page is higher
@@ -286,9 +290,6 @@ class App extends React.Component {
 
 	// render the page output
 	render() {
-
-		// set total page count value based on a page size of 25
-		this.state.totalpagecount = (this.state.totalRow / 25);
 
 		// set variables for table and table title
 		const columns = [];
