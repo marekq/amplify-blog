@@ -168,11 +168,6 @@ class App extends React.Component {
 
 		let result;
 
-		// reset values before retrieve to reduce page shifting
-		this.state.description = '';
-		this.state.author = '';
-		this.state.link = '';
-
 		await API.graphql(graphqlOperation(QueryDdbGetDetailText, 
 			{
 				'guid': guid
@@ -279,7 +274,7 @@ class App extends React.Component {
 	// handle page change in table
 	handleChangePage = async (page) => {
 		
-		console.log('go from page ', this.state.page + ' --->' + page + ' on ' + this.state.path1);		
+		console.log('go from page ', this.state.page + ' ---> ' + page + ' on ' + this.state.path1);		
 		var token = this.state.token;
 
 		// if new page is higher
@@ -380,33 +375,34 @@ class App extends React.Component {
 						OverlayLoading: () => <div />,
 						Toolbar: (props) => (
 							<table>
-								<tr>
-									<td style = {{ verticalAlign: 'middle', maxHeight: "20px", maxWidth: "300px", fontSize: "14", padding: "10px" }} >
-										<h2>{this.state.tabletitle}</h2>
-									</td>
-									<TablePagination
-										component = "td"
-										rowsPerPageOptions = {[25]}
-										rowsPerPage = {this.state.rowsPerPage}
-										count = {this.state.totalRow}
-										page = {this.state.page}
-										onChangePage = {(e, page) => {this.handleChangePage(page)}}
-									/>
-								</tr>
+								<tbody>
+									<tr>
+										<td style = {{ verticalAlign: 'middle', maxHeight: "20px", maxWidth: "300px", fontSize: "14", padding: "10px" }} >
+											<h2>{this.state.tabletitle}</h2>
+										</td>
+										<TablePagination
+											component = "td"
+											rowsPerPageOptions = {[25]}
+											rowsPerPage = {this.state.rowsPerPage}
+											count = {this.state.totalRow}
+											page = {this.state.page}
+											onChangePage = {(e, page) => {this.handleChangePage(page)}}
+										/>
+									</tr>
+								</tbody>
+
 							</table>
 						),
 						Pagination: (props) => (
-							<center>
-								<TablePagination
-									component = "td"
-									labelRowsPerPage = ""
-									rowsPerPageOptions = {[25]}
-									rowsPerPage = {this.state.rowsPerPage}
-									count = {this.state.totalRow}
-									page = {this.state.page}
-									onChangePage = {(e, page) => {this.handleChangePage(page)}}
-								/>
-							</center>
+							<TablePagination
+								component = "td"
+								labelRowsPerPage = ""
+								rowsPerPageOptions = {[25]}
+								rowsPerPage = {this.state.rowsPerPage}
+								count = {this.state.totalRow}
+								page = {this.state.page}
+								onChangePage = {(e, page) => {this.handleChangePage(page)}}
+							/>
 						)
 					}}
 					isLoading = {this.state.loading1}
