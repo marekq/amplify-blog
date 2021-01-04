@@ -70,6 +70,7 @@ class App extends React.Component {
 			page: 0,
 			rowsPerPage: 25,
 			totalpagecount: 0,
+			tabletitle: '',
 			tableRef: React.createRef(),
 			tokens: {
 				pages: {
@@ -164,19 +165,25 @@ class App extends React.Component {
 
 		let result;
 
+		// reset values before retrieve to reduce page shifting
+		this.state.description = '';
+		this.state.author = '';
+		this.state.link = '';
+
 		await API.graphql(graphqlOperation(QueryDdbGetDetailText, 
 			{
 				'guid': guid
 			}
 
 		)).then(({ data }) => {
+
+			// get result
 			result = data.QueryDdbGetDetailText;
 
 			// store response values in state
 			this.state.description = result.items[0].description;
 			this.state.author = result.items[0].author;
 			this.state.link = result.items[0].link;
-			this.state.guid = guid;
 
 		});
 	}
@@ -253,6 +260,9 @@ class App extends React.Component {
 
 		});
 
+		// set page table title
+		this.state.tabletitle = this.state.path1.toUpperCase() + ' (' + (this.state.page + 1 ) + '/' +  Math.floor(this.state.totalpagecount + 1 ) + ')'
+
 		// set data and loading state
 		this.setState({
 			data: data,
@@ -294,7 +304,6 @@ class App extends React.Component {
 		// set variables for table and table title
 		const columns = [];
 		const returnlink = [];
-		const materialtitle = this.state.path1 + ' blogs (showing page ' + (this.state.page + 1 ) + '/' +  Math.floor(this.state.totalpagecount + 1 ) + ')'
 
 		// add hidden timest column for article sorting 
 		columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
@@ -348,7 +357,6 @@ class App extends React.Component {
 				</Container>
 
 				<MaterialTable
-					title = {materialtitle}
 					style = {{position: "sticky", padding: "0%" }}
 					options = {{
 						search: false,
@@ -367,16 +375,35 @@ class App extends React.Component {
 					}}
 					components = {{
 						OverlayLoading: () => <div />,
+						Toolbar: (props) => (
+							<table>
+								<tr>
+									<td style = {{ verticalAlign: 'middle', maxHeight: "20px", maxWidth: "300px", fontSize: "14", padding: "10px" }} >
+										<h2>{this.state.tabletitle}</h2>
+									</td>
+									<TablePagination
+										component = "td"
+										rowsPerPageOptions = {[25]}
+										rowsPerPage = {this.state.rowsPerPage}
+										count = {this.state.totalRow}
+										page = {this.state.page}
+										onChangePage = {(e, page) => {this.handleChangePage(page)}}
+									/>
+								</tr>
+							</table>
+						),
 						Pagination: (props) => (
-						  <TablePagination
-							component = "td"
-							labelRowsPerPage = ""
-							rowsPerPageOptions = {[25]}
-							rowsPerPage = {this.state.rowsPerPage}
-							count = {this.state.totalRow}
-							page = {this.state.page}
-							onChangePage = {(e, page) => {this.handleChangePage(page)}}
-						  />
+							<center>
+								<TablePagination
+									component = "td"
+									labelRowsPerPage = ""
+									rowsPerPageOptions = {[25]}
+									rowsPerPage = {this.state.rowsPerPage}
+									count = {this.state.totalRow}
+									page = {this.state.page}
+									onChangePage = {(e, page) => {this.handleChangePage(page)}}
+								/>
+							</center>
 						)
 					}}
 					isLoading = {this.state.loading1}
