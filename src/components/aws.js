@@ -35,8 +35,8 @@ const tableIcons = {
 	ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 
-// set timestamp for 90 days ago
-var timest = Math.floor(Date.now() / 1000) - (86400 * 90);
+// set timestamp for 365 days ago
+var timest = Math.floor(Date.now() / 1000) - (86400 * 365);
 
 // main react class
 class App extends React.Component {
@@ -57,10 +57,11 @@ class App extends React.Component {
 			mql1 = window.matchMedia(`(min-width: 800px)`);
 		} 
 
-		// set the state of url, path and current open article in detailpanel
+		// set the state of url, path and current open article props for detailpanel
 		this.state = { 
 			path1: String(bloguri), 
 			mql1: mql1, 
+			tabledense: '',
 			loading1: true, 
 			description: '', 
 			guid: '', 
@@ -68,9 +69,11 @@ class App extends React.Component {
 			link: '',
 			totalRow: 0,
 			page: 0,
+			pending: true,
 			rowsPerPage: 25,
 			totalpagecount: 0,
 			tabletitle: '',
+			selectedRow: [],
 			tableRef: React.createRef(),
 			tokens: {
 				pages: {
@@ -78,6 +81,18 @@ class App extends React.Component {
 				}
 			}
 		};
+
+		// set material table density depending on screen width
+		if (mql1.matches) {
+
+			// set to default mode if in fullscreen browser
+			this.state.tabledense = "default";
+
+		} else {
+
+			// set to dense mode if mobile
+			this.state.tabledense = "dense";
+		}
 
 		// add keyboard navigation using left/right keys if window available
 		if (typeof window !== `undefined`) {
@@ -127,7 +142,6 @@ class App extends React.Component {
 			this.setState({ tokens : newToken });
 
 		});
-
 	}
 
 	// get all blog articles from appsync
@@ -159,8 +173,6 @@ class App extends React.Component {
 			this.setState({ tokens : newToken });
 
 		});
-
-
 	}
 
 	// load blog post article details
@@ -168,6 +180,12 @@ class App extends React.Component {
 
 		let result;
 
+		// set values to blank during appsync load
+		this.state.description = '';
+		this.state.author = '';
+		this.state.link = '';
+
+		// get blogpost details per guid
 		await API.graphql(graphqlOperation(QueryDdbGetDetailText, 
 			{
 				'guid': guid
@@ -183,6 +201,15 @@ class App extends React.Component {
 			this.state.author = result.items[0].author;
 			this.state.link = result.items[0].link;
 
+			// force update only once 
+			if (this.state.guid !== guid) {
+
+				// set guid to current one
+				this.state.guid = guid;
+
+				// update page
+				this.forceUpdate();
+			}
 		});
 	}
 
@@ -191,6 +218,7 @@ class App extends React.Component {
 
 		if (this.state.totalRow === 0) {
 
+			// get blog posts based on blog source
 			await API.graphql(graphqlOperation(QueryDdbItemCountPerBlog,
 				{
 					'blogsource': blogsource
@@ -238,7 +266,7 @@ class App extends React.Component {
 		var now = new Date().getTime();
 
 		// convert the unix timestamp of every blog to a timediff string
-		data.map(function(blog, index){
+		data.map(function(blog){
 							
 			// get the time difference in seconds
 			var timestamp = now - (blog.timest * 1000);
@@ -254,7 +282,8 @@ class App extends React.Component {
 			blog.sourcetitle = <div key = {blog.link}><b key = {blog.link}>{blog.bloglink}<br /></b>{btitle}</div>;
 			blog.key = blog.blogsource.toString() + blog.timest.toString()
 
-			return ''
+			// return null
+			return null
 
 		});
 
@@ -295,7 +324,6 @@ class App extends React.Component {
 
 	};
 
-
 	// render the page output
 	render() {
 
@@ -331,7 +359,7 @@ class App extends React.Component {
 
 		} else {
 			returnlink.push(<br key = "br" />)
-		}
+		};
 
 		// async get the blog detailed content
 		var getblog = async (guid) => {
@@ -341,12 +369,19 @@ class App extends React.Component {
 
 				// get the blog article details
 				await this.loadBlogArticle(guid);
-
-				// update page
-				this.forceUpdate();
-
 			}
 		};
+
+		const PageComponent = 
+			<TablePagination
+				component = "td"
+				labelRowsPerPage = ""
+				rowsPerPageOptions = {[25]}
+				rowsPerPage = {this.state.rowsPerPage}
+				count = {this.state.totalRow}
+				page = {this.state.page}
+				onChangePage = {(e, page) => {this.handleChangePage(page)}}
+			/>
 
 		return (
 			<center> 
@@ -355,54 +390,55 @@ class App extends React.Component {
 				</Container>
 
 				<MaterialTable
-					style = {{position: "sticky", padding: "0%" }}
+					style = {{ position: "sticky", padding: "0%" }}
 					options = {{
 						search: false,
+						grouping: false,
 						showFirstLastPageButtons: false,
 						emptyRowsWhenPaging: false,
 						pageSize: 25,
 						pageSizeOptions: [25],
 						detailPanelType: "single",
-						loadingType: "linear",
+						loadingType: "overlay",
 						showEmptyDataSourceMessage: false,
-						padding: "default",
+						padding: this.state.tabledense,
 						draggable: false,
-						sorting: true,
+						sorting: false,
 						editable: false,
-						doubleHorizontalScroll: true
+						doubleHorizontalScroll: true,
+						rowStyle: rowData => ({backgroundColor: (this.state.selectedRow === rowData.guid) ? '#EEE' : '#FFF'})
 					}}
+
+					// change backgroun on row click or detailpanel expand
+					onRowClick = {((evt, selectedRow) => { 
+						
+						this.state.selectedRow = selectedRow.guid; 
+						this.forceUpdate();
+					})}
+
+					// override components for overlay and top toolbars and pagination
 					components = {{
 						OverlayLoading: () => <div />,
 						Toolbar: (props) => (
 							<table>
 								<tbody>
 									<tr>
-										<td style = {{ verticalAlign: 'middle', maxHeight: "20px", maxWidth: "300px", fontSize: "14", padding: "10px" }} >
+										<td style = {{ 
+											verticalAlign: 'middle', 
+											maxHeight: "20px", 
+											maxWidth: "300px", 
+											fontSize: "14", 
+											padding: "10px" 
+										}} >
 											<h2>{this.state.tabletitle}</h2>
 										</td>
-										<TablePagination
-											component = "td"
-											rowsPerPageOptions = {[25]}
-											rowsPerPage = {this.state.rowsPerPage}
-											count = {this.state.totalRow}
-											page = {this.state.page}
-											onChangePage = {(e, page) => {this.handleChangePage(page)}}
-										/>
+										{PageComponent}
 									</tr>
 								</tbody>
-
 							</table>
 						),
 						Pagination: (props) => (
-							<TablePagination
-								component = "td"
-								labelRowsPerPage = ""
-								rowsPerPageOptions = {[25]}
-								rowsPerPage = {this.state.rowsPerPage}
-								count = {this.state.totalRow}
-								page = {this.state.page}
-								onChangePage = {(e, page) => {this.handleChangePage(page)}}
-							/>
+							PageComponent
 						)
 					}}
 					isLoading = {this.state.loading1}
@@ -411,11 +447,11 @@ class App extends React.Component {
 					columns = {columns}
 					detailPanel = {[
 						{
-							tooltip: 'Show blogpost details',
+							tooltip: 'Show blog details',
 							icon: KeyboardArrowRight,
 							openIcon: KeyboardArrowDown,
 							render: data => {
-								
+
 								// get blog details from appsync
 								getblog(data.guid);
 
