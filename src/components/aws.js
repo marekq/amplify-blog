@@ -1,8 +1,8 @@
 import React, { forwardRef } from 'react'
 import prettyMilliseconds from 'pretty-ms';
 import MaterialTable from 'material-table';
-import { Container } from 'react-bulma-components';
-import { Link } from 'gatsby';
+import Container from 'react-bulma-components/lib/components/container/container';
+import Link from "gatsby-link";
 import Amplify, { API, graphqlOperation } from 'aws-amplify';
 import AppSyncConfig from "../AppSyncConfig.js";
 import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest, QueryDdbGetDetailText, QueryDdbItemCountPerBlog, QueryDdbItemCountAll } from './graphql/queries';
@@ -230,7 +230,7 @@ class App extends React.Component {
 				this.state.totalRow = data.QueryDdbItemCountPerBlog.items[0].articlecount;
 				
 				// set total page count value based on a page size of 25
-				this.state.totalpagecount = (this.state.totalRow / 25);
+				this.state.totalpagecount = Math.floor(this.state.totalRow / 25);
 
 			});
 		}	
@@ -288,7 +288,7 @@ class App extends React.Component {
 		});
 
 		// set page table title
-		this.state.tabletitle = this.state.path1.toUpperCase() + ' (' + (this.state.page + 1 ) + '/' +  Math.floor(this.state.totalpagecount + 1 ) + ')'
+		this.state.tabletitle = this.state.path1.toUpperCase() + ' (' + (this.state.page + 1 ) + '/' +  this.state.totalpagecount + ')'
 
 		// set data and loading state
 		this.setState({
@@ -375,12 +375,12 @@ class App extends React.Component {
 		const PageComponent = 
 			<TablePagination
 				component = "td"
-				labelRowsPerPage = ""
 				rowsPerPageOptions = {[25]}
 				rowsPerPage = {this.state.rowsPerPage}
 				count = {this.state.totalRow}
 				page = {this.state.page}
 				onChangePage = {(e, page) => {this.handleChangePage(page)}}
+        		labelDisplayedRows = {({ from, to }) => `${this.state.path1} blogs (${from}-${to})${this.state.totalpagecount < 1 ? '' : ` - page (${this.state.page + 1}/${this.state.totalpagecount + 1})`}`}
 			/>
 
 		return (
@@ -412,7 +412,7 @@ class App extends React.Component {
 					// change backgroun on row click or detailpanel expand
 					onRowClick = {((evt, selectedRow) => { 
 						
-						this.state.selectedRow = selectedRow.guid; 
+						this.setState({selectedRow: selectedRow.guid});
 						this.forceUpdate();
 					})}
 
@@ -423,15 +423,6 @@ class App extends React.Component {
 							<table>
 								<tbody>
 									<tr>
-										<td style = {{ 
-											verticalAlign: 'middle', 
-											maxHeight: "20px", 
-											maxWidth: "300px", 
-											fontSize: "14", 
-											padding: "10px" 
-										}} >
-											<h2>{this.state.tabletitle}</h2>
-										</td>
 										{PageComponent}
 									</tr>
 								</tbody>
@@ -457,7 +448,7 @@ class App extends React.Component {
 
 								return (
 									<div id = "container" key = "container" style = {{
-										fontSize: 16,
+										fontSize: 15,
 										margin: 20,
 										color: 'black'
 									}}>
