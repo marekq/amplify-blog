@@ -382,7 +382,7 @@ class App extends React.Component {
 				count = {this.state.totalRow}
 				page = {this.state.page}
 				onChangePage = {(e, page) => {this.handleChangePage(page)}}
-        		labelDisplayedRows = {({ from, to }) => `${this.state.path1} blogs (${from}-${to})${this.state.totalpagecount < 1 ? '' : ` - page (${this.state.page + 1}/${this.state.totalpagecount + 1})`}`}
+        		labelDisplayedRows = {({ from, to, count }) => `${this.state.path1} blogs - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
 			/>
 
 		return (
