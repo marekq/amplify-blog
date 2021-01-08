@@ -73,7 +73,7 @@ class App extends React.Component {
 			rowsPerPage: 25,
 			totalpagecount: 0,
 			tabletitle: '',
-			selectedRow: [],
+			selectedRow: -1,
 			tableRef: React.createRef(),
 			tokens: {
 				pages: {
@@ -99,15 +99,15 @@ class App extends React.Component {
 
 			document.addEventListener('keyup', (e) => {
 
-				// left arror if pagesize larger than 0
+				// on left arrow press, go to next page
 				if(e.code === 'ArrowLeft' && this.state.page > 0) {
 					this.handleChangePage(this.state.page - 1)
-				}
+				};
 
-				// right arrow if page smaller than total page count
+				// on right arrow press, go to previous page
 				if(e.code === 'ArrowRight' && this.state.totalpagecount > this.state.page + 1) {
 					this.handleChangePage(this.state.page + 1)
-				}
+				};
 			})
 		};
 	}
@@ -366,9 +366,10 @@ class App extends React.Component {
 
 			// if guid is not locally set
 			if (guid !== this.state.guid) {
-
+				
 				// get the blog article details
 				await this.loadBlogArticle(guid);
+				
 			}
 		};
 
@@ -391,7 +392,9 @@ class App extends React.Component {
 
 				<MaterialTable
 					style = {{ position: "sticky", padding: "0%" }}
+					tableRef = { this.state.tableRef }
 					options = {{
+						defaultExpanded: true,
 						search: false,
 						grouping: false,
 						showFirstLastPageButtons: false,
@@ -406,14 +409,16 @@ class App extends React.Component {
 						sorting: false,
 						editable: false,
 						doubleHorizontalScroll: true,
-						rowStyle: rowData => ({backgroundColor: (this.state.selectedRow === rowData.guid) ? '#EEE' : '#FFF'})
+						rowStyle: rowData => ({backgroundColor: (this.state.selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'})
 					}}
 
-					// change backgroun on row click or detailpanel expand
-					onRowClick = {((evt, selectedRow) => { 
-						
-						this.setState({selectedRow: selectedRow.guid});
+					// change background on row click or detailpanel expand
+					onRowClick = {((evt, selectedRow, togglePanel) => { 
+
+						// toggle the panel 
+						togglePanel();
 						this.forceUpdate();
+
 					})}
 
 					// override components for overlay and top toolbars and pagination
@@ -442,6 +447,9 @@ class App extends React.Component {
 							icon: KeyboardArrowRight,
 							openIcon: KeyboardArrowDown,
 							render: data => {
+
+								// set selected row to current
+								this.state.selectedRow = data.tableData.id;
 
 								// get blog details from appsync
 								getblog(data.guid);
