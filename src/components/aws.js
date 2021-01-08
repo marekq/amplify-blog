@@ -316,7 +316,8 @@ class App extends React.Component {
 
 		}
 
-		// set page number
+		// set page number, reset selected row to -1
+		this.state.selectedRow = -1;
 		this.state.page = page;
 
 		// get blog data
@@ -394,7 +395,6 @@ class App extends React.Component {
 					style = {{ position: "sticky", padding: "0%" }}
 					tableRef = { this.state.tableRef }
 					options = {{
-						defaultExpanded: true,
 						search: false,
 						grouping: false,
 						showFirstLastPageButtons: false,
@@ -415,9 +415,9 @@ class App extends React.Component {
 					// change background on row click or detailpanel expand
 					onRowClick = {((evt, selectedRow, togglePanel) => { 
 
-						// toggle the panel 
+						// set selected row and toggle detail panel 
+						this.setState({ selectedRow: selectedRow.tableData.id });
 						togglePanel();
-						this.forceUpdate();
 
 					})}
 
@@ -447,9 +447,6 @@ class App extends React.Component {
 							icon: KeyboardArrowRight,
 							openIcon: KeyboardArrowDown,
 							render: data => {
-
-								// set selected row to current
-								this.state.selectedRow = data.tableData.id;
 
 								// get blog details from appsync
 								getblog(data.guid);
