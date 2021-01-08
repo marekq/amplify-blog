@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react'
 import prettyMilliseconds from 'pretty-ms';
 import MaterialTable from 'material-table';
-import Container from 'react-bulma-components/lib/components/container/container';
 import Link from "gatsby-link";
 import Amplify, { API, graphqlOperation } from 'aws-amplify';
 import AppSyncConfig from "../AppSyncConfig.js";
@@ -19,6 +18,7 @@ import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import ViewColumn from "@material-ui/icons/ListAltRounded";
 import Button from '@material-ui/core/Button';
 import TablePagination from "@material-ui/core/TablePagination";
+import styles from "../components/css/table.css";
 
 // configure appsync with config stored in 'AppSyncConfig.js'
 Amplify.configure(AppSyncConfig);
@@ -67,6 +67,7 @@ class App extends React.Component {
 			guid: '', 
 			author: '', 
 			link: '',
+			detailrender: '',
 			totalRow: 0,
 			page: 0,
 			pending: true,
@@ -108,6 +109,7 @@ class App extends React.Component {
 				if(e.code === 'ArrowRight' && this.state.totalpagecount > this.state.page + 1) {
 					this.handleChangePage(this.state.page + 1)
 				};
+
 			})
 		};
 	}
@@ -200,6 +202,14 @@ class App extends React.Component {
 			this.state.description = result.items[0].description;
 			this.state.author = result.items[0].author;
 			this.state.link = result.items[0].link;
+
+			if (this.state.mql1.matches) {
+				this.state.detailrender = result.items[0].rawhtml;
+
+			} else {
+				this.state.detailrender = result.items[0].description;
+
+			}
 
 			// force update only once 
 			if (this.state.guid !== guid) {
@@ -387,9 +397,9 @@ class App extends React.Component {
 
 		return (
 			<center> 
-				<Container>
+				<div>
 					{returnlink}
-				</Container>
+				</div>
 
 				<MaterialTable
 					style = {{ position: "sticky", padding: "0%" }}
@@ -452,17 +462,18 @@ class App extends React.Component {
 								getblog(data.guid);
 
 								return (
-									<div id = "container" key = "container" style = {{
-										fontSize: 15,
-										margin: 20,
-										color: 'black'
-									}}>
+									<div style = { styles.detailpanel_style }>
 										<center>
-											<i>Posted {data.datestr} ago by {this.state.author} in {data.bloglink}</i>
+											<br />
+												<i>Posted {data.datestr} ago by {this.state.author} in {data.bloglink}</i>
+											<br />
+												<div 
+													dangerouslySetInnerHTML = {{ __html: this.state.detailrender }}
+													style = {{margin: '1em', fontSize: '16px'}}
+												/>
+											<br />
+												<a href = {this.state.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
 											<br /><br />
-												{this.state.description}
-											<br /><br />
-											<a href = {this.state.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
 										</center>
 									</div>
 								)

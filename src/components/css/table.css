@@ -1,0 +1,35 @@
+.blog-post-content {
+    font-size: 16px;
+    padding-left: 1em;
+    padding-right: 1em;
+    text-align: left;
+    display: table-cell;
+    box-sizing: border-box;
+    max-width: auto;
+}
+
+.blog-post-content p {
+    margin-block-end: 1em;
+}
+
+.blog-post-content h1, .blog-post-content h2, .blog-post-content h3 {
+    font-weight: bold;
+}
+
+.blog-post-content img {
+    max-height: 50%;
+    max-width: 90%;
+    align-content: center;
+}
+
+.blog-post-content table {
+    margin: 1em auto 1em;
+}
+
+.blog-post-content li {
+    padding-left: 15px;
+}
+
+.blog-post-content div {
+    margin: 100px;
+}
