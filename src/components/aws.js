@@ -73,6 +73,7 @@ class App extends React.Component {
 			pending: true,
 			rowsPerPage: 25,
 			totalpagecount: 0,
+			detailrendermode: 'compact',
 			tabletitle: '',
 			selectedRow: -1,
 			tableRef: React.createRef(),
@@ -335,6 +336,27 @@ class App extends React.Component {
 
 	};
 
+	// handle toolbar button click to switch between full and compact mode for detailpanel
+	handleClick = (e) => {
+
+		// get newmode
+		var newmode = e;
+
+		// if submitted mode is different from stored mode
+		if (this.state.detailrendermode !== newmode) {
+
+			// set state to full or compact mode
+			this.setState({ 
+				detailrendermode: newmode 
+			});
+
+			console.log('update rendermode state to ', newmode);
+
+			//update page
+			this.forceUpdate();
+		}
+	}
+
 	// render the page output
 	render() {
 
@@ -384,6 +406,7 @@ class App extends React.Component {
 			}
 		};
 
+		// create pagination component shown on top and bottom of page
 		const PageComponent = 
 			<TablePagination
 				component = "td"
@@ -394,6 +417,13 @@ class App extends React.Component {
 				onChangePage = {(e, page) => {this.handleChangePage(page)}}
         		labelDisplayedRows = {({ from, to, count }) => `${this.state.path1} blogs - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
 			/>
+
+		// create menu to select full or compact view
+		const toolbarMenu = 
+			<td>
+				<Button onClick={() => this.handleClick('full')}>Full View</Button>
+				<Button onClick={() => this.handleClick('compact')}>Compact View</Button>
+			</td>
 
 		return (
 			<center> 
@@ -438,6 +468,7 @@ class App extends React.Component {
 							<table>
 								<tbody>
 									<tr>
+										{toolbarMenu}
 										{PageComponent}
 									</tr>
 								</tbody>
@@ -465,7 +496,7 @@ class App extends React.Component {
 									<div style = { styles.detailpanel_style }>
 										<center>
 											<br />
-												<i>Posted {data.datestr} ago by {this.state.author} in {data.bloglink}</i>
+												<i>Posted by {this.state.author} in {data.bloglink}</i>
 											<br />
 												<div 
 													dangerouslySetInnerHTML = {{ __html: this.state.detailrender }}
