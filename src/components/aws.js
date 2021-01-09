@@ -204,7 +204,7 @@ class App extends React.Component {
 			this.state.author = result.items[0].author;
 			this.state.link = result.items[0].link;
 
-			if (this.state.mql1.matches) {
+			if (this.state.detailrendermode == 'full') {
 				this.state.detailrender = result.items[0].rawhtml;
 
 			} else {
@@ -212,7 +212,7 @@ class App extends React.Component {
 
 			}
 
-			// force update only once 
+			// update page only once 
 			if (this.state.guid !== guid) {
 
 				// set guid to current one
@@ -420,7 +420,7 @@ class App extends React.Component {
 
 		// create menu to select full or compact view
 		const toolbarMenu = 
-			<td>
+			<td style = {{verticalAlign: 'center'}}>
 				<Button onClick={() => this.handleClick('full')}>Full View</Button>
 				<Button onClick={() => this.handleClick('compact')}>Compact View</Button>
 			</td>
