@@ -183,46 +183,49 @@ class App extends React.Component {
 
 		let result;
 
-		// set values to blank during appsync load
-		this.state.description = '';
-		this.state.author = '';
-		this.state.link = '';
-
 		// get blogpost details per guid
-		await API.graphql(graphqlOperation(QueryDdbGetDetailText, 
-			{
-				'guid': guid
-			}
+		if (guid !== 'empty') {
 
-		)).then(({ data }) => {
+			// set values to blank during appsync load
+			this.state.description = '';
+			this.state.author = '';
+			this.state.link = '';
 
-			// get result
-			result = data.QueryDdbGetDetailText;
+			await API.graphql(graphqlOperation(QueryDdbGetDetailText, 
+				{
+					'guid': guid
+				}
 
-			// store response values in state
-			this.state.description = result.items[0].description;
-			this.state.author = result.items[0].author;
-			this.state.link = result.items[0].link;
+			)).then(({ data }) => {
 
-			// store brief summary or full gtml depending on detail render mode
-			if (this.state.detailrendermode === 'full') {
-				this.state.detailrender = result.items[0].rawhtml;
+				// get result
+				result = data.QueryDdbGetDetailText;
 
-			} else {
-				this.state.detailrender = result.items[0].description;
+				// store response values in state
+				this.state.description = result.items[0].description;
+				this.state.author = result.items[0].author;
+				this.state.link = result.items[0].link;
 
-			}
+				// store brief summary or full gtml depending on detail render mode
+				if (this.state.detailrendermode === 'full') {
+					this.state.detailrender = result.items[0].rawhtml;
 
-			// update page only once 
-			if (this.state.guid !== guid) {
+				} else {
+					this.state.detailrender = result.items[0].description;
 
-				// set guid to current one
-				this.state.guid = guid;
+				}
 
-				// update page
-				this.forceUpdate();
-			}
-		});
+				// update page only once 
+				if (this.state.guid !== guid) {
+
+					// set guid to current one
+					this.state.guid = guid;
+
+					// update page
+					this.forceUpdate();
+				}
+			});
+		};
 	}
 
 	// get item count per blog category
@@ -307,10 +310,7 @@ class App extends React.Component {
 		this.setState({
 			data: data,
 			loading1: false
-		})
-
-		// update page
-		this.forceUpdate();
+		});
 	}
 
 	// handle page change in table
@@ -333,8 +333,9 @@ class App extends React.Component {
 		this.state.selectedRow = -1;
 		this.state.page = page;
 
-		// get blog data
+		// get blog data and update page
 		await this.getBlogsData(token);
+		this.forceUpdate();
 
 	};
 
@@ -419,9 +420,10 @@ class App extends React.Component {
 
 		// create menu to select full or compact view
 		const toolbarMenu = 
-			<td>
-				<Button onClick = {async () => await this.handleClick('full')} style = {{backgroundColor: (this.state.detailrendermode === 'full') ? '#EEE' : '#FFF'}}>Full</Button>
-				<Button onClick = {async () => await this.handleClick('compact')} style = {{backgroundColor: (this.state.detailrendermode === 'compact') ? '#EEE' : '#FFF'}}>Compact</Button>
+			<td style = {{ verticalAlign: 'middle', textAlign: 'left', fontSize: '14px', height: '20px' }}>
+				VIEW MODE{' '}
+				<Button onClick = {async () => await this.handleClick('full')} style = {{color: (this.state.detailrendermode === 'full') ? 'black' : 'gray'}}>Full</Button>
+				<Button onClick = {async () => await this.handleClick('compact')} style = {{color: (this.state.detailrendermode === 'compact') ? 'black' : 'gray'}}>Compact</Button>
 
 			</td>
 
@@ -484,6 +486,7 @@ class App extends React.Component {
 					columns = {columns}
 					detailPanel = {[
 						{
+							disabled: true,
 							tooltip: 'Show blog details',
 							icon: KeyboardArrowRight,
 							openIcon: KeyboardArrowDown,
