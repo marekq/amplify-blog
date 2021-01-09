@@ -6,6 +6,7 @@
     display: table-cell;
     box-sizing: border-box;
     max-width: auto;
+    overflow: auto;
 }
 
 .blog-post-content p {

@@ -64,7 +64,7 @@ class App extends React.Component {
 			tabledense: '',
 			loading1: true, 
 			description: '', 
-			guid: '', 
+			guid: 'empty', 
 			author: '', 
 			link: '',
 			detailrender: '',
@@ -354,7 +354,7 @@ class App extends React.Component {
 
 			//update detail page data
 			await this.loadBlogArticle(this.state.guid);
-	
+			this.forceUpdate();
 		}
 	}
 
@@ -420,8 +420,8 @@ class App extends React.Component {
 		// create menu to select full or compact view
 		const toolbarMenu = 
 			<td>
-				<Button onClick = {async () => await this.handleClick('compact')} style = {{backgroundColor: (this.state.detailrendermode === 'compact') ? '#EEE' : '#FFF'}}>Full</Button>
-				<Button onClick = {async () => await this.handleClick('full')} style = {{backgroundColor: (this.state.detailrendermode === 'full') ? '#EEE' : '#FFF'}}>Compact</Button>
+				<Button onClick = {async () => await this.handleClick('full')} style = {{backgroundColor: (this.state.detailrendermode === 'full') ? '#EEE' : '#FFF'}}>Full</Button>
+				<Button onClick = {async () => await this.handleClick('compact')} style = {{backgroundColor: (this.state.detailrendermode === 'compact') ? '#EEE' : '#FFF'}}>Compact</Button>
 
 			</td>
 
@@ -468,7 +468,7 @@ class App extends React.Component {
 							<table>
 								<tbody>
 									<tr>
-										{toolbarMenu}
+										{this.state.mql1.matches && toolbarMenu}
 										{PageComponent}
 									</tr>
 								</tbody>
@@ -500,7 +500,7 @@ class App extends React.Component {
 											<br />
 												<div 
 													dangerouslySetInnerHTML = {{ __html: this.state.detailrender }}
-													style = {{margin: '1em', fontSize: '16px'}}
+													style = {{ margin: '1em', fontSize: '16px' }}
 												/>
 											<br />
 												<a href = {this.state.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>

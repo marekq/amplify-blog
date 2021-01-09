@@ -1,5 +1,5 @@
 import React from "react";
-import Router from "../pages/router";
+import Router from "./router";
 
 const Index = () => (
   <Router />
