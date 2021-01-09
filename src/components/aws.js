@@ -204,7 +204,8 @@ class App extends React.Component {
 			this.state.author = result.items[0].author;
 			this.state.link = result.items[0].link;
 
-			if (this.state.detailrendermode == 'full') {
+			// store brief summary or full gtml depending on detail render mode
+			if (this.state.detailrendermode === 'full') {
 				this.state.detailrender = result.items[0].rawhtml;
 
 			} else {
@@ -251,6 +252,7 @@ class App extends React.Component {
 	async componentDidMount(){
 
 		await this.getBlogsData();
+		this.forceUpdate();
 	}
 
 	// get blog content and item count
@@ -337,7 +339,7 @@ class App extends React.Component {
 	};
 
 	// handle toolbar button click to switch between full and compact mode for detailpanel
-	handleClick = (e) => {
+	handleClick = async (e) => {
 
 		// get newmode
 		var newmode = e;
@@ -350,10 +352,9 @@ class App extends React.Component {
 				detailrendermode: newmode 
 			});
 
-			console.log('update rendermode state to ', newmode);
-
-			//update page
-			this.forceUpdate();
+			//update detail page data
+			await this.loadBlogArticle(this.state.guid);
+	
 		}
 	}
 
@@ -390,8 +391,6 @@ class App extends React.Component {
 		if (this.state.path1 !== "all") {
 			returnlink.push(<Link key = "homelink" to = "/"><Button color="primary">view all blogs</Button><br /></Link>)
 
-		} else {
-			returnlink.push(<br key = "br" />)
 		};
 
 		// async get the blog detailed content
@@ -420,9 +419,10 @@ class App extends React.Component {
 
 		// create menu to select full or compact view
 		const toolbarMenu = 
-			<td style = {{verticalAlign: 'center'}}>
-				<Button onClick={() => this.handleClick('full')}>Full View</Button>
-				<Button onClick={() => this.handleClick('compact')}>Compact View</Button>
+			<td>
+				<Button onClick = {async () => await this.handleClick('compact')} style = {{backgroundColor: (this.state.detailrendermode === 'compact') ? '#EEE' : '#FFF'}}>Full</Button>
+				<Button onClick = {async () => await this.handleClick('full')} style = {{backgroundColor: (this.state.detailrendermode === 'full') ? '#EEE' : '#FFF'}}>Compact</Button>
+
 			</td>
 
 		return (
