@@ -483,7 +483,7 @@ class App extends React.Component {
 							</table>
 						),
 						Pagination: (props) => (
-							PageComponent
+							<div><Link to = "." onClick = {window.scrollTo(0, 0)}>back to top</Link></div>
 						)
 					}}
 					isLoading = {this.state.loading1}
