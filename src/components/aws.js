@@ -73,7 +73,7 @@ class App extends React.Component {
 			pending: true,
 			rowsPerPage: 25,
 			totalpagecount: 0,
-			detailrendermode: 'compact',
+			detailrendermode: '',
 			tabletitle: '',
 			selectedRow: -1,
 			tableRef: React.createRef(),
@@ -87,13 +87,19 @@ class App extends React.Component {
 		// set material table density depending on screen width
 		if (mql1.matches) {
 
-			// set to default mode if in fullscreen browser
+			// set to default mode and full text mode if in fullscreen browser
 			this.state.tabledense = "default";
 
 		} else {
 
-			// set to dense mode if mobile
+			// set to dense mode and compact description text if mobile
 			this.state.tabledense = "dense";
+
+		};
+
+		// set mode to "compact" if no mode was set
+		if (this.state.detailrendermode === '') {
+			this.state.detailrendermode = "compact";
 		}
 
 		// add keyboard navigation using left/right keys if window available
@@ -111,7 +117,7 @@ class App extends React.Component {
 					this.handleChangePage(this.state.page + 1)
 				};
 
-			})
+			});
 		};
 	}
 
@@ -185,11 +191,6 @@ class App extends React.Component {
 
 		// get blogpost details per guid
 		if (guid !== 'empty') {
-
-			// set values to blank during appsync load
-			this.state.description = '';
-			this.state.author = '';
-			this.state.link = '';
 
 			await API.graphql(graphqlOperation(QueryDdbGetDetailText, 
 				{
@@ -355,8 +356,13 @@ class App extends React.Component {
 
 			//update detail page data
 			await this.loadBlogArticle(this.state.guid);
-			this.forceUpdate();
+
+			console.log(newmode);
 		}
+
+		// update page
+		this.forceUpdate();
+
 	}
 
 	// render the page output
@@ -420,12 +426,13 @@ class App extends React.Component {
 
 		// create menu to select full or compact view
 		const toolbarMenu = 
-			<td style = {{ verticalAlign: 'middle', textAlign: 'left', fontSize: '14px', height: '20px' }}>
-				VIEW MODE{' '}
-				<Button onClick = {async () => await this.handleClick('full')} style = {{color: (this.state.detailrendermode === 'full') ? 'black' : 'gray'}}>Full</Button>
-				<Button onClick = {async () => await this.handleClick('compact')} style = {{color: (this.state.detailrendermode === 'compact') ? 'black' : 'gray'}}>Compact</Button>
-
-			</td>
+			<i>
+				(
+				<Link to = "." onClick = {async () => await this.handleClick('full')} style = {{color: (this.state.detailrendermode === 'full') ? 'black' : 'gray'}}>full {' '}</Link>
+				
+				<Link to = "." onClick = {async () => await this.handleClick('compact')} style = {{color: (this.state.detailrendermode === 'compact') ? 'black' : 'gray'}}>compact {' '}</Link>
+				)
+			</i>
 
 		return (
 			<center> 
@@ -470,7 +477,6 @@ class App extends React.Component {
 							<table>
 								<tbody>
 									<tr>
-										{this.state.mql1.matches && toolbarMenu}
 										{PageComponent}
 									</tr>
 								</tbody>
@@ -487,7 +493,6 @@ class App extends React.Component {
 					detailPanel = {[
 						{
 							disabled: true,
-							tooltip: 'Show blog details',
 							icon: KeyboardArrowRight,
 							openIcon: KeyboardArrowDown,
 							render: data => {
@@ -499,8 +504,7 @@ class App extends React.Component {
 									<div style = { styles.detailpanel_style }>
 										<center>
 											<br />
-												<i>Posted by {this.state.author} in {data.bloglink}</i>
-											<br />
+												<i>Posted by {this.state.author} in {data.bloglink}</i>{' '}{this.state.mql1.matches && toolbarMenu}
 												<div 
 													dangerouslySetInnerHTML = {{ __html: this.state.detailrender }}
 													style = {{ margin: '1em', fontSize: '16px' }}
