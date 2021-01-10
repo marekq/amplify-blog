@@ -340,6 +340,14 @@ class App extends React.Component {
 
 	};
 
+	// handle scroll to top button click if not during build
+	handleTop = async (e) => {
+
+		if (typeof window !== `undefined`) {
+			window.scrollTo(0, 0);
+		}
+	};
+
 	// handle toolbar button click to switch between full and compact mode for detailpanel
 	handleClick = async (e) => {
 
@@ -363,7 +371,7 @@ class App extends React.Component {
 		// update page
 		this.forceUpdate();
 
-	}
+	};
 
 	// render the page output
 	render() {
@@ -483,7 +491,7 @@ class App extends React.Component {
 							</table>
 						),
 						Pagination: (props) => (
-							<td><Link to = "." onClick = {window.scrollTo(0, 0)}>back to top</Link></td>
+							<td><Link to = "." onClick = {this.handleTop}>back to top</Link></td>
 						)
 					}}
 					isLoading = {this.state.loading1}
