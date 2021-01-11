@@ -359,7 +359,7 @@ class App extends React.Component {
 
 			// set state to full or compact mode
 			this.setState({ 
-				detailrendermode: newmode 
+				detailrendermode: newmode
 			});
 
 			//update detail page data
@@ -432,16 +432,6 @@ class App extends React.Component {
         		labelDisplayedRows = {({ from, to, count }) => `${this.state.path1} blogs - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
 			/>
 
-		// create menu to select full or compact view
-		const toolbarMenu = 
-			<i>
-				(
-				<Link to = "." onClick = {async () => await this.handleClick('full')} style = {{color: (this.state.detailrendermode === 'full') ? 'black' : 'gray'}}>full {' '}</Link>
-				
-				<Link to = "." onClick = {async () => await this.handleClick('compact')} style = {{color: (this.state.detailrendermode === 'compact') ? 'black' : 'gray'}}>compact {' '}</Link>
-				)
-			</i>
-
 		return (
 			<center> 
 				<div>
@@ -508,16 +498,24 @@ class App extends React.Component {
 								// get blog details from appsync
 								getblog(data.guid);
 
+								// create menu to select full or compact view
+								const toolbarMenu = 
+								<i>
+									(
+									<Link to = "." onClick = {async () => await this.handleClick('full')} style = {{color: (this.state.detailrendermode === 'full') ? 'black' : 'gray'}}>full{' '}</Link>
+									<Link to = "." onClick = {async () => await this.handleClick('compact')} style = {{color: (this.state.detailrendermode === 'compact') ? 'black' : 'gray'}}>compact</Link>
+									)
+								</i>
+
 								return (
 									<div style = { styles.detailpanel_style }>
 										<center>
 											<br />
-												<i>Posted by {this.state.author} in {data.bloglink}</i>{' '}{this.state.mql1.matches && toolbarMenu}
+												<i>Posted by {this.state.author}</i>{' '}{this.state.mql1.matches && toolbarMenu}
 												<div 
 													dangerouslySetInnerHTML = {{ __html: this.state.detailrender }}
 													style = {{ margin: '1em', fontSize: '16px' }}
 												/>
-											<br />
 												<a href = {this.state.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
 											<br /><br />
 										</center>

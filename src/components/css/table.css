@@ -1,4 +1,4 @@
-.blog-post-content {
+.blog-post-content, .entry-content {
     font-size: 16px;
     padding-left: 1em;
     padding-right: 1em;
@@ -13,7 +13,7 @@
     margin-block-end: 1em;
 }
 
-.blog-post-content h1, .blog-post-content h2, .blog-post-content h3 {
+.entry-content h1, .blog-post-content h1, .blog-post-content h2, .blog-post-content h3, .blog-post-content h4 {
     font-weight: bold;
 }
 
@@ -27,6 +27,6 @@
     margin: 1em auto 1em;
 }
 
-.blog-post-content li {
+*.li, .blog-post-content li, .blog-post-content ol {
     padding-left: 15px;
 }

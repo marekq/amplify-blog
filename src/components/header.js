@@ -16,15 +16,15 @@ class Header extends Component {
 
     // add menu entry per blog
     for (const [index, value] of blogpaths.entries()) {
-      menubar.push(<Link key = {index} style = {{margin: "1em"}} to = {`/blog/${value}/`}>{value}<br /></Link>)
+      menubar.push(<Link key = {value} style = {{margin: "1em"}} to = {`/blog/${value.toString()}/`}>{value.toString()}</Link>)
     }
 
     return (
-      <Navbar expand = "navbar-expand-xl" sticky = "top" key = "navbar" style = {{backgroundColor: "#f4f4f4 "}}>
+      <Navbar expand = "navbar-expand-xl" sticky = "top" key = "navbar" style = {{backgroundColor: "#f4f4f4" }}>
         <title>{pageTitle}</title>
         <b><Link key = "home" to = "/">New Blogs</Link></b>
         <b><NavDropdown key = "aws" title = "All Blogs" id = "basic-nav-dropdown" to = "/blog/">
-          {menubar}
+            {menubar}
         </NavDropdown></b>
         <b><Link key = "about" to = "/about/">About</Link></b>
         <b><Link key = "marek" to = "/marek/">Marek</Link></b>
