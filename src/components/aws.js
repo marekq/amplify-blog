@@ -59,24 +59,26 @@ class App extends React.Component {
 
 		// set the state of url, path and current open article props for detailpanel
 		this.state = { 
-			path1: String(bloguri), 
-			mql1: mql1, 
-			tabledense: '',
-			loading1: true, 
-			description: '', 
-			guid: 'empty', 
 			author: '', 
+			description: '', 
+			detailrawdescription: '',
+			detailrawhtml: '',
+			detailrenderout: '',
+			detailrendermode: '',
+			guid: 'empty', 
 			link: '',
-			detailrender: '',
-			totalRow: 0,
+			loading1: true, 
+			mql1: mql1, 
 			page: 0,
+			path1: String(bloguri), 
 			pending: true,
 			rowsPerPage: 25,
-			totalpagecount: 0,
-			detailrendermode: '',
-			tabletitle: '',
 			selectedRow: -1,
 			tableRef: React.createRef(),
+			tabledense: '',
+			tabletitle: '',
+			totalRow: 0,
+			totalpagecount: 0,
 			tokens: {
 				pages: {
 					0: null
@@ -99,6 +101,7 @@ class App extends React.Component {
 
 		// set mode to "compact" if no mode was set
 		if (this.state.detailrendermode === '') {
+
 			this.state.detailrendermode = "compact";
 		}
 
@@ -207,14 +210,20 @@ class App extends React.Component {
 				this.state.author = result.items[0].author;
 				this.state.link = result.items[0].link;
 
-				// store brief summary or full gtml depending on detail render mode
+				// store brief summary or full html depending on detail render mode
 				if (this.state.detailrendermode === 'full') {
-					this.state.detailrender = result.items[0].rawhtml;
 
-				} else {
-					this.state.detailrender = result.items[0].description;
+					this.state.detailrenderout = result.items[0].rawhtml;
+
+				} else if (this.state.detailrendermode === 'compact') {
+
+					this.state.detailrenderout = result.items[0].description;
 
 				}
+
+				// store rawhtml and description for caching purposes
+				this.state.detailrawhtml = result.items[0].rawhtml;
+				this.state.detailrawdescription = result.items[0].description;
 
 				// update page only once 
 				if (this.state.guid !== guid) {
@@ -224,6 +233,7 @@ class App extends React.Component {
 
 					// update page
 					this.forceUpdate();
+
 				}
 			});
 		};
@@ -256,7 +266,7 @@ class App extends React.Component {
 	async componentDidMount(){
 
 		await this.getBlogsData();
-		this.forceUpdate();
+
 	}
 
 	// get blog content and item count
@@ -336,7 +346,6 @@ class App extends React.Component {
 
 		// get blog data and update page
 		await this.getBlogsData(token);
-		this.forceUpdate();
 
 	};
 
@@ -352,25 +361,41 @@ class App extends React.Component {
 	handleClick = async (e) => {
 
 		// get newmode
-		var newmode = e;
+		var newmode = e[0];
+		var guid = e[1];
+
+
+		// load article if new guid
+		if (guid !== this.state.guid) {
+			
+			console.log('guid', guid);
+
+			await this.loadBlogArticle(guid);
+
+		};
 
 		// if submitted mode is different from stored mode
 		if (this.state.detailrendermode !== newmode) {
+			
+			console.log('newmode', newmode);
 
-			// set state to full or compact mode
-			this.setState({ 
-				detailrendermode: newmode
-			});
+			if (newmode === 'full') {
+			
+				// set state to full mode
+				this.setState({ 
+					detailrendermode: newmode,
+					detailrenderout: this.state.detailrawhtml
+				});	
+			
+			} else if (newmode === 'compact') {
 
-			//update detail page data
-			await this.loadBlogArticle(this.state.guid);
-
-			console.log(newmode);
-		}
-
-		// update page
-		this.forceUpdate();
-
+				// set state to compact mode
+				this.setState({ 
+					detailrendermode: newmode,
+					detailrenderout: this.state.detailrawdescription
+				});	
+			}
+		};
 	};
 
 	// render the page output
@@ -409,14 +434,13 @@ class App extends React.Component {
 		};
 
 		// async get the blog detailed content
-		var getblog = async (guid) => {
+		var loadarticle = async (guid) => {
 
 			// if guid is not locally set
 			if (guid !== this.state.guid) {
 				
 				// get the blog article details
 				await this.loadBlogArticle(guid);
-				
 			}
 		};
 
@@ -496,16 +520,14 @@ class App extends React.Component {
 							render: data => {
 
 								// get blog details from appsync
-								getblog(data.guid);
+								loadarticle(data.guid);
 
 								// create menu to select full or compact view
 								const toolbarMenu = 
-								<i>
-									(
-									<Link to = "." onClick = {async () => await this.handleClick('full')} style = {{color: (this.state.detailrendermode === 'full') ? 'black' : 'gray'}}>full{' '}</Link>
-									<Link to = "." onClick = {async () => await this.handleClick('compact')} style = {{color: (this.state.detailrendermode === 'compact') ? 'black' : 'gray'}}>compact</Link>
-									)
-								</i>
+								<b>
+									<Button size = "small" variant = "text" onClick = {async () => await this.handleClick(['full', data.guid])} style = {{color: (this.state.detailrendermode === 'full') ? 'black' : 'gray'}}>full{' '}</Button>
+									<Button size = "small" variant = "text" onClick = {async () => await this.handleClick(['compact', data.guid])} style = {{color: (this.state.detailrendermode === 'compact') ? 'black' : 'gray'}}>compact</Button>
+								</b>
 
 								return (
 									<div style = { styles.detailpanel_style }>
@@ -513,7 +535,7 @@ class App extends React.Component {
 											<br />
 												<i>Posted by {this.state.author}</i>{' '}{this.state.mql1.matches && toolbarMenu}
 												<div 
-													dangerouslySetInnerHTML = {{ __html: this.state.detailrender }}
+													dangerouslySetInnerHTML = {{ __html: this.state.detailrenderout }}
 													style = {{ margin: '1em', fontSize: '16px' }}
 												/>
 												<a href = {this.state.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>

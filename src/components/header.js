@@ -16,7 +16,7 @@ class Header extends Component {
 
     // add menu entry per blog
     for (const [index, value] of blogpaths.entries()) {
-      menubar.push(<Link key = {value} style = {{margin: "1em"}} to = {`/blog/${value.toString()}/`}>{value.toString()}</Link>)
+      menubar.push(<Link key = {index} style = {{margin: "1em"}} to = {`/blog/${value.toString()}/`}>{value.toString()}</Link>)
     }
 
     return (
