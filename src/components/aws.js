@@ -416,16 +416,22 @@ class App extends React.Component {
 		var keyword = this.state.searchquery;
 		e.preventDefault();
 
-		await index.search(keyword).then(({ hits }) => {
-			console.log(keyword, hits);
+		console.log('len ' + keyword.length)
 
-			this.setState({
-				data: hits,
-				totalRow: hits.length,
-				totalpagecount: Math.floor(hits.length / 25),
-				toolbartitle: "search results : " + keyword
+		if (keyword.length !== 0) {
+
+			await index.search(keyword).then(({ hits }) => {
+				console.log(keyword, hits);
+
+				this.setState({
+					data: hits,
+					totalRow: hits.length,
+					totalpagecount: Math.floor(hits.length / 25),
+					page: 0,
+					toolbartitle: "search results : " + keyword
+				});
 			});
-		});
+		};
 
 		await this.prepareData();
 
@@ -437,6 +443,14 @@ class App extends React.Component {
 		var x = e.target.value;
 		this.state.searchquery = x;
 		console.log(this.state.searchquery);
+	}
+
+	searchFunction = (helper) => {
+		if (helper.state.query === '') {
+			return;
+		}
+	
+		helper.search();
 	}
 
 	// render the page output
@@ -487,17 +501,15 @@ class App extends React.Component {
 
 		// create pagination component shown on top and bottom of page
 		const PageComponent = 
-			<center>
-				<TablePagination
-					component = "div"
-					rowsPerPageOptions = {[25]}
-					rowsPerPage = {this.state.rowsPerPage}
-					count = {this.state.totalRow}
-					page = {this.state.page}
-					onChangePage = {(e, page) => {this.handleChangePage(page)}}
-					labelDisplayedRows = {({ from, to, count }) => `${this.state.toolbartitle} - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
-				/>	
-			</center>
+			<TablePagination
+				component = "div"
+				rowsPerPageOptions = {[25]}
+				rowsPerPage = {this.state.rowsPerPage}
+				count = {this.state.totalRow}
+				page = {this.state.page}
+				onChangePage = {(e, page) => {this.handleChangePage(page)}}
+				labelDisplayedRows = {({ from, to, count }) => `${this.state.toolbartitle} - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
+			/>	
 			
 		return (
 			<center> 
@@ -541,26 +553,31 @@ class App extends React.Component {
 						Toolbar: (props) => (
 							<InstantSearch
 								indexName = "rssaws"
-								searchClient = {searchClient}
+								searchClient = {this.searchFunction}
 						 	>
-								{PageComponent}
-								<SearchBox 
-									autoFocus
-									defaultRefinement = {this.state.searchquery}
-									searchAsYouType = {true}
-									onChange = {this.updateQuery}
-									onSubmit = {this.searchPage}
-								/>
+								 <div width = "40%">
+									{PageComponent}
+								</div>
+								<div width = "40%">
+
+									<SearchBox 
+										defaultRefinement = {this.state.searchquery}
+										searchClient = {this.searchFunction}
+										searchAsYouType = {true}
+										onChange = {this.updateQuery}
+										onSubmit = {this.searchPage}
+									/>
+								</div>
 						  </InstantSearch>
 						),
 						Pagination: (props) => (
-							<div align = "center" width = "100%">
+							<td align = "center" width = "100%">
 								{PageComponent}
 								<br />
 								<Link to = "." onClick = {this.handleTop}>back to top</Link>
 								<br />
 								<img src = {'/algolia.svg'} style = {{ 'height' : '20px' }} alt = "algolia search" />
-							</div>
+							</td>
 						)
 					}}
 					isLoading = {this.state.loading1}
