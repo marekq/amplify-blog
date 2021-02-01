@@ -20,6 +20,12 @@ import Button from '@material-ui/core/Button';
 import TablePagination from "@material-ui/core/TablePagination";
 import styles from "../components/css/table.css";
 
+import algoliasearch from 'algoliasearch/lite';
+import { InstantSearch, SearchBox } from 'react-instantsearch-dom';
+
+const searchClient = algoliasearch('FDHHMAIGTE', 'a2c38a80e37e8e01de7998cd7f7d98f4', { _useRequestCache: true });
+const index = searchClient.initIndex('rssaws');
+
 // configure appsync with config stored in 'AppSyncConfig.js'
 Amplify.configure(AppSyncConfig);
 
@@ -73,10 +79,12 @@ class App extends React.Component {
 			path1: String(bloguri), 
 			pending: true,
 			rowsPerPage: 25,
+			searchquery: '',
 			selectedRow: -1,
 			tableRef: React.createRef(),
 			tabledense: '',
 			tabletitle: '',
+			toolbartitle: 'all blogs',
 			totalRow: 0,
 			totalpagecount: 0,
 			tokens: {
@@ -266,11 +274,12 @@ class App extends React.Component {
 	async componentDidMount(){
 
 		await this.getBlogsData();
+		await this.prepareData();
 
 	}
 
 	// get blog content and item count
-	async getBlogsData(token) {
+	async getBlogsData() {
 
 		if (this.state.path1 === 'all') {
 
@@ -286,6 +295,11 @@ class App extends React.Component {
 
 		}
 
+		this.state.toolbartitle = this.state.path1 + " blogs";
+
+	};
+
+	async prepareData() {
 		// set data variable
 		var data = this.state.data;
 
@@ -314,15 +328,13 @@ class App extends React.Component {
 
 		});
 
-		// set page table title
-		this.state.tabletitle = this.state.path1.toUpperCase() + ' (' + (this.state.page + 1 ) + '/' +  this.state.totalpagecount + ')'
-
-		// set data and loading state
+		// set data, table title and loading state
 		this.setState({
 			data: data,
-			loading1: false
+			loading1: false,
+			tabletitle: this.state.path1.toUpperCase() + ' (' + (this.state.page + 1 ) + '/' +  this.state.totalpagecount + ')'
 		});
-	}
+	};
 
 	// handle page change in table
 	handleChangePage = async (page) => {
@@ -346,6 +358,7 @@ class App extends React.Component {
 
 		// get blog data and update page
 		await this.getBlogsData(token);
+		await this.prepareData();
 
 	};
 
@@ -398,6 +411,60 @@ class App extends React.Component {
 		};
 	};
 
+	// search page using Algolia
+	searchPage = async (e) => {
+
+		var keyword = this.state.searchquery;
+		e.preventDefault();
+
+		// if keyword received, search
+		if (keyword.length !== 0) {
+
+			await index.search(keyword, {
+				'attributesToRetrieve': [
+					'blogsource',
+					'guid',
+					'timest',
+					'title',
+					'timest'
+				],
+				'hitsPerPage': 100
+			}).then(({ hits }) => {
+				console.log(keyword, hits);
+
+				this.setState({
+					data: hits,
+					totalRow: hits.length,
+					totalpagecount: Math.floor(hits.length / 25),
+					page: 0,
+					toolbartitle: "search results : " + keyword
+				});
+			});
+		};
+
+		await this.prepareData();
+
+	}
+
+	// update the query in state when the user types
+	updateQuery = async (e) => {
+
+		e.preventDefault();
+		var x = e.target.value;
+		this.state.searchquery = x;
+		console.log(this.state.searchquery);
+	}
+
+
+	// search helper to prevent query to Algolia on initial page load
+	searchFunction = (helper) => {
+		if (helper.state.query === '') {
+			return;
+		}
+	
+		helper.search();
+	}
+
 	// render the page output
 	render() {
 
@@ -406,10 +473,10 @@ class App extends React.Component {
 		const returnlink = [];
 
 		// add hidden timest column for article sorting 
-		columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true, searchable: false });
+		columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true });
 
 		// add age column
-		columns.push({ title: 'Age', field: 'datestr', width: 0, searchable: true });
+		columns.push({ title: 'Age', field: 'datestr', width: 0 });
 
 		// get window status
 		const mql = this.state.mql1;
@@ -417,13 +484,13 @@ class App extends React.Component {
 		// if fullmode is true, add blog and title column
 		if (mql.matches) {
 
-			columns.push({ title: 'Blog', field: 'bloglink', width: 0, searchable: true });
-			columns.push({ title: 'Title', field: 'title', width: 1000, searchable: true });
+			columns.push({ title: 'Blog', field: 'bloglink', width: 0 });
+			columns.push({ title: 'Title', field: 'title', width: 1000 });
 
 		// if fullmode is false, add shortened title column and no blog source column
 		} else {
 
-			columns.push({ title: 'Title', field: 'sourcetitle', width: 1000, searchable: true });
+			columns.push({ title: 'Title', field: 'sourcetitle', width: 1000 });
 
 		};
 		
@@ -447,15 +514,15 @@ class App extends React.Component {
 		// create pagination component shown on top and bottom of page
 		const PageComponent = 
 			<TablePagination
-				component = "td"
+				component = "div"
 				rowsPerPageOptions = {[25]}
 				rowsPerPage = {this.state.rowsPerPage}
 				count = {this.state.totalRow}
 				page = {this.state.page}
 				onChangePage = {(e, page) => {this.handleChangePage(page)}}
-        		labelDisplayedRows = {({ from, to, count }) => `${this.state.path1} blogs - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
-			/>
-
+				labelDisplayedRows = {({ from, to, count }) => `${this.state.toolbartitle} - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
+			/>	
+			
 		return (
 			<center> 
 				<div>
@@ -466,7 +533,7 @@ class App extends React.Component {
 					style = {{ position: "sticky", padding: "0%" }}
 					tableRef = { this.state.tableRef }
 					options = {{
-						search: false,
+						search: true,
 						grouping: false,
 						showFirstLastPageButtons: false,
 						emptyRowsWhenPaging: false,
@@ -474,7 +541,7 @@ class App extends React.Component {
 						pageSizeOptions: [25],
 						detailPanelType: "single",
 						loadingType: "overlay",
-						showEmptyDataSourceMessage: false,
+						showEmptyDataSourceMessage: true,
 						padding: this.state.tabledense,
 						draggable: false,
 						sorting: false,
@@ -496,16 +563,33 @@ class App extends React.Component {
 					components = {{
 						OverlayLoading: () => <div />,
 						Toolbar: (props) => (
-							<table>
-								<tbody>
-									<tr>
-										{PageComponent}
-									</tr>
-								</tbody>
-							</table>
+							<InstantSearch
+								indexName = "rssaws"
+								searchClient = {this.searchFunction}
+						 	>
+								 <div width = "40%">
+									{PageComponent}
+								</div>
+								<div width = "40%">
+
+									<SearchBox 
+										defaultRefinement = {this.state.searchquery}
+										searchClient = {this.searchFunction}
+										searchAsYouType = {true}
+										onChange = {this.updateQuery}
+										onSubmit = {this.searchPage}
+									/>
+								</div>
+						  </InstantSearch>
 						),
 						Pagination: (props) => (
-							<td><Link to = "." onClick = {this.handleTop}>back to top</Link></td>
+							<td align = "center" width = "100%">
+								{PageComponent}
+								<br />
+								<Link to = "." onClick = {this.handleTop}>back to top</Link>
+								<br />
+								<img src = {'/algolia.svg'} style = {{ 'height' : '20px' }} alt = "algolia search" />
+							</td>
 						)
 					}}
 					isLoading = {this.state.loading1}
