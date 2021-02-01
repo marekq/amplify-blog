@@ -411,16 +411,25 @@ class App extends React.Component {
 		};
 	};
 
+	// search page using Algolia
 	searchPage = async (e) => {
 
 		var keyword = this.state.searchquery;
 		e.preventDefault();
 
-		console.log('len ' + keyword.length)
-
+		// if keyword received, search
 		if (keyword.length !== 0) {
 
-			await index.search(keyword).then(({ hits }) => {
+			await index.search(keyword, {
+				'attributesToRetrieve': [
+					'blogsource',
+					'guid',
+					'timest',
+					'title',
+					'timest'
+				],
+				'hitsPerPage': 100
+			}).then(({ hits }) => {
 				console.log(keyword, hits);
 
 				this.setState({
@@ -437,6 +446,7 @@ class App extends React.Component {
 
 	}
 
+	// update the query in state when the user types
 	updateQuery = async (e) => {
 
 		e.preventDefault();
@@ -445,6 +455,8 @@ class App extends React.Component {
 		console.log(this.state.searchquery);
 	}
 
+
+	// search helper to prevent query to Algolia on initial page load
 	searchFunction = (helper) => {
 		if (helper.state.query === '') {
 			return;
