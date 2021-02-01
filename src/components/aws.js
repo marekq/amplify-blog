@@ -23,7 +23,7 @@ import styles from "../components/css/table.css";
 import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, SearchBox } from 'react-instantsearch-dom';
 
-const searchClient = algoliasearch('FDHHMAIGTE', 'a2c38a80e37e8e01de7998cd7f7d98f4', { _useRequestCache: true });
+const searchClient = algoliasearch('FDHHMAIGTE', '6c590e02d2e56fbaec33ee4e8b8638a9', { _useRequestCache: true });
 const index = searchClient.initIndex('rssaws');
 
 // configure appsync with config stored in 'AppSyncConfig.js'
