@@ -530,17 +530,15 @@ class App extends React.Component {
 
 		// create pagination component shown on top and bottom of page
 		const PageComponent = 
-			<div width = "200px">
-				<TablePagination
-					component = "div"
-					rowsPerPageOptions = {[25]}
-					rowsPerPage = {this.state.rowsPerPage}
-					count = {this.state.totalRow}
-					page = {this.state.page}
-					onChangePage = {(e, page) => {this.handleChangePage(page)}}
-					labelDisplayedRows = {({ from, to, count }) => `${this.state.toolbartitle} - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
-				/>	
-			</div>
+			<TablePagination
+				component = "div"
+				rowsPerPageOptions = {[25]}
+				rowsPerPage = {this.state.rowsPerPage}
+				count = {this.state.totalRow}
+				page = {this.state.page}
+				onChangePage = {(e, page) => {this.handleChangePage(page)}}
+				labelDisplayedRows = {({ from, to, count }) => `${this.state.toolbartitle} - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
+			/>	
 			
 		return (
 			<center> 
