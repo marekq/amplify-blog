@@ -498,7 +498,24 @@ class App extends React.Component {
 		if (this.state.path1 !== "all") {
 			returnlink.push(<Link key = "homelink" to = "/"><Button color="primary">view all blogs</Button><br /></Link>)
 
-		};
+		} else {
+			returnlink.push(
+				<InstantSearch
+					indexName = "rssaws"
+					searchClient = {this.searchFunction}
+					key = "instantsearch"
+				>
+					<SearchBox 
+						defaultRefinement = {this.state.searchquery}
+						searchClient = {this.searchFunction}
+						searchAsYouType = {true}
+						onChange = {this.updateQuery}
+						onSubmit = {this.searchPage}
+						key = "searchbox"
+					/>
+				</InstantSearch>
+			)
+		}
 
 		// async get the blog detailed content
 		var loadarticle = async (guid) => {
@@ -513,15 +530,17 @@ class App extends React.Component {
 
 		// create pagination component shown on top and bottom of page
 		const PageComponent = 
-			<TablePagination
-				component = "div"
-				rowsPerPageOptions = {[25]}
-				rowsPerPage = {this.state.rowsPerPage}
-				count = {this.state.totalRow}
-				page = {this.state.page}
-				onChangePage = {(e, page) => {this.handleChangePage(page)}}
-				labelDisplayedRows = {({ from, to, count }) => `${this.state.toolbartitle} - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
-			/>	
+			<div width = "200px">
+				<TablePagination
+					component = "div"
+					rowsPerPageOptions = {[25]}
+					rowsPerPage = {this.state.rowsPerPage}
+					count = {this.state.totalRow}
+					page = {this.state.page}
+					onChangePage = {(e, page) => {this.handleChangePage(page)}}
+					labelDisplayedRows = {({ from, to, count }) => `${this.state.toolbartitle} - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
+				/>	
+			</div>
 			
 		return (
 			<center> 
@@ -563,24 +582,9 @@ class App extends React.Component {
 					components = {{
 						OverlayLoading: () => <div />,
 						Toolbar: (props) => (
-							<InstantSearch
-								indexName = "rssaws"
-								searchClient = {this.searchFunction}
-						 	>
-								 <div width = "40%">
-									{PageComponent}
-								</div>
-								<div width = "40%">
-
-									<SearchBox 
-										defaultRefinement = {this.state.searchquery}
-										searchClient = {this.searchFunction}
-										searchAsYouType = {true}
-										onChange = {this.updateQuery}
-										onSubmit = {this.searchPage}
-									/>
-								</div>
-						  </InstantSearch>
+							<div>
+								{PageComponent}
+							</div>
 						),
 						Pagination: (props) => (
 							<td align = "center" width = "100%">
