@@ -12,6 +12,7 @@
     "aws-amplify": "^3.3.17",
     "gatsby": "^2.32.3",
     "gatsby-link": "^2.11.0",
+    "gatsby-plugin-brotli": "^2.0.0",
     "gatsby-plugin-minify": "^0.3.0",
     "material-table": "^1.69.2",
     "pretty-ms": "^7.0.1",

@@ -66,7 +66,7 @@ class Header extends Component {
 
       menubar.push(
         <Link 
-          key = {index} 
+          key = {url} 
           style = {{margin: "1em"}} 
           activeStyle = {{ color: "red" }} 
           to = {url}
