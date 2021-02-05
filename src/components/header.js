@@ -70,8 +70,8 @@ class Header extends Component {
         </b>
         <b>
           <NavDropdown 
-            key = "aws" 
             title = "Blogs"
+            key = "aws" 
             id = "basic-nav-dropdown" 
             onMouseEnter = {this.showDropdown} 
             onMouseLeave = {this.hideDropdown} 

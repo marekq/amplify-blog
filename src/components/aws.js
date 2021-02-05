@@ -377,7 +377,6 @@ class App extends React.Component {
 		var newmode = e[0];
 		var guid = e[1];
 
-
 		// load article if new guid
 		if (guid !== this.state.guid) {
 			
