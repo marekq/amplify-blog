@@ -54,7 +54,7 @@ class Header extends Component {
       const blog = value.toString();
 
       menubar.push(<Link 
-        key = {value} 
+        key = {index} 
         style = {{margin: "1em"}} 
         activeStyle = {{ color: "red" }} 
         to = {url}
@@ -63,7 +63,7 @@ class Header extends Component {
     }
 
     return (
-      <Navbar expand = "navbar-expand-xl" sticky = "top" key = "navbar" style = {{backgroundColor: "#f4f4f4" }}>
+      <Navbar expand = "navbar-expand-xl" sticky = "top" key = "navbar" style = {{backgroundColor: "#f4f4f4", minWidth: "375px", maxWidth: "800px", textAlign: "center" }}>
         <title>{pageTitle}</title>
         <b>
           <Link key = "home" to = "/" activeStyle = {{ color: "red" }}>New Blogs</Link>

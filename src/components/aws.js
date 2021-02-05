@@ -507,7 +507,6 @@ class App extends React.Component {
 					<SearchBox 
 						defaultRefinement = {this.state.searchquery}
 						searchClient = {this.searchFunction}
-						searchAsYouType = {true}
 						onChange = {this.updateQuery}
 						onSubmit = {this.searchPage}
 						key = "searchbox"
@@ -585,11 +584,14 @@ class App extends React.Component {
 						),
 						Pagination: (props) => (
 							<td align = "center" width = "100%">
-								{PageComponent}
-								<br />
-								<Link to = "." onClick = {this.handleTop}>back to top</Link>
-								<br />
-								<img src = {'/algolia.svg'} style = {{ 'height' : '20px' }} alt = "algolia search" />
+								<td>
+									{PageComponent}
+								</td>
+
+								<td style = {{verticalAlign: "middle", width: "150px"}}>
+									<img src = {'/algolia.svg'} alt = "algolia search" />
+								</td>
+
 							</td>
 						)
 					}}
