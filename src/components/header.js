@@ -10,7 +10,8 @@ var pageTitle = 'Serverless Blog';
 class Header extends Component {
 	constructor(props) {
     super(props);
-    this.toggle = this.toggle.bind(this);
+
+    this.toggle = this.toggleMenu.bind(this);
     this.showDropdown = this.showDropdown.bind(this);
     this.hideDropdown = this.hideDropdown.bind(this);
 
@@ -36,10 +37,20 @@ class Header extends Component {
   }
 
   // toggle dropdown menu
-  toggle() {
-    this.setState(prevState => ({
-      show: !prevState.show
-    }));
+  toggleMenu() {
+    if (this.state.toggle === false) {
+
+      this.setState({
+        toggle: true
+      });
+
+    } else if (this.state.toggle === true) {
+
+      this.setState({
+        toggle: false
+      });
+
+    }
   }
 
   render() {
@@ -53,12 +64,16 @@ class Header extends Component {
       const url = '/blog/' + value.toString() + '/';
       const blog = value.toString();
 
-      menubar.push(<Link 
-        key = {index} 
-        style = {{margin: "1em"}} 
-        activeStyle = {{ color: "red" }} 
-        to = {url}
-      >{blog}</Link>)
+      menubar.push(
+        <Link 
+          key = {index} 
+          style = {{margin: "1em"}} 
+          activeStyle = {{ color: "red" }} 
+          to = {url}
+        >
+          {blog}
+        </Link>
+      )
       menubar.push(<br />)
     }
 
@@ -75,7 +90,7 @@ class Header extends Component {
             id = "basic-nav-dropdown" 
             onMouseEnter = {this.showDropdown} 
             onMouseLeave = {this.hideDropdown} 
-            toggle = {this.toggle} 
+            toggle = {this.toggleMenu} 
             className = "d-inline-block"
             show = {this.state.show}
           >
