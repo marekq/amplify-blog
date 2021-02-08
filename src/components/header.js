@@ -11,33 +11,35 @@ class Header extends Component {
 	constructor(props) {
     super(props);
 
-    this.toggle = this.toggleMenu.bind(this);
     this.showDropdown = this.showDropdown.bind(this);
     this.hideDropdown = this.hideDropdown.bind(this);
+    this.toggle = this.toggle.bind(this);
 
     this.state = {
       show: false,
-      blogname: 'All blogs'
-    }
-  }
+      blogname: 'All blogs',
+    };
+  };
 
   // hide dropdown menu
   showDropdown() {
     this.setState({
-      show: true
+      toggle: true
     });
-  }
+  };
 
   // hide dropdown menu
   hideDropdown() {
     this.setState({
-      show: false
+      toggle: false
     });
 
-  }
+  };
 
   // toggle dropdown menu
-  toggleMenu() {
+  toggle() {
+    //console.log('state', this.state.toggle)
+
     if (this.state.toggle === false) {
 
       this.setState({
@@ -50,8 +52,8 @@ class Header extends Component {
         toggle: false
       });
 
-    }
-  }
+    };
+  };
 
   render() {
 
@@ -66,15 +68,15 @@ class Header extends Component {
 
       menubar.push(
         <Link 
-          key = {url} 
+          key = {index} 
           style = {{margin: "1em"}} 
           activeStyle = {{ color: "red" }} 
           to = {url}
         >
           {blog}
+          <br />
         </Link>
       )
-      menubar.push(<br />)
     }
 
     return (
@@ -90,9 +92,9 @@ class Header extends Component {
             id = "basic-nav-dropdown" 
             onMouseEnter = {this.showDropdown} 
             onMouseLeave = {this.hideDropdown} 
-            toggle = {this.toggleMenu} 
+            onToggle = {this.toggle}
             className = "d-inline-block"
-            show = {this.state.show}
+            show = {this.state.toggle}
           >
             {menubar}
           </NavDropdown>

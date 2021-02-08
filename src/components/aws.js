@@ -583,15 +583,11 @@ class App extends React.Component {
 							</div>
 						),
 						Pagination: (props) => (
-							<td align = "center" width = "100%">
-								<td>
-									{PageComponent}
-								</td>
-
-								<td style = {{verticalAlign: "middle", width: "150px"}}>
-									<img src = {'/algolia.svg'} alt = "algolia search" />
-								</td>
-
+							<td align = "center" width = "50%">
+								{PageComponent}
+								<br />
+								<img src = {'/algolia.svg'} alt = "algolia search" />
+								<br />
 							</td>
 						)
 					}}
