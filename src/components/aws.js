@@ -22,6 +22,7 @@ import styles from "../components/css/table.css";
 
 import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, SearchBox } from 'react-instantsearch-dom';
+import 'instantsearch.css/themes/algolia.css';
 
 const searchClient = algoliasearch('FDHHMAIGTE', '6c590e02d2e56fbaec33ee4e8b8638a9', { _useRequestCache: true });
 const index = searchClient.initIndex('rssaws');
@@ -427,7 +428,13 @@ class App extends React.Component {
 					'title',
 					'timest'
 				],
-				'hitsPerPage': 100
+				'attributesToHighlight': [
+					'*'
+				],
+				'highlightPreTag': '<mark>',
+				'highlightPostTag': '</mark>',
+				'hitsPerPage': 100,
+				'advancedSyntax': true
 			}).then(({ hits }) => {
 				console.log(keyword, hits);
 
@@ -452,6 +459,16 @@ class App extends React.Component {
 		var x = e.target.value;
 		this.state.searchquery = x;
 		console.log(this.state.searchquery);
+	}
+
+	// update the query in state when the user types
+	resetSearch = async (e) => {
+
+		e.preventDefault();
+		this.state.searchquery = '';
+
+		await this.getBlogsData();
+		await this.prepareData();
 	}
 
 
@@ -505,6 +522,10 @@ class App extends React.Component {
 					key = "instantsearch"
 				>
 					<SearchBox 
+						translations = {{
+							placeholder: 'Search AWS blogs...',
+						}}
+						onReset = {this.resetSearch}
 						defaultRefinement = {this.state.searchquery}
 						searchClient = {this.searchFunction}
 						onChange = {this.updateQuery}

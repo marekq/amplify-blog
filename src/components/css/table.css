@@ -30,3 +30,7 @@
 *.li, .blog-post-content li, .blog-post-content ol {
     padding-left: 15px;
 }
+
+.ais-SearchBox { 
+    margin: 1em 0; 
+}
