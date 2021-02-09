@@ -2,6 +2,9 @@ import React, { forwardRef } from 'react'
 import prettyMilliseconds from 'pretty-ms';
 import MaterialTable from 'material-table';
 import Link from "gatsby-link";
+import parse from 'html-react-parser';
+
+// amplify and appsync
 import Amplify, { API, graphqlOperation } from 'aws-amplify';
 import AppSyncConfig from "../AppSyncConfig.js";
 import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest, QueryDdbGetDetailText, QueryDdbItemCountPerBlog, QueryDdbItemCountAll } from './graphql/queries';
@@ -20,6 +23,7 @@ import Button from '@material-ui/core/Button';
 import TablePagination from "@material-ui/core/TablePagination";
 import styles from "../components/css/table.css";
 
+// algolia
 import algoliasearch from 'algoliasearch/lite';
 import { InstantSearch, SearchBox } from 'react-instantsearch-dom';
 import 'instantsearch.css/themes/algolia.css';
@@ -317,11 +321,25 @@ class App extends React.Component {
 			var timediff = prettyMilliseconds(timestamp, {compact: true});
 			blog.datestr = timediff;
 			
-			// strip dashes from blog source and add link
-			blog.bloglink = <Link key = {blog.link} to = {`/blog/${blog.blogsource.toString()}/`}>{blog.blogsource.toString().replace("-", " ")}</Link>;
-			const btitle = blog.title.toString();
+			var btitle = '';
+
+			// if search text is returned with _highlightResult
+			if ('_highlightResult' in blog) {
+
+				console.log('highlight', blog['_highlightResult']['title']['value']);		
+				btitle = blog['_highlightResult']['title']['value'];
+
+			} else {
+
+				btitle =  blog.title;
+
+			}
+
+			// parse html string for title
+			blog.title = parse(btitle);			
+			blog.bloglink = <Link key = {blog.link} to = {`/blog/${blog.blogsource.toString()}/`}>{blog.blogsource.toString().replace("-", " ")}</Link>;			
 			
-			blog.sourcetitle = <div key = {blog.link}><b key = {blog.link}>{blog.bloglink}<br /></b>{btitle}</div>;
+			blog.sourcetitle = <div key = {blog.link}><b key = {blog.link}>{blog.bloglink}<br /></b>{blog.title}</div>;
 			blog.key = blog.blogsource.toString() + blog.timest.toString()
 
 			// return null
@@ -390,8 +408,6 @@ class App extends React.Component {
 		// if submitted mode is different from stored mode
 		if (this.state.detailrendermode !== newmode) {
 			
-			console.log('newmode', newmode);
-
 			if (newmode === 'full') {
 			
 				// set state to full mode
@@ -431,10 +447,10 @@ class App extends React.Component {
 				'attributesToHighlight': [
 					'*'
 				],
-				'highlightPreTag': '<mark>',
-				'highlightPostTag': '</mark>',
-				'hitsPerPage': 100,
-				'advancedSyntax': true
+				'highlightPreTag': '<font style = "color: red">',
+				'highlightPostTag': '</font>',
+				'hitsPerPage': 100
+
 			}).then(({ hits }) => {
 				console.log(keyword, hits);
 
@@ -466,9 +482,11 @@ class App extends React.Component {
 
 		e.preventDefault();
 		this.state.searchquery = '';
+		this.state.toolbartitle = this.state.path1 + " blogs";
 
 		await this.getBlogsData();
 		await this.prepareData();
+
 	}
 
 
@@ -638,10 +656,9 @@ class App extends React.Component {
 										<center>
 											<br />
 												<i>Posted by {this.state.author}</i>{' '}{this.state.mql1.matches && toolbarMenu}
-												<div 
-													dangerouslySetInnerHTML = {{ __html: this.state.detailrenderout }}
-													style = {{ margin: '1em', fontSize: '16px' }}
-												/>
+												<div style = {{ margin: '1em', fontSize: '16px' }}>
+													{parse(this.state.detailrenderout)}
+												</div>
 												<a href = {this.state.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
 											<br /><br />
 										</center>
