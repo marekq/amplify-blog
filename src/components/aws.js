@@ -652,7 +652,7 @@ class App extends React.Component {
 								</b>
 
 								return (
-									<div style = { styles.detailpanel_style }>
+									<div style = {styles}>
 										<center>
 											<br />
 												<i>Posted by {this.state.author}</i>{' '}{this.state.mql1.matches && toolbarMenu}

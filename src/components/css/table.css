@@ -18,13 +18,17 @@
 }
 
 .blog-post-content img {
-    max-height: 50%;
-    max-width: 90%;
+    max-width: 70%;
+    height: auto;
+    width: auto;
     align-content: center;
 }
 
 .blog-post-content table {
     margin: 1em auto 1em;
+    max-width: 90%;
+    display: inline-block;
+    word-break: break-all;
 }
 
 *.li, .blog-post-content li, .blog-post-content ol {
@@ -34,3 +38,17 @@
 .ais-SearchBox { 
     margin: 1em 0; 
 }
+
+.pre.code, .p {
+    max-width: 90%;
+    word-break: break-all;
+}
+
+.pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+ }
