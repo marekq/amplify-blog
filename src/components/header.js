@@ -83,7 +83,7 @@ class Header extends Component {
       <Navbar expand = "navbar-expand-xl" sticky = "top" key = "navbar" style = {{backgroundColor: "#f4f4f4", minWidth: "375px", maxWidth: "800px", textAlign: "center" }}>
         <title>{pageTitle}</title>
         <b>
-          <Link key = "home" to = "/" activeStyle = {{ color: "red" }}>New Blogs</Link>
+          <Link key = "home" to = "/">All Blogs</Link>
         </b>
         <b>
           <NavDropdown 

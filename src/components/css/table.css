@@ -18,7 +18,8 @@
 }
 
 .blog-post-content img {
-    max-width: 70%;
+    max-width: 100%;
+    margin: 1em auto 1em;
     height: auto;
     width: auto;
     align-content: center;
@@ -26,7 +27,7 @@
 
 .blog-post-content table {
     margin: 1em auto 1em;
-    max-width: 90%;
+    max-width: 100%;
     display: inline-block;
     word-break: break-all;
 }

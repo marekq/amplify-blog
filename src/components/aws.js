@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react'
 import prettyMilliseconds from 'pretty-ms';
-import MaterialTable from 'material-table';
+import MaterialTable, { MTableToolbar } from "material-table";
 import Link from "gatsby-link";
 import parse from 'html-react-parser';
 
@@ -326,7 +326,6 @@ class App extends React.Component {
 			// if search text is returned with _highlightResult
 			if ('_highlightResult' in blog) {
 
-				console.log('highlight', blog['_highlightResult']['title']['value']);		
 				btitle = blog['_highlightResult']['title']['value'];
 
 			} else {
@@ -399,8 +398,6 @@ class App extends React.Component {
 		// load article if new guid
 		if (guid !== this.state.guid) {
 			
-			console.log('guid', guid);
-
 			await this.loadBlogArticle(guid);
 
 		};
@@ -452,7 +449,6 @@ class App extends React.Component {
 				'hitsPerPage': 100
 
 			}).then(({ hits }) => {
-				console.log(keyword, hits);
 
 				this.setState({
 					data: hits,
@@ -474,7 +470,7 @@ class App extends React.Component {
 		e.preventDefault();
 		var x = e.target.value;
 		this.state.searchquery = x;
-		console.log(this.state.searchquery);
+		console.log('search', this.state.searchquery);
 	}
 
 	// update the query in state when the user types
@@ -528,31 +524,27 @@ class App extends React.Component {
 
 		};
 		
-		// add the return button on top for specific blog pages
-		if (this.state.path1 !== "all") {
-			returnlink.push(<Link key = "homelink" to = "/"><Button color="primary">view all blogs</Button><br /></Link>)
-
-		} else {
-			returnlink.push(
-				<InstantSearch
-					indexName = "rssaws"
+		// add the return button on top
+		returnlink.push(
+			<InstantSearch
+				indexName = "rssaws"
+				searchClient = {this.searchFunction}
+				key = "instantsearch"
+			>
+				<SearchBox 
+					translations = {{
+						placeholder: 'Search AWS blogs...',
+					}}
+					onReset = {this.resetSearch}
+					defaultRefinement = {this.state.searchquery}
 					searchClient = {this.searchFunction}
-					key = "instantsearch"
-				>
-					<SearchBox 
-						translations = {{
-							placeholder: 'Search AWS blogs...',
-						}}
-						onReset = {this.resetSearch}
-						defaultRefinement = {this.state.searchquery}
-						searchClient = {this.searchFunction}
-						onChange = {this.updateQuery}
-						onSubmit = {this.searchPage}
-						key = "searchbox"
-					/>
-				</InstantSearch>
-			)
-		}
+					onChange = {this.updateQuery}
+					onSubmit = {this.searchPage}
+					key = "searchbox"
+				/>
+			</InstantSearch>
+		)
+		
 
 		// async get the blog detailed content
 		var loadarticle = async (guid) => {
@@ -567,16 +559,19 @@ class App extends React.Component {
 
 		// create pagination component shown on top and bottom of page
 		const PageComponent = 
-			<TablePagination
-				component = "div"
-				rowsPerPageOptions = {[25]}
-				rowsPerPage = {this.state.rowsPerPage}
-				count = {this.state.totalRow}
-				page = {this.state.page}
-				onChangePage = {(e, page) => {this.handleChangePage(page)}}
-				labelDisplayedRows = {({ from, to, count }) => `${this.state.toolbartitle} - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
-			/>	
-			
+			<center>
+				<TablePagination
+					style = {{alignSelf: 'center'}}
+					component = "div"
+					rowsPerPageOptions = {[25]}
+					rowsPerPage = {this.state.rowsPerPage}
+					count = {this.state.totalRow}
+					page = {this.state.page}
+					onChangePage = {(e, page) => {this.handleChangePage(page)}}
+					labelDisplayedRows = {({ from, to, count }) => `${this.state.toolbartitle} - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
+				/>	
+			</center>
+
 		return (
 			<center> 
 				<div>
@@ -584,10 +579,15 @@ class App extends React.Component {
 				</div>
 
 				<MaterialTable
-					style = {{ position: "sticky", padding: "0%" }}
-					tableRef = { this.state.tableRef }
+					style = {{ padding: "0" }}
+					tableRef = {this.state.tableRef}
+					isLoading = {this.state.loading1}
+					data = {this.state.data}
+					icons = {tableIcons}
+					columns = {columns}
+
 					options = {{
-						search: true,
+						search: false,
 						grouping: false,
 						showFirstLastPageButtons: false,
 						emptyRowsWhenPaging: false,
@@ -617,7 +617,7 @@ class App extends React.Component {
 					components = {{
 						OverlayLoading: () => <div />,
 						Toolbar: (props) => (
-							<div>
+							<div className = "float-container">
 								{PageComponent}
 							</div>
 						),
@@ -630,10 +630,8 @@ class App extends React.Component {
 							</td>
 						)
 					}}
-					isLoading = {this.state.loading1}
-					data = {this.state.data}
-					icons = {tableIcons}
-					columns = {columns}
+		
+					// render detailpanel
 					detailPanel = {[
 						{
 							disabled: true,
