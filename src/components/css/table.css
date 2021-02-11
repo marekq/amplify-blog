@@ -40,16 +40,11 @@
     margin: 1em 0; 
 }
 
-.pre.code, .p {
-    max-width: 90%;
-    word-break: break-all;
-}
-
 .pre {
     overflow-x: auto;
     white-space: pre-wrap;
     white-space: -moz-pre-wrap;
     white-space: -pre-wrap;
     white-space: -o-pre-wrap;
-    word-wrap: break-word;
- }
+    word-wrap: break-all;
+}

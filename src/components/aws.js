@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react'
 import prettyMilliseconds from 'pretty-ms';
-import MaterialTable, { MTableToolbar } from "material-table";
+import MaterialTable from "material-table";
 import Link from "gatsby-link";
 import parse from 'html-react-parser';
 
