@@ -31,6 +31,23 @@ import 'instantsearch.css/themes/algolia.css';
 const searchClient = algoliasearch('FDHHMAIGTE', '6c590e02d2e56fbaec33ee4e8b8638a9', { _useRequestCache: true });
 const index = searchClient.initIndex('rssaws');
 
+// search helper to prevent query to Algolia on initial page load
+const searchFunction = {
+	search(requests) {
+
+		const query = requests[0]['params']['query'];
+
+		if (query.length !== 0) {
+			return searchClient.search(requests);
+		}
+
+		return Promise.resolve({
+			results: [{ hits: [] }],
+		});
+	},
+	searchForFacetValues: searchClient.searchForFacetValues,
+};
+
 // configure appsync with config stored in 'AppSyncConfig.js'
 Amplify.configure(AppSyncConfig);
 
@@ -485,16 +502,6 @@ class App extends React.Component {
 
 	}
 
-
-	// search helper to prevent query to Algolia on initial page load
-	searchFunction = (helper) => {
-		if (helper.state.query === '') {
-			return;
-		}
-	
-		helper.search();
-	}
-
 	// render the page output
 	render() {
 
@@ -528,16 +535,17 @@ class App extends React.Component {
 		returnlink.push(
 			<InstantSearch
 				indexName = "rssaws"
-				searchClient = {this.searchFunction}
+				searchClient = {searchFunction}
 				key = "instantsearch"
 			>
 				<SearchBox 
+					searchAsYouType = {false}
 					translations = {{
 						placeholder: 'Search AWS blogs...',
 					}}
 					onReset = {this.resetSearch}
 					defaultRefinement = {this.state.searchquery}
-					searchClient = {this.searchFunction}
+					searchClient = {searchFunction}
 					onChange = {this.updateQuery}
 					onSubmit = {this.searchPage}
 					key = "searchbox"
