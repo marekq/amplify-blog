@@ -99,8 +99,8 @@ class Header extends Component {
             {menubar}
           </NavDropdown>
         </b>
-        <b><Link key = "about" to = "/about/" activeStyle={{ color: "red" }}>About</Link></b>
-        <b><Link key = "marek" to = "/marek/" activeStyle={{ color: "red" }}>Marek</Link></b>
+        <b><Link key = "about" to = "/about/" activeStyle = {{ color: "red" }}>About</Link></b>
+        <b><Link key = "marek" to = "/marek/" activeStyle = {{ color: "red" }}>Marek</Link></b>
       </Navbar>
     )
   }
