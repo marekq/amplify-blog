@@ -9,7 +9,7 @@ const Marek = () => {
       personalData = {{
         key: 'data',
         name: 'Marek Kuczynski',
-        title: 'Serverless Specialist SA @ AWS',
+        title: 'Strategic Account SA @ AWS',
         image: '/mk.jpg',
         contacts: [
           { type: 'location', key: 'location', value: 'The Hague, The Netherlands' },
@@ -22,7 +22,7 @@ const Marek = () => {
           {
             type: 'text',
             title: 'About Marek',
-            content: 'Marek Kuczynski is a Senior Serverless Solutions Architect at Amazon Web Services in The Netherlands. He has been with the company since late 2016 and worked with enterprise and startup customers before working fulltime on serverless. Before AWS, Marek spent several years as a security consultant and ethical hacker, with a focus on cloud, mobile and backend systems.',
+            content: 'Marek Kuczynski is a Strategic Accounts Solutions Architect at Amazon Web Services in The Netherlands. He has been with the company since late 2016 and worked with enterprise, startup and serverless customers before working fulltime in his current role. Before AWS, Marek spent several years as a security consultant and ethical hacker, with a focus on cloud, mobile and backend systems.',
             icon: 'usertie',
             key: 'about'
           },
@@ -33,16 +33,25 @@ const Marek = () => {
             items: 
               [
                 {
-                  title: 'Sr. Serverless Specialist Solutions Architect',
+                  title: 'Strategic Account Solutions Architect',
+                  company: 'Amazon Web Services',
+                  description: 'As a Strategic Account SA, I work with some of our key customers to build and run their workloads on AWS.',
+                  companyWebSite: 'https://aws.amazon.com',
+                  companyMeta: 'AWS',
+                  datesBetween: '2021 - now',
+                  key: 'strategic'
+                },
+                {
+                  title: 'Serverless Specialist Solutions Architect',
                   company: 'Amazon Web Services',
                   description: 'As a Specialist SA for serverless, I help customers across EMEA to build and improve their serverless architectures on AWS. I also work on internal enablement of our internal teams and work with the service teams on further improvement of their services. Finally, I\'m a regular speaker at internal and external events, including several meetups in the Benelux.',
                   companyWebSite: 'https://aws.amazon.com',
                   companyMeta: 'AWS',
-                  datesBetween: '2019 - now',
+                  datesBetween: '2019 - 2021',
                   key: 'serverless'
                 },
                 {
-                  title: 'Sr. Startup Solutions Architect',
+                  title: 'Startup Solutions Architect',
                   company: 'Amazon Web Services',
                   description: 'As a Startup SA, I worked with startups in The Benelux on building their business on AWS. I worked mostly on container, ML and serverless projects during this time.',
                   companyWebSite: 'https://aws.amazon.com',
@@ -135,7 +144,7 @@ const Marek = () => {
             title: 'Skills Proficiency',
             icon: 'tasks',
             key: 'skills',
-            items: ['Python', 'Go', 'React', 'NodeJS', 'Bash']
+            items: ['Python', 'Go', 'React', 'NodeJS', 'AWS CDK', 'AWS SAM', 'PyTorch']
           },
         ]
       }
