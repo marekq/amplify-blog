@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../components/css/header.module.css";
+import * as styles from "../components/css/header.module.css";
 import Card from 'react-bootstrap/Card';
 
 const About = () => {

@@ -7,7 +7,8 @@ import parse from 'html-react-parser';
 // amplify and appsync
 import Amplify, { API, graphqlOperation } from 'aws-amplify';
 import AppSyncConfig from "../AppSyncConfig.js";
-import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest, QueryDdbGetDetailText, QueryDdbItemCountPerBlog, QueryDdbItemCountAll } from './graphql/queries';
+import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest, QueryDdbGetDetailText, QueryDdbItemCountPerBlog } from './graphql/queries';
+//import { QueryDdbItemCountAll } from './graphql/queries';
 
 // material ui
 import Clear from "@material-ui/icons/Clear";
@@ -21,7 +22,7 @@ import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import ViewColumn from "@material-ui/icons/ListAltRounded";
 import Button from '@material-ui/core/Button';
 import TablePagination from "@material-ui/core/TablePagination";
-import styles from "../components/css/table.css";
+import * as styles from "../components/css/table.css";
 
 // algolia
 import algoliasearch from 'algoliasearch/lite';

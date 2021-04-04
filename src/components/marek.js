@@ -1,10 +1,10 @@
 import React from "react"
-import CV from 'react-cv'
+import Cv from 'react-cv'
 
 const Marek = () => {
 
   return (
-    <CV
+    <Cv
       key = 'cv'
       personalData = {{
         key: 'data',

@@ -1,5 +1,5 @@
 import React from "react"
-import styles from "./css/view.module.css"
+import * as styles from "./css/view.module.css"
 import Header from "./header"
 
 const View = ({ title, children }) => (
