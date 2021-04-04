@@ -48,3 +48,7 @@
     white-space: -o-pre-wrap;
     word-wrap: break-all;
 }
+
+.MuiTableCell-root {
+    padding: 10px !important;
+}

@@ -356,7 +356,7 @@ class App extends React.Component {
 			blog.title = parse(btitle);			
 			blog.bloglink = <Link key = {blog.link} to = {`/blog/${blog.blogsource.toString()}/`}>{blog.blogsource.toString().replace("-", " ")}</Link>;			
 			
-			blog.sourcetitle = <div key = {blog.link}><b key = {blog.link}>{blog.bloglink}<br /></b>{blog.title}</div>;
+			blog.sourcetitle = <div key = {blog.link}><b key = {blog.link}>{blog.bloglink}</b> * {blog.title}</div>;
 			blog.key = blog.blogsource.toString() + blog.timest.toString()
 
 			// return null
@@ -448,6 +448,8 @@ class App extends React.Component {
 		var keyword = this.state.searchquery;
 		e.preventDefault();
 
+		console.log('search keyword: ' + keyword);
+
 		// if keyword received, search
 		if (keyword.length !== 0) {
 
@@ -515,23 +517,8 @@ class App extends React.Component {
 
 		// add age column
 		columns.push({ title: 'Age', field: 'datestr', width: 0 });
+		columns.push({ title: 'Title', field: 'title', width: 1000 });
 
-		// get window status
-		const mql = this.state.mql1;
-
-		// if fullmode is true, add blog and title column
-		if (mql.matches) {
-
-			columns.push({ title: 'Blog', field: 'bloglink', width: 0 });
-			columns.push({ title: 'Title', field: 'title', width: 1000 });
-
-		// if fullmode is false, add shortened title column and no blog source column
-		} else {
-
-			columns.push({ title: 'Title', field: 'sourcetitle', width: 1000 });
-
-		};
-		
 		// add the return button on top
 		returnlink.push(
 			<InstantSearch
@@ -594,7 +581,6 @@ class App extends React.Component {
 					data = {this.state.data}
 					icons = {tableIcons}
 					columns = {columns}
-
 					options = {{
 						search: false,
 						grouping: false,
@@ -634,7 +620,7 @@ class App extends React.Component {
 							<td align = "center" width = "50%">
 								{PageComponent}
 								<br />
-								<img src = {'/algolia.svg'} alt = "algolia search" />
+								<img src = {'/algolia.svg'} alt = "algolia search" width = "168px" height = "24px" />
 								<br />
 							</td>
 						)
