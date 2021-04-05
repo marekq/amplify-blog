@@ -117,25 +117,10 @@ class App extends React.Component {
 			}
 		};
 
-		// set material table density depending on screen width
-		if (mql1.matches) {
-
-			// set to default mode and full text mode if in fullscreen browser
-			this.state.tabledense = "default";
-
-		} else {
-
-			// set to dense mode and compact description text if mobile
-			this.state.tabledense = "dense";
-
-		};
-
-		// set mode to "compact" if no mode was set
-		if (this.state.detailrendermode === '') {
-
-			this.state.detailrendermode = "compact";
-		}
-
+		// set to dense mode and compact description text if mobile
+		this.state.tabledense = "dense";
+		this.state.detailrendermode = "compact";
+		
 		// add keyboard navigation using left/right keys if window available
 		if (typeof window !== `undefined`) {
 
@@ -240,6 +225,7 @@ class App extends React.Component {
 				this.state.description = result.items[0].description;
 				this.state.author = result.items[0].author;
 				this.state.link = result.items[0].link;
+				this.state.blogsource = result.items[0].blogsource;
 
 				// store brief summary or full html depending on detail render mode
 				if (this.state.detailrendermode === 'full') {
@@ -639,25 +625,28 @@ class App extends React.Component {
 
 								// create menu to select full or compact view
 								const toolbarMenu = 
-								<b>
+								<div><b><br />
 									<Button size = "small" variant = "text" onClick = {async () => await this.handleClick(['full', data.guid])} style = {{color: (this.state.detailrendermode === 'full') ? 'black' : 'gray'}}>full{' '}</Button>
 									<Button size = "small" variant = "text" onClick = {async () => await this.handleClick(['compact', data.guid])} style = {{color: (this.state.detailrendermode === 'compact') ? 'black' : 'gray'}}>compact</Button>
-								</b>
+								</b></div>
 
 								return (
 									<div style = {styles}>
 										<center>
 											<br />
-												<i>Posted by {this.state.author}</i>{' '}{this.state.mql1.matches && toolbarMenu}
-												<div style = {{ margin: '1em', fontSize: '16px' }}>
-													{parse(this.state.detailrenderout)}
-												</div>
+											<div style = {{ margin: '1em', fontSize: '15px', alignSelf: 'center' }}>
+												<b><i>Posted by {this.state.author} in {this.state.blogsource}</i></b>
+												<br />
+												{this.state.mql1.matches && toolbarMenu}
+												<br />
+												{parse(this.state.detailrenderout)}
+												<br /><br />
 												<a href = {this.state.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
-											<br /><br />
+											</div><br />
 										</center>
 									</div>
 								)
-							},
+							}
 						}
 					]}
 				/>
