@@ -17,8 +17,8 @@ import LastPage from "@material-ui/icons/LastPage";
 import ChevronRight from "@material-ui/icons/ChevronRight";
 import ChevronLeft from "@material-ui/icons/ChevronLeft";
 import Search from "@material-ui/icons/Search";
-import KeyboardArrowDown from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
+import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
+import ArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import ViewColumn from "@material-ui/icons/ListAltRounded";
 import Button from '@material-ui/core/Button';
 import TablePagination from "@material-ui/core/TablePagination";
@@ -523,6 +523,9 @@ class App extends React.Component {
 					onChange = {this.updateQuery}
 					onSubmit = {this.searchPage}
 					key = "searchbox"
+					autoFocus
+					showLoadingIndicator
+					focusShortcuts = {['s']}
 				/>
 			</InstantSearch>
 		)
@@ -621,8 +624,8 @@ class App extends React.Component {
 					detailPanel = {[
 						{
 							disabled: true,
-							icon: KeyboardArrowRight,
-							openIcon: KeyboardArrowDown,
+							icon: ArrowRight,
+							openIcon: ArrowDropDown,
 							render: data => {
 
 								// get blog details from appsync
