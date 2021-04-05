@@ -502,8 +502,8 @@ class App extends React.Component {
 		columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true });
 
 		// add age column
-		columns.push({ title: 'Age', field: 'datestr', width: 0 });
-		columns.push({ title: 'Title', field: 'title', width: 1000 });
+		columns.push({ title: '', field: 'datestr', width: 0, cellStyle: { color: '#aaa' }});
+		columns.push({ title: '', field: 'title', width: 1000});
 
 		// add the return button on top
 		returnlink.push(
@@ -582,7 +582,12 @@ class App extends React.Component {
 						sorting: false,
 						editable: false,
 						doubleHorizontalScroll: true,
-						rowStyle: rowData => ({backgroundColor: (this.state.selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'})
+						rowStyle: rowData => ({backgroundColor: (this.state.selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'}),
+						headerStyle: {
+							alignSelf: 'center',
+							fontSize: '16px',
+							color: '#aaa'
+						}
 					}}
 
 					// change background on row click or detailpanel expand
