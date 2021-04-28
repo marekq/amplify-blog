@@ -500,10 +500,23 @@ class App extends React.Component {
 
 		// add hidden timest column for article sorting 
 		columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true });
-
+		
 		// add age column
 		columns.push({ title: '', field: 'datestr', width: 0, cellStyle: { color: '#aaa' }});
+		
+		// add title column
 		columns.push({ title: '', field: 'title', width: 1000});
+
+		// add blog source column in full mode on 'all' page
+		if (this.state.mql1.matches && this.state.path1 === 'all') {
+			columns.push({ 
+				title: '', 
+				field: 'blogsource', 
+				render: rowData => <center>{rowData.blogsource.replace('-', ' ')}</center>,
+				cellStyle: { color: '#aaa' }
+			});
+		}
+		
 
 		// add the return button on top
 		returnlink.push(
@@ -523,7 +536,6 @@ class App extends React.Component {
 					onChange = {this.updateQuery}
 					onSubmit = {this.searchPage}
 					key = "searchbox"
-					autoFocus
 					showLoadingIndicator
 					focusShortcuts = {['s']}
 				/>
@@ -640,18 +652,16 @@ class App extends React.Component {
 
 								return (
 									<div style = {styles}>
-										<center>
+										<br />
+										<div style = {{ margin: '1em', fontSize: '15px', alignSelf: 'left' }}>
+											<b><i>Posted by {this.state.author} in {this.state.blogsource}</i></b>
 											<br />
-											<div style = {{ margin: '1em', fontSize: '15px', alignSelf: 'center' }}>
-												<b><i>Posted by {this.state.author} in {this.state.blogsource}</i></b>
-												<br />
-												{this.state.mql1.matches && toolbarMenu}
-												<br />
-												{parse(this.state.detailrenderout)}
-												<br /><br />
-												<a href = {this.state.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
-											</div><br />
-										</center>
+											{this.state.mql1.matches && toolbarMenu}
+											<br />
+											{parse(this.state.detailrenderout)}
+											<br /><br />
+											<a href = {this.state.link} target = "_blank" rel = "noreferrer" key = "blogurl"><b>Visit blog here</b></a>
+										</div><br />
 									</div>
 								)
 							}
