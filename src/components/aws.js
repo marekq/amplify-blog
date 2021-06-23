@@ -8,6 +8,7 @@ import parse from 'html-react-parser';
 import Amplify, { API, graphqlOperation } from 'aws-amplify';
 import AppSyncConfig from "../AppSyncConfig.js";
 import { QueryDdbByVisibleAndTimest, QueryDdbByBlogsourceAndTimest, QueryDdbGetDetailText, QueryDdbItemCountPerBlog } from './graphql/queries';
+//import { QueryDdbItemCountAll } from './graphql/queries';
 
 // material ui
 import Clear from "@material-ui/icons/Clear";
