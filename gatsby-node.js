@@ -7,10 +7,6 @@ exports.onCreateWebpackConfig = ({
   ...other
 }) => {
   
-  console.log(other)
-  const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
-  plugins.push(new NodePolyfillPlugin())
-
   actions.setWebpackConfig({
     resolve: {
       fallback: {
