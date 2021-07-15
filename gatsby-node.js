@@ -1,3 +1,26 @@
+exports.onCreateWebpackConfig = ({
+  stage,
+  rules,
+  loaders,
+  plugins,
+  actions,
+  ...other
+}) => {
+  
+  console.log(other)
+  const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+  plugins.push(new NodePolyfillPlugin())
+
+  actions.setWebpackConfig({
+    resolve: {
+      fallback: {
+        crypto: require.resolve("crypto-browserify"),
+        stream: require.resolve("stream-browserify"),
+      },
+    },
+  })
+}
+
 exports.onCreatePage = async ({ page, actions }) => {
   const { createPage } = actions
 

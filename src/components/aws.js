@@ -505,7 +505,7 @@ class App extends React.Component {
 		columns.push({ title: '', field: 'datestr', width: 0, cellStyle: { color: '#aaa' }});
 		
 		// add title column
-		columns.push({ title: '', field: 'title', width: 1000});
+		columns.push({ title: '', field: 'title', width: 0});
 
 		// add blog source column in full mode on 'all' page
 		if (this.state.mql1.matches && this.state.path1 === 'all') {
@@ -513,7 +513,8 @@ class App extends React.Component {
 				title: '', 
 				field: 'blogsource', 
 				render: rowData => <center>{rowData.blogsource.replace('-', ' ')}</center>,
-				cellStyle: { color: '#aaa' }
+				cellStyle: { color: '#aaa' },
+				width: 0
 			});
 		}
 		
@@ -564,7 +565,7 @@ class App extends React.Component {
 					rowsPerPage = {this.state.rowsPerPage}
 					count = {this.state.totalRow}
 					page = {this.state.page}
-					onChangePage = {(e, page) => {this.handleChangePage(page)}}
+					onPageChange = {(e, page) => {this.handleChangePage(page)}}
 					labelDisplayedRows = {({ from, to, count }) => `${this.state.toolbartitle} - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
 				/>	
 			</center>
@@ -576,7 +577,7 @@ class App extends React.Component {
 				</div>
 
 				<MaterialTable
-					style = {{ padding: "0" }}
+					style = { styles }
 					tableRef = {this.state.tableRef}
 					isLoading = {this.state.loading1}
 					data = {this.state.data}

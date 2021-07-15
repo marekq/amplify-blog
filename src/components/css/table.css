@@ -51,4 +51,6 @@
 
 .MuiTableCell-root {
     padding: 10px !important;
+    width: min-content !important;
+    height: min-content !important;
 }
