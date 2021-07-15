@@ -53,4 +53,5 @@
     padding: 10px !important;
     width: min-content !important;
     height: min-content !important;
+    max-width: 800px !important;
 }
