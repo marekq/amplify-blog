@@ -17,8 +17,9 @@ import LastPage from "@material-ui/icons/LastPage";
 import ChevronRight from "@material-ui/icons/ChevronRight";
 import ChevronLeft from "@material-ui/icons/ChevronLeft";
 import Search from "@material-ui/icons/Search";
-import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
-import ArrowRight from "@material-ui/icons/KeyboardArrowRight";
+import { BsCaretRight } from 'react-icons/bs';
+import { BsCaretDown } from 'react-icons/bs';
+
 import ViewColumn from "@material-ui/icons/ListAltRounded";
 import Button from '@material-ui/core/Button';
 import TablePagination from "@material-ui/core/TablePagination";
@@ -135,7 +136,6 @@ class App extends React.Component {
 				if(e.code === 'ArrowRight' && this.state.totalpagecount > this.state.page + 1) {
 					this.handleChangePage(this.state.page + 1)
 				};
-
 			});
 		};
 	}
@@ -325,6 +325,7 @@ class App extends React.Component {
 			var timediff = prettyMilliseconds(timestamp, {compact: true});
 			blog.datestr = timediff;
 			
+			// create empty blog title
 			var btitle = '';
 
 			// if search text is returned with _highlightResult
@@ -361,7 +362,7 @@ class App extends React.Component {
 	// handle page change in table
 	handleChangePage = async (page) => {
 		
-		console.log('go from page ', this.state.page + ' ---> ' + page + ' on ' + this.state.path1);		
+		console.log('go from page ', this.state.page + ' to ' + page + ' on ' + this.state.path1);		
 		var token = this.state.token;
 
 		// if new page is higher
@@ -566,7 +567,7 @@ class App extends React.Component {
 					count = {this.state.totalRow}
 					page = {this.state.page}
 					onPageChange = {(e, page) => {this.handleChangePage(page)}}
-					labelDisplayedRows = {({ from, to, count }) => `${this.state.toolbartitle} - ${from}-${to} from ${count}${this.state.totalpagecount < 1 ? '' : ` -  page ${this.state.page + 1}/${this.state.totalpagecount + 1}`}`}
+					labelDisplayedRows = {() => `${this.state.toolbartitle} - ${this.state.totalpagecount < 1 ? '' : `  page ${this.state.page + 1}`}`}
 				/>	
 			</center>
 
@@ -637,8 +638,8 @@ class App extends React.Component {
 					detailPanel = {[
 						{
 							disabled: true,
-							icon: ArrowRight,
-							openIcon: ArrowDropDown,
+							icon: BsCaretRight,
+							openIcon: BsCaretDown,
 							render: data => {
 
 								// get blog details from appsync

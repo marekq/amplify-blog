@@ -55,3 +55,8 @@
     height: min-content !important;
     max-width: 800px !important;
 }
+
+.MuiTablePagination-caption {
+    font-size: 18px !important;
+    color: gray !important;
+}
