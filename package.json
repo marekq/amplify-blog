@@ -35,9 +35,6 @@
     "start": "npm run develop",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "devDependencies": {
-    "gatsby-plugin-webpack-bundle-analyser-v2": "^1.1.24"
-  },
   "browser": {
     "crypto": false
   }
