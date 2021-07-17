@@ -500,7 +500,7 @@ class App extends React.Component {
 		const returnlink = [];
 
 		// add hidden timest column for article sorting 
-		columns.push({ title: 'Timest', field: 'timest', defaultSort: 'desc', hidden: true });
+		columns.push({ title: '', field: 'timest', defaultSort: 'desc', hidden: true });
 		
 		// add age column
 		columns.push({ title: '', field: 'datestr', width: 0, cellStyle: { color: '#aaa' }});
@@ -558,7 +558,7 @@ class App extends React.Component {
 
 		// create pagination component shown on top and bottom of page
 		const PageComponent = 
-			<center>
+			<div>
 				<TablePagination
 					style = {{alignSelf: 'center'}}
 					component = "div"
@@ -569,7 +569,7 @@ class App extends React.Component {
 					onPageChange = {(e, page) => {this.handleChangePage(page)}}
 					labelDisplayedRows = {() => `${this.state.toolbartitle} - ${this.state.totalpagecount < 1 ? '' : `  page ${this.state.page + 1}`}`}
 				/>	
-			</center>
+			</div>
 
 		return (
 			<center> 
@@ -620,7 +620,7 @@ class App extends React.Component {
 					components = {{
 						OverlayLoading: () => <div />,
 						Toolbar: (props) => (
-							<div className = "float-container">
+							<div align = "left" width = "50%">
 								{PageComponent}
 							</div>
 						),

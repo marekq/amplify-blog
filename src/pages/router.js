@@ -1,10 +1,11 @@
-import React from "react";
+import React from 'react';
 import { Router } from "@reach/router";
-import Blog from "../components/aws";
-import FourZeroFour from "./404.js";
-import View from "../components/view";
-import Marek from "../components/marek";
-import About from "../components/about";
+import loadable from '@loadable/component';
+
+const View = loadable(() => import('../components/view.js'));
+const Blog = loadable(() => import('../components/aws.js'));
+const Marek = loadable(() => import('../components/marek.js'));
+const About = loadable(() => import('../components/about.js'));
 
 const RouterPage = () => (
   <View title = "">
@@ -61,9 +62,9 @@ const RouterPage = () => (
       <Blog path = "/blog/werner/" />
       <Blog path = "/blog/whats-new/" />
       <Blog path = "/blog/yan/" />
-      <FourZeroFour path = "*" default />
     </Router>
   </View>
+  
 )
 
 export default RouterPage
